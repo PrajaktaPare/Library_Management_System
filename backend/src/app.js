@@ -2,8 +2,7 @@
 const express = require('express');
 // Import CORS middleware for cross-origin requests
 const cors = require('cors');
-// Import Helmet for setting secure HTTP headers
-const helmet = require('helmet');
+
 // Import cookie-parser to parse cookies from requests
 const cookieParser = require('cookie-parser');
 // Enable async error handling in Express routes
@@ -17,8 +16,6 @@ const { errorMiddleware, notFoundMiddleware, loggerMiddleware } = require('./mid
 // Create Express application instance
 const app = express();
 
-// Apply Helmet middleware for security headers
-app.use(helmet());
 
 // Configure CORS to allow frontend origin and credentials
 app.use(cors({

@@ -53,24 +53,6 @@ async function startServer() {
       logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
       logger.info(`API Base URL: http://localhost:${PORT}/api/v1`);
     });
-
-    // Handle SIGTERM signal for graceful shutdown (e.g. Docker stop)
-    process.on('SIGTERM', async () => {
-      logger.info('SIGTERM received, shutting down gracefully');
-      server.close(async () => {
-        await closeDatabase();
-        process.exit(0);
-      });
-    });
-
-    // Handle SIGINT signal for graceful shutdown (e.g. Ctrl+C)
-    process.on('SIGINT', async () => {
-      logger.info('SIGINT received, shutting down gracefully');
-      server.close(async () => {
-        await closeDatabase();
-        process.exit(0);
-      });
-    });
   } catch (error) {
     // Log error and exit if server fails to start
     logger.error('Failed to start server:', error);

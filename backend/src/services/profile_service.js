@@ -1,14 +1,13 @@
 // profile_service — fetch logged-in user's full profile with stats
-import pool from '../config/db_config.js';
-import ApiError from '../utils/api_error.js';
-import { calculateFine } from '../utils/date_helper.js';
+const { query } = require('../database/connection');
+const { ApiError } = require('../utils');
 
 // return profile + live stats for any user
-export async function getProfile(userId) {
-  const [rows] = await pool.query(
-    `SELECT id, username, name, role, phone, avatar, created_at
+async function getProfile(userId) {
+  const rows = await query(
+    `SELECT id, username, email, name, phone, role, profile_image, is_active, created_at
      FROM users WHERE id = ? AND is_active = 1`,
-    [userId],
+    [userId]
   );
 
   if (rows.length === 0) {
@@ -17,29 +16,40 @@ export async function getProfile(userId) {
 
   const user = rows[0];
 
-  // active issues with live fine
-  const [issues] = await pool.query(
-    `SELECT i.id, i.issue_date, i.due_date, i.status, b.title
-     FROM issues i JOIN books b ON b.id = i.book_id
-     WHERE i.user_id = ? AND i.status = 'active'`,
-    [userId],
+  // active issued books with live fine calculation
+  const issuedBooks = await query(
+    `SELECT br.id, br.issued_at, br.due_date, br.request_status, b.title
+     FROM book_requests br JOIN books b ON b.id = br.book_id
+     WHERE br.student_id = ? AND br.request_status = 'issued'`,
+    [userId]
   );
 
-  const activeIssues = issues.map((i) => ({
-    ...i,
-    computed_fine: calculateFine(i.due_date),
-  }));
+  const activeIssues = issuedBooks.map((item) => {
+    let computedFine = 0;
+    if (item.due_date) {
+      const dueDate = new Date(item.due_date);
+      const today = new Date();
+      if (today > dueDate) {
+        const daysOverdue = Math.ceil((today - dueDate) / (1000 * 60 * 60 * 24));
+        computedFine = daysOverdue * 5; // ₹5 per day
+      }
+    }
+    return { ...item, computed_fine: computedFine };
+  });
 
-  // total unpaid fines
-  const [[{ totalFines }]] = await pool.query(
-    `SELECT COALESCE(SUM(amount), 0) AS totalFines FROM fines WHERE user_id = ? AND paid = 0`,
-    [userId],
+  // total fines from all requests
+  const finesResult = await query(
+    `SELECT COALESCE(SUM(fine_amount), 0) AS totalFines FROM book_requests WHERE student_id = ? AND fine_amount > 0`,
+    [userId]
   );
+  const totalFines = parseFloat(finesResult[0].totalFines);
 
   return {
     ...user,
     activeIssues,
     activeIssueCount: activeIssues.length,
-    totalFines: parseFloat(totalFines),
+    totalFines,
   };
 }
+
+module.exports = { getProfile };

@@ -1,12 +1,87 @@
-const { AuthRepository } = require('../repositories');
+const { query } = require('../database/connection');
 const { ApiError, PasswordHelper, JwtHelper, DateHelper, EmailHelper } = require('../utils');
 
 class AuthService {
+  // ─── Database helpers (formerly in AuthRepository) ───
+
+  static async findUserByUsername(username) {
+    const sql = 'SELECT * FROM users WHERE username = ?';
+    const results = await query(sql, [username]);
+    return results.length > 0 ? results[0] : null;
+  }
+
+  static async findUserById(userId) {
+    const sql = 'SELECT id, username, email, name, phone, role, profile_image, is_active, last_login, created_at FROM users WHERE id = ?';
+    const results = await query(sql, [userId]);
+    return results.length > 0 ? results[0] : null;
+  }
+
+  static async findUserByEmail(email) {
+    const sql = 'SELECT * FROM users WHERE email = ?';
+    const results = await query(sql, [email]);
+    return results.length > 0 ? results[0] : null;
+  }
+
+  static async createUser(username, email, passwordHash, name, phone, role) {
+    const sql = `
+      INSERT INTO users (username, email, password_hash, name, phone, role)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    const result = await query(sql, [username, email, passwordHash, name, phone, role]);
+    return result.insertId;
+  }
+
+  static async updateLastLogin(userId) {
+    const sql = 'UPDATE users SET last_login = NOW() WHERE id = ?';
+    await query(sql, [userId]);
+  }
+
+  static async saveRefreshToken(userId, token, expiresAt) {
+    const sql = `
+      INSERT INTO refresh_tokens (user_id, token, expires_at)
+      VALUES (?, ?, ?)
+    `;
+    await query(sql, [userId, token, expiresAt]);
+  }
+
+  static async findRefreshToken(userId, token) {
+    const sql = `
+      SELECT * FROM refresh_tokens
+      WHERE user_id = ? AND token = ? AND revoked = FALSE AND expires_at > NOW()
+    `;
+    const results = await query(sql, [userId, token]);
+    return results.length > 0 ? results[0] : null;
+  }
+
+  static async revokeRefreshToken(token) {
+    const sql = 'UPDATE refresh_tokens SET revoked = TRUE WHERE token = ?';
+    await query(sql, [token]);
+  }
+
+  static async revokeAllUserTokens(userId) {
+    const sql = 'UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = ?';
+    await query(sql, [userId]);
+  }
+
+  static async usernameExists(username) {
+    const sql = 'SELECT COUNT(*) as count FROM users WHERE username = ?';
+    const results = await query(sql, [username]);
+    return results[0].count > 0;
+  }
+
+  static async emailExists(email) {
+    const sql = 'SELECT COUNT(*) as count FROM users WHERE email = ?';
+    const results = await query(sql, [email]);
+    return results[0].count > 0;
+  }
+
+  // ─── Business logic (service layer) ───
+
   static async login(usernameOrEmail, password, role) {
     // Try to find user by username first, then by email
-    let user = await AuthRepository.findUserByUsername(usernameOrEmail);
+    let user = await this.findUserByUsername(usernameOrEmail);
     if (!user) {
-      user = await AuthRepository.findUserByEmail(usernameOrEmail);
+      user = await this.findUserByEmail(usernameOrEmail);
     }
 
     if (!user) {
@@ -30,7 +105,7 @@ class AuthService {
     }
 
     // Update last login
-    await AuthRepository.updateLastLogin(user.id);
+    await this.updateLastLogin(user.id);
 
     // Generate tokens
     const payload = {
@@ -44,7 +119,7 @@ class AuthService {
 
     // Save refresh token
     const expiresAt = DateHelper.addDays(new Date(), 7);
-    await AuthRepository.saveRefreshToken(user.id, refreshToken, expiresAt);
+    await this.saveRefreshToken(user.id, refreshToken, expiresAt);
 
     return {
       user: {
@@ -63,14 +138,14 @@ class AuthService {
 
   static async register(registerData) {
     // Check if username exists
-    const usernameTaken = await AuthRepository.usernameExists(registerData.username);
+    const usernameTaken = await this.usernameExists(registerData.username);
     if (usernameTaken) {
       throw ApiError.conflict('Username already taken');
     }
 
     // Check if email exists (required now)
     if (registerData.email) {
-      const emailTaken = await AuthRepository.emailExists(registerData.email);
+      const emailTaken = await this.emailExists(registerData.email);
       if (emailTaken) {
         throw ApiError.conflict('Email already registered');
       }
@@ -86,7 +161,7 @@ class AuthService {
     const passwordHash = await PasswordHelper.hashPassword(registerData.password);
 
     // Create user
-    const userId = await AuthRepository.createUser(
+    const userId = await this.createUser(
       registerData.username,
       registerData.email || null,
       passwordHash,
@@ -112,14 +187,14 @@ class AuthService {
 
   static async refreshAccessToken(userId, refreshToken) {
     // Verify refresh token exists and is not revoked
-    const tokenRecord = await AuthRepository.findRefreshToken(userId, refreshToken);
+    const tokenRecord = await this.findRefreshToken(userId, refreshToken);
 
     if (!tokenRecord) {
       throw ApiError.unauthorized('Invalid or expired refresh token');
     }
 
     // Get user data
-    const user = await AuthRepository.findUserById(userId);
+    const user = await this.findUserById(userId);
 
     if (!user) {
       throw ApiError.notFound('User not found');
@@ -142,16 +217,16 @@ class AuthService {
   }
 
   static async logout(userId, refreshToken) {
-    await AuthRepository.revokeRefreshToken(refreshToken);
+    await this.revokeRefreshToken(refreshToken);
   }
 
   static async logoutAll(userId) {
-    await AuthRepository.revokeAllUserTokens(userId);
+    await this.revokeAllUserTokens(userId);
   }
 
   // Reset password (for forgot password flow — sets new password directly)
   static async resetPassword(email, newPassword) {
-    const user = await AuthRepository.findUserByEmail(email);
+    const user = await this.findUserByEmail(email);
     if (!user) {
       throw ApiError.notFound('No account found with this email');
     }
@@ -162,7 +237,6 @@ class AuthService {
     }
 
     const passwordHash = await PasswordHelper.hashPassword(newPassword);
-    const { query } = require('../database/connection');
     await query('UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?', [passwordHash, user.id]);
 
     // Send password changed email

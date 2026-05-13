@@ -13,7 +13,7 @@ function renderUsersTable(users, total) {
   const filteredUsers = users.filter(user => user.role !== "admin");
 
   if (filteredUsers.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:32px;color:var(--text-light)">👥 No Users Found</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:32px;color:var(--text-light)">👥 No Users Found</td></tr>`;
     renderUsersPagination(0);
     return;
   }
@@ -26,9 +26,6 @@ function renderUsersTable(users, total) {
       <td>${user.email || "—"}</td>
       <td>${user.phone || "—"}</td>
       <td><span class="badge ${user.is_active !== false ? "badge-success" : "badge-danger"}">${user.is_active !== false ? "Active" : "Inactive"}</span></td>
-      <td>
-        <button class="btn btn-sm btn-secondary" onclick="toggleStatus(${user.id}, ${user.is_active !== false ? 'false' : 'true'})">${user.is_active !== false ? "Deactivate" : "Activate"}</button>
-      </td>
     </tr>`).join("");
 
   renderUsersPagination(total);
@@ -64,7 +61,7 @@ async function loadUsers() {
   } catch (error) {
     console.error("Failed to load users:", error);
     const tbody = document.getElementById("usersTableBody");
-    if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="text-center">Failed to load users</td></tr>`;
+    if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="text-center">Failed to load users</td></tr>`;
   }
 }
 
@@ -127,15 +124,6 @@ async function saveUser(e) {
   }
 }
 
-async function toggleStatus(userId, isActive) {
-  try {
-    await apiClient.toggleUserStatus(userId, isActive);
-    showToast(`User ${isActive ? "activated" : "deactivated"} successfully`, "success");
-    loadUsers();
-  } catch (error) {
-    showToast(error.message || "Failed to update status", "error");
-  }
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   loadUsers();

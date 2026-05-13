@@ -1,17 +1,18 @@
 // admin_controller — admin-only dashboard and stats endpoints
-import asyncHandler from '../utils/async_handler.js';
-import apiResponse from '../utils/api_response.js';
-import * as adminService from '../services/admin_service.js';
-import { HTTP } from '../utils/constants.js';
+const asyncHandler = require('../utils/async_handler');
+const ApiResponse = require('../utils/api_response');
+const adminService = require('../services/admin_service');
 
 // GET /api/admin/stats — dashboard statistics
-export const getDashboardStats = asyncHandler(async (req, res) => {
+const getDashboardStats = asyncHandler(async (req, res) => {
   const stats = await adminService.getDashboardStats();
-  return apiResponse(res, HTTP.OK, 'Dashboard stats fetched', stats);
+  res.status(200).json(ApiResponse.ok('Dashboard stats fetched', stats));
 });
 
 // GET /api/admin/recent-issues — last 10 issues for dashboard table
-export const getRecentIssues = asyncHandler(async (req, res) => {
+const getRecentIssues = asyncHandler(async (req, res) => {
   const issues = await adminService.getRecentIssues();
-  return apiResponse(res, HTTP.OK, 'Recent issues fetched', issues);
+  res.status(200).json(ApiResponse.ok('Recent issues fetched', issues));
 });
+
+module.exports = { getDashboardStats, getRecentIssues };
