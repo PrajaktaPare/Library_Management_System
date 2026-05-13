@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Requests — Smart Library</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/badges.css">
+</head>
+<body>
+
+  <div class="app-layout">
+
+    <!-- sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span>📚</span>
+        <span>Smart Library</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-menu-item">
+          <a href="admin-dashboard.html" class="sidebar-menu-link">
+            <span>📊</span><span>Dashboard</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="manage-books.html" class="sidebar-menu-link">
+            <span>📖</span><span>Books</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="manage-users.html" class="sidebar-menu-link">
+            <span>👥</span><span>Users</span>
+          </a>
+        </li>
+        
+        <li class="sidebar-menu-item">
+          <a href="issue-book.html" class="sidebar-menu-link">
+            <span>📤</span><span>Issues</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <!-- active link for this page -->
+          <a href="view-requests.html" class="sidebar-menu-link active">
+            <span>🔔</span><span>Requests</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="admin_profile.html" class="sidebar-menu-link">
+            <span>👤</span><span>Profile</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a class="sidebar-menu-link" style="cursor:pointer" onclick="logout()">
+            <span>🚪</span><span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- top bar -->
+    <header class="top-bar">
+      <h1 class="top-bar-title">Book Requests</h1>
+      <div class="top-bar-actions">
+        <div class="user-profile" style="cursor:pointer" title="View Profile" onclick="window.location.href='admin_profile.html'">
+          <div class="avatar" id="userAvatar">A</div>
+          <span id="userName">admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- main content -->
+    <main class="main-content">
+      <section class="section">
+
+        <!-- search bar with clear button -->
+        <div class="filter-bar" style="margin-bottom:var(--spacing-md)">
+          <div class="search-bar" style="flex:1;position:relative">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="vrSearch" placeholder="Search by Student Name or Book Title..."
+                   onkeyup="onVRSearch()">
+            <button id="vrSearchClear" onclick="clearVRSearch()"
+                    style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text-light);line-height:1">✕</button>
+          </div>
+        </div>
+
+        <!-- requests table -->
+        <table id="requestsTable">
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Book Title</th>
+              <th>Request Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="requestsTableBody">
+            <tr><td colspan="5" class="text-center">Loading Requests...</td></tr>
+          </tbody>
+        </table>
+
+        <!-- pagination -->
+        <div id="vrPagination" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:var(--spacing-md)"></div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- toast -->
+  <div class="toast" id="toast"></div>
+
+  <!--
+    script load order:
+    1. toast
+    2. auth — redirect if not admin
+    3. adminnotifications — provides addnotification() used by approverequest/rejectrequest
+    4. admin_dashboard — provides renderrequests, approverequest, rejectrequest, logout
+    note: original only had adminnotifications.js here which caused
+          approverequest and rejectrequest to be undefined — now fixed
+  -->
+  <script src="../js/utils/toastNotifyFunction.js"></script>
+  <script src="../js/api/config.js"></script>
+  <script src="../js/utils/auth.js"></script>
+  <script src="../js/admin_dashboard.js"></script>
+  <script src="../js/view_request.js"></script>
+
+</body>
+</html>

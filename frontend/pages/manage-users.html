@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Users — Smart Library</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/badges.css">
+</head>
+<body>
+
+  <div class="app-layout">
+
+    <!-- sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span>📚</span>
+        <span>Smart Library</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-menu-item">
+          <a href="admin-dashboard.html" class="sidebar-menu-link">
+            <span>📊</span><span>Dashboard</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="manage-books.html" class="sidebar-menu-link">
+            <span>📖</span><span>Books</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <!-- active link for this page -->
+          <a href="manage-users.html" class="sidebar-menu-link active">
+            <span>👥</span><span>Users</span>
+          </a>
+        </li>
+        
+        <li class="sidebar-menu-item">
+          <a href="issue-book.html" class="sidebar-menu-link">
+            <span>📤</span><span>Issues</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="view-requests.html" class="sidebar-menu-link">
+            <span>🔔</span><span>Requests</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="admin_profile.html" class="sidebar-menu-link">
+            <span>👤</span><span>Profile</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a class="sidebar-menu-link" style="cursor:pointer" onclick="logout()">
+            <span>🚪</span><span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- top bar -->
+    <header class="top-bar">
+      <h1 class="top-bar-title">Manage Users</h1>
+      <div class="top-bar-actions">
+        <button class="btn btn-sm" onclick="openAddUserModal()">+ Add User</button>
+        <div class="user-profile" style="cursor:pointer" title="View Profile" onclick="window.location.href='admin_profile.html'">
+          <div class="avatar" id="userAvatar">A</div>
+          <span id="userName">admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- main content -->
+    <main class="main-content">
+      <section class="section">
+
+        <!-- search bar -->
+        <div class="filter-bar">
+          <div class="search-bar" style="flex:1;position:relative">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search by Name or Student ID..."
+                   onkeyup="filterUsers()">
+            <button id="searchClear" onclick="clearUsersSearch()"
+                    style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text-light);line-height:1">✕</button>
+          </div>
+        </div>
+
+        <!-- users table -->
+        <table id="usersTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Username / ID</th>
+              <th>Role</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr><td colspan="7" class="text-center">Loading Users...</td></tr>
+          </tbody>
+        </table>
+
+        <!-- pagination -->
+        <div id="usersPagination" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:var(--spacing-md)"></div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- add / edit user modal -->
+  <div class="modal" id="userModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add User</h2>
+        <button type="button" class="modal-close" onclick="closeUserModal()">&times;</button>
+      </div>
+      <form id="userForm" onsubmit="saveUser(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <!-- id is usernameinput in js to avoid conflict with html id attr -->
+            <label for="userNameInput">Full Name *</label>
+            <input type="text" id="userNameInput" required placeholder="Student Full Name">
+          </div>
+          <div class="form-group">
+            <label for="userEmail">Username / Student ID *</label>
+            <input type="text" id="userEmail" required placeholder="Enter mail or student ID">
+          </div>
+          <div class="form-group">
+            <label for="userRole">Role *</label>
+            <select id="userRole" required>
+              <option value="student">Student</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="userEmailAddr">Email</label>
+            <input type="email" id="userEmailAddr" placeholder="student@email.com">
+          </div>
+          <div class="form-group">
+            <label for="userPhone">Phone Number</label>
+            <input type="tel" id="userPhone" placeholder="Optional">
+          </div>
+          
+          <div class="form-group" id="passGroup">
+            <label for="password">Password *</label>
+            <input type="password" id="userpass" placeholder="Min 8 characters" required>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeUserModal()">Cancel</button>
+          <button type="submit" class="btn">Save User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- toast -->
+  <div class="toast" id="toast"></div>
+
+  <!--
+    script load order:
+    1. toast
+    2. auth — redirect if not admin
+    3. admin_dashboard — provides logout()
+    4. manage_users — all user crud logic (new file)
+  -->
+  <script src="../js/utils/toastNotifyFunction.js"></script>
+  <script src="../js/api/config.js"></script>
+  <script src="../js/utils/auth.js"></script>
+  <script src="../js/admin_dashboard.js"></script>
+  <script src="../js/manage_users.js"></script>
+
+</body>
+</html>

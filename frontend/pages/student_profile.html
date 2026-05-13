@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — Smart Library</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/badges.css">
+  <style>
+    .profile-card {
+      background: var(--white, #fff);
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+    .profile-avatar-wrapper {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px;
+    }
+    .profile-avatar-large {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--primary, #1a7f6e);
+      color: #fff;
+      font-size: 2.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .profile-avatar-large:hover { opacity: 0.85; }
+    .profile-avatar-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .avatar-upload-btn {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: 2px solid #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .avatar-upload-btn:hover { transform: scale(1.1); }
+    .profile-name {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-dark, #1a1a2e);
+    }
+    .profile-role {
+      text-align: center;
+      color: var(--text-light, #888);
+      margin-bottom: 32px;
+    }
+    .profile-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 480px) { .profile-info-grid { grid-template-columns: 1fr; } }
+    .profile-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .profile-field label {
+      font-size: 0.78rem;
+      color: var(--text-light, #888);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .profile-field span {
+      font-size: 1rem;
+      color: var(--text-dark, #1a1a2e);
+      font-weight: 500;
+      padding: 8px 12px;
+      background: var(--bg-light, #f5f6fa);
+      border-radius: 8px;
+    }
+    .profile-edit-section {
+      margin-top: 36px;
+      border-top: 1px solid var(--border, #e5e7eb);
+      padding-top: 28px;
+    }
+    .profile-edit-section h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-dark, #1a1a2e);
+    }
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .profile-stat {
+      text-align: center;
+      background: var(--bg-light, #f5f6fa);
+      border-radius: 12px;
+      padding: 16px 8px;
+    }
+    .profile-stat-number {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary, #1a7f6e);
+    }
+    .profile-stat-label {
+      font-size: 0.78rem;
+      color: var(--text-light, #888);
+      margin-top: 4px;
+    }
+    .error-msg { color: #e53e3e; font-size: 0.85rem; margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+
+    <!-- sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span>📚</span>
+        <span>Smart Library</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-menu-item">
+          <a href="student-dashboard.html" class="sidebar-menu-link">
+            <span>🏠</span><span>Home</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="student-mybooks.html" class="sidebar-menu-link">
+            <span>📖</span><span>My Books</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="request-book.html" class="sidebar-menu-link">
+            <span>➕</span><span>Request Book</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="student-notifications.html" class="sidebar-menu-link">
+            <span>🔔</span><span>Notifications</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item active">
+          <a href="student_profile.html" class="sidebar-menu-link active">
+            <span>👤</span><span>Profile</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a class="sidebar-menu-link" style="cursor:pointer" onclick="logout()">
+            <span>🚪</span><span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- top bar -->
+    <header class="top-bar">
+      <h1 class="top-bar-title">My Profile</h1>
+      <div class="top-bar-actions">
+        <div class="user-profile" style="cursor:pointer" onclick="window.location.href='student_profile.html'">
+          <div class="avatar" id="userAvatar">S</div>
+          <span id="userName">student</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- main content -->
+    <main class="main-content">
+      <section class="section">
+
+        <div class="profile-card">
+
+          <!-- avatar with upload -->
+          <div class="profile-avatar-wrapper">
+            <div class="profile-avatar-large" id="profileAvatarLarge" onclick="document.getElementById('avatarInput').click()" title="Click to change photo">S</div>
+            <div class="avatar-upload-btn" onclick="document.getElementById('avatarInput').click()" title="Upload photo">📷</div>
+            <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
+          </div>
+
+          <div class="profile-name" id="profileName">—</div>
+          <div class="profile-role"><span class="badge badge-success">student</span></div>
+
+          <!-- stats -->
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <div class="profile-stat-number" id="statIssued">0</div>
+              <div class="profile-stat-label">Books Issued</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-number" id="statReturned">0</div>
+              <div class="profile-stat-label">Returned</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-number" id="statFine">₹0</div>
+              <div class="profile-stat-label">Total Fines</div>
+            </div>
+          </div>
+
+          <!-- info fields -->
+          <div class="profile-info-grid">
+            <div class="profile-field">
+              <label>Full Name</label>
+              <span id="infoName">—</span>
+            </div>
+            <div class="profile-field">
+              <label>Student ID</label>
+              <span id="infoUsername">—</span>
+            </div>
+            <div class="profile-field">
+              <label>Email</label>
+              <span id="infoEmail">—</span>
+            </div>
+            <div class="profile-field">
+              <label>Phone</label>
+              <span id="infoPhone">—</span>
+            </div>
+          </div>
+
+          <!-- edit section -->
+          <div class="profile-edit-section">
+            <h3>Edit Profile</h3>
+            <div class="form-group">
+              <label for="editName">Full Name</label>
+              <input type="text" id="editName" placeholder="Your full name">
+            </div>
+            <div class="form-group">
+              <label for="editPhone">Phone Number</label>
+              <input type="tel" id="editPhone" placeholder="10-digit phone number">
+              <div class="error-msg" id="phoneError"></div>
+            </div>
+            <div style="margin-top:16px;">
+              <button class="btn" onclick="saveProfile()">Save Changes</button>
+            </div>
+          </div>
+
+          <!-- change password section -->
+          <div class="profile-edit-section">
+            <h3>Change Password</h3>
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" id="currentPassword" placeholder="Enter current password">
+            </div>
+            <div class="form-group">
+              <label for="editPassword">New Password</label>
+              <input type="password" id="editPassword" placeholder="Min 8 chars, uppercase, number, special char">
+              <div class="error-msg" id="passError"></div>
+            </div>
+            <div class="form-group">
+              <label for="confirmNewPassword">Confirm New Password</label>
+              <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+            </div>
+            <div style="margin-top:16px;">
+              <button class="btn" onclick="changePassword()">Update Password</button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="../js/utils/toastNotifyFunction.js"></script>
+  <script src="../js/api/config.js"></script>
+  <script src="../js/utils/auth_student.js"></script>
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    function loadProfile() {
+      if (!currentUser) return;
+      const displayName = currentUser.name || currentUser.username;
+      const initial = displayName.charAt(0).toUpperCase();
+      document.getElementById("userName").textContent = displayName;
+      document.getElementById("profileName").textContent = displayName;
+      document.getElementById("infoName").textContent = currentUser.name || "—";
+      document.getElementById("infoUsername").textContent = currentUser.username;
+      document.getElementById("infoEmail").textContent = currentUser.email || "—";
+      document.getElementById("infoPhone").textContent = currentUser.phone || "—";
+      document.getElementById("editName").value = currentUser.name || "";
+      document.getElementById("editPhone").value = currentUser.phone || "";
+
+      // Avatar
+      const avatarEl = document.getElementById("userAvatar");
+      const avatarLarge = document.getElementById("profileAvatarLarge");
+      if (currentUser.profile_image) {
+        avatarEl.innerHTML = `<img src="${currentUser.profile_image}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
+        avatarLarge.innerHTML = `<img src="${currentUser.profile_image}" alt="Profile">`;
+      } else {
+        avatarEl.textContent = initial;
+        avatarLarge.textContent = initial;
+      }
+
+      // Load stats from API
+      apiClient.getMyRequests(1, 100).then(res => {
+        const requests = res.data || [];
+        const issued = requests.filter(r => r.request_status === "issued").length;
+        const returned = requests.filter(r => r.request_status === "returned").length;
+        const totalFines = requests.reduce((sum, r) => sum + (parseFloat(r.fine_amount) || 0), 0);
+        document.getElementById("statIssued").textContent = issued;
+        document.getElementById("statReturned").textContent = returned;
+        document.getElementById("statFine").textContent = `₹${totalFines}`;
+      }).catch(() => {});
+    }
+
+    function handleAvatarUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        showToast("Please select an image file", "error");
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        showToast("Image must be less than 2MB", "error");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imageData = e.target.result;
+        // Store profile image as base64 in localStorage
+        const updated = { ...currentUser, profile_image: imageData };
+        localStorage.setItem("currentUser", JSON.stringify(updated));
+
+        document.getElementById("profileAvatarLarge").innerHTML = `<img src="${imageData}" alt="Profile">`;
+        document.getElementById("userAvatar").innerHTML = `<img src="${imageData}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
+
+        showToast("Profile photo updated!", "success");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function saveProfile() {
+      document.getElementById("phoneError").textContent = "";
+      const name = document.getElementById("editName").value.trim();
+      const phone = document.getElementById("editPhone").value.trim();
+
+      if (name.length > 0 && name.length < 3) { showToast("Name must be at least 3 characters", "error"); return; }
+      if (phone && !/^[0-9]{10}$/.test(phone)) { document.getElementById("phoneError").textContent = "Enter valid 10-digit number"; return; }
+
+      try {
+        await apiClient.updateProfile({ name: name || currentUser.name, phone });
+        const updated = { ...currentUser, name: name || currentUser.name, phone };
+        localStorage.setItem("currentUser", JSON.stringify(updated));
+        showToast("Profile updated! You'll receive an email confirmation.", "success");
+        Object.assign(currentUser, updated);
+        loadProfile();
+      } catch (error) { showToast(error.message || "Update failed", "error"); }
+    }
+
+    async function changePassword() {
+      document.getElementById("passError").textContent = "";
+      const currentPwd = document.getElementById("currentPassword").value.trim();
+      const newPwd = document.getElementById("editPassword").value.trim();
+      const confirmPwd = document.getElementById("confirmNewPassword").value.trim();
+
+      if (!currentPwd) { showToast("Enter current password", "error"); return; }
+      if (!newPwd || newPwd.length < 8) { document.getElementById("passError").textContent = "Min 8 characters"; return; }
+      if (newPwd !== confirmPwd) { document.getElementById("passError").textContent = "Passwords don't match"; return; }
+
+      try {
+        await apiClient.changePassword(currentPwd, newPwd, confirmPwd);
+        showToast("Password changed! Check your email for confirmation.", "success");
+        document.getElementById("currentPassword").value = "";
+        document.getElementById("editPassword").value = "";
+        document.getElementById("confirmNewPassword").value = "";
+      } catch (error) { showToast(error.message || "Password change failed", "error"); }
+    }
+
+    function logout() {
+      showToast("Logged out", "success");
+      setTimeout(async () => {
+        try { await apiClient.logout(); } catch (e) {}
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("currentUser");
+        window.location.replace("../index.html");
+      }, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", loadProfile);
+  </script>
+
+</body>
+</html>

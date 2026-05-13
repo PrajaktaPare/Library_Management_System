@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Books — Smart Library</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/badges.css">
+</head>
+<body>
+
+  <div class="app-layout">
+
+    <!-- sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span>📚</span>
+        <span>Smart Library</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-menu-item">
+          <a href="student-dashboard.html" class="sidebar-menu-link">
+            <span>🏠</span><span>Home</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <!-- active link for this page -->
+          <a href="student-mybooks.html" class="sidebar-menu-link active">
+            <span>📖</span><span>My Books</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="request-book.html" class="sidebar-menu-link">
+            <span>➕</span><span>Request Book</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="student-notifications.html" class="sidebar-menu-link">
+            <span>🔔</span><span>Notifications</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="student_profile.html" class="sidebar-menu-link">
+            <span>👤</span><span>Profile</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a class="sidebar-menu-link" style="cursor:pointer" onclick="logout()">
+            <span>🚪</span><span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- top bar -->
+    <header class="top-bar">
+      <h1 class="top-bar-title">My Issued Books</h1>
+      <div class="top-bar-actions">
+        <div class="user-profile" style="cursor:pointer" title="View Profile" onclick="window.location.href='student_profile.html'">
+          <div class="avatar" id="userAvatar">S</div>
+          <span id="userName">student</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- main content -->
+    <main class="main-content">
+      <section class="section">
+
+        <!-- active / returned tab buttons -->
+        <div class="tabs">
+          <button class="tab-button active" onclick="filterByStatus('active')">Active</button>
+          <button class="tab-button"        onclick="filterByStatus('returned')">Returned</button>
+        </div>
+
+        <!-- my books table -->
+        <table id="myBooksTable">
+          <thead>
+            <tr>
+              <th>Book Title</th>
+              <th>Author</th>
+              <th>Issue Date</th>
+              <th>Due Date</th>
+              <th>Days Left</th>
+              <th>Fine</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="myBooksTableBody">
+            <tr><td colspan="7" class="text-center">Loading...</td></tr>
+          </tbody>
+        </table>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- toast -->
+  <div class="toast" id="toast"></div>
+
+  <!--
+    script load order:
+    1. toast
+    2. auth_student — redirect if not logged in as student
+    3. student_mybooks — rendermybooks, filterbystatus, logout (new file)
+    note: original loaded admin_requests.js (non-existent) and had no
+          filterbystatus or logout — all fixed in student_mybooks.js
+  -->
+  <script src="../js/utils/toastNotifyFunction.js"></script>
+  <script src="../js/api/config.js"></script>
+  <script src="../js/utils/auth_student.js"></script>
+  <script src="../js/student_mybooks.js"></script>
+
+</body>
+</html>

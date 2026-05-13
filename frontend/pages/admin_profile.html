@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Profile Smart Library</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/badges.css">
+  <style>
+    .profile-card {
+      background: var(--white, #fff);
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+    .profile-avatar-large {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: var(--primary, #1a7f6e); color: #fff;
+      font-size: 2.5rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .profile-name { text-align:center; font-size:1.5rem; font-weight:700; margin-bottom:4px; }
+    .profile-role { text-align:center; color:var(--text-light,#888); margin-bottom:28px; }
+    .profile-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    @media(max-width:480px){.profile-info-grid{grid-template-columns:1fr;}}
+    .profile-field { display:flex; flex-direction:column; gap:4px; }
+    .profile-field label { font-size:0.78rem; color:var(--text-light,#888); font-weight:600; text-transform:uppercase; }
+    .profile-field span { font-size:1rem; padding:8px 12px; background:var(--bg-light,#f5f6fa); border-radius:8px; }
+    .profile-edit-section { margin-top:32px; border-top:1px solid var(--border,#e5e7eb); padding-top:24px; }
+    .profile-edit-section h3 { font-size:1.1rem; font-weight:700; margin-bottom:16px; }
+    .error-msg { color:#e53e3e; font-size:0.85rem; margin-top:2px; }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><span>📚</span><span>Smart Library</span></div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-menu-item"><a href="admin-dashboard.html" class="sidebar-menu-link"><span>📊</span><span>Dashboard</span></a></li>
+        <li class="sidebar-menu-item"><a href="manage-books.html" class="sidebar-menu-link"><span>📖</span><span>Books</span></a></li>
+        <li class="sidebar-menu-item"><a href="manage-users.html" class="sidebar-menu-link"><span>👥</span><span>Users</span></a></li>
+       
+        <li class="sidebar-menu-item"><a href="issue-book.html" class="sidebar-menu-link"><span>📤</span><span>Issues</span></a></li>
+        <li class="sidebar-menu-item"><a href="view-requests.html" class="sidebar-menu-link"><span>🔔</span><span>Requests</span></a></li>
+        <li class="sidebar-menu-item"><a href="admin_profile.html" class="sidebar-menu-link active"><span>👤</span><span>Profile</span></a></li>
+        <li class="sidebar-menu-item"><a class="sidebar-menu-link" style="cursor:pointer" onclick="logout()"><span>🚪</span><span>Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <header class="top-bar">
+      <h1 class="top-bar-title">My Profile</h1>
+      <div class="top-bar-actions">
+        <div class="user-profile" style="cursor:pointer" onclick="window.location.href='admin_profile.html'">
+          <div class="avatar" id="userAvatar">A</div>
+          <span id="userName">admin</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="section">
+        <div class="profile-card">
+          <div class="profile-avatar-large" id="profileAvatarLarge">A</div>
+          <div class="profile-name" id="profileName">Admin</div>
+          <div class="profile-role"><span class="badge badge-info">admin</span></div>
+
+          <div class="profile-info-grid">
+            <div class="profile-field">
+              <label>Full Name</label><span id="infoName">—</span>
+            </div>
+            <div class="profile-field">
+              <label>Username</label><span id="infoUsername">—</span>
+            </div>
+            <div class="profile-field">
+              <label>Phone</label><span id="infoPhone">—</span>
+            </div>
+            <div class="profile-field">
+              <label>Role</label><span>Administrator</span>
+            </div>
+          </div>
+
+         
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/utils/toastNotifyFunction.js"></script>
+  <script src="../js/api/config.js"></script>
+  <script src="../js/utils/auth.js"></script>
+  <script>
+    // load profile from localStorage (set during login)
+    function loadProfile() {
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+      if (!user) { showToast("No user logged in", "error"); return; }
+      const displayName = user.name || user.username;
+      const initial = displayName.charAt(0).toUpperCase();
+      document.getElementById("userAvatar").textContent = initial;
+      document.getElementById("userName").textContent = displayName;
+      document.getElementById("profileAvatarLarge").textContent = initial;
+      document.getElementById("profileName").textContent = displayName;
+      document.getElementById("infoName").textContent = user.name || "—";
+      document.getElementById("infoUsername").textContent = user.username;
+      document.getElementById("infoPhone").textContent = user.phone || "—";
+    }
+    // logout via API
+    function logout() {
+      showToast("Logged out", "success");
+      setTimeout(async () => {
+        try { await apiClient.logout(); } catch (e) {}
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("currentUser");
+        window.location.replace("../index.html");
+      }, 1000);
+    }
+    document.addEventListener("DOMContentLoaded", loadProfile);
+  </script>
+</body>
+</html>

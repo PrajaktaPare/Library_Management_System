@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications — Smart Library</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/badges.css">
+</head>
+<body>
+
+  <div class="app-layout">
+
+    <!-- sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span>📚</span>
+        <span>Smart Library</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-menu-item">
+          <a href="student-dashboard.html" class="sidebar-menu-link">
+            <span>🏠</span><span>Home</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="student-mybooks.html" class="sidebar-menu-link">
+            <span>📖</span><span>My Books</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="request-book.html" class="sidebar-menu-link">
+            <span>➕</span><span>Request Book</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <!-- active link for this page -->
+          <a href="student-notifications.html" class="sidebar-menu-link active">
+            <span>🔔</span><span>Notifications</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a href="student_profile.html" class="sidebar-menu-link">
+            <span>👤</span><span>Profile</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item">
+          <a class="sidebar-menu-link" style="cursor:pointer" onclick="logout()">
+            <span>🚪</span><span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- top bar -->
+    <header class="top-bar">
+      <h1 class="top-bar-title">Notifications</h1>
+      <div class="top-bar-actions">
+        <button class="btn btn-sm btn-secondary" onclick="clearAllNotifications()">clear all</button>
+        <div class="user-profile" style="cursor:pointer" title="View Profile" onclick="window.location.href='student_profile.html'">
+          <div class="avatar" id="userAvatar">S</div>
+          <span id="userName">student</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- main content -->
+    <main class="main-content">
+      <section class="section">
+
+        <!-- notifications list — populated by adminnotifications.js rendernotifications() -->
+        <div id="notificationsContainer">
+          <div class="empty-state">
+            <div class="empty-state-icon">🔔</div>
+            <div class="empty-state-title">No Notifications</div>
+            <p>You'll See Important Updates Here</p>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- toast -->
+  <div class="toast" id="toast"></div>
+
+  <!--
+    script load order:
+    1. toast
+    2. auth_student — redirect if not a logged-in student
+    3. adminnotifications — rendernotifications, clearallnotifications
+    note: original had no script tags at all, page was completely static
+  -->
+  <script src="../js/utils/toastNotifyFunction.js"></script>
+  <script src="../js/api/config.js"></script>
+  <script src="../js/utils/auth_student.js"></script>
+  <script src="../js/adminnotifications.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const u = JSON.parse(localStorage.getItem("currentUser"));
+      if (u) {
+        document.getElementById("userName").textContent = u.name || u.username;
+        document.getElementById("userAvatar").textContent = (u.name || u.username).charAt(0).toUpperCase();
+      }
+    });
+    function logout() {
+      showToast("logged out successfully", "success");
+      setTimeout(async () => {
+        try { await apiClient.logout(); } catch (e) {}
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("currentUser");
+        window.location.replace("../index.html");
+      }, 1000);
+    }
+  </script>
+
+</body>
+</html>
