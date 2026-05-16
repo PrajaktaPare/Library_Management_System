@@ -1,6 +1,27 @@
-export { default as AuthService } from './auth_service.js';
-export { default as BookService } from './book_service.js';
-export { default as RequestService } from './request_service.js';
-export { default as IssueService } from './issue_service.js';
-export { default as NotificationService } from './notification_service.js';
-export { default as UserService } from './user_service.js';
+// services/index.js
+
+export {
+  getAllUsersService,
+  getUserByIDService,
+  createUser,
+  patchUserService,
+  putUserService,
+  deleteUserService,
+  getProfileService,
+  updateProfileService,
+} from './user_services.js';
+
+export {
+  hashPassword,
+  registerService,
+  loginService,
+} from './auth_service.js';
+
+export {
+  generateToken,
+  verifyToken,
+} from './jwt_service.js';
+
+export {
+  sendVerificationEmail,
+} from './email_service.js';

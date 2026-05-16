@@ -1,20 +1,152 @@
-import Joi from 'joi';
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+import ajvErrors from 'ajv-errors';
 
-export const loginSchema = Joi.object({
-  username: Joi.string().min(3).max(100).required().messages({ 'string.min': 'Username/email must be at least 3 characters', 'string.max': 'Username/email must not exceed 100 characters', 'any.required': 'Username or email is required' }),
-  password: Joi.string().min(8).max(100).required().messages({ 'string.min': 'Password must be at least 8 characters', 'string.max': 'Password must not exceed 100 characters', 'any.required': 'Password is required' }),
-  role: Joi.string().valid('admin', 'student').required().messages({ 'any.only': 'Role must be either admin or student', 'any.required': 'Role is required' })
-});
+const ajv = new Ajv({ allErrors: true });
+addFormats(ajv);
+ajvErrors(ajv);
 
-export const registerSchema = Joi.object({
-  username: Joi.string().min(3).max(50).alphanum().required().messages({ 'string.min': 'Username must be at least 3 characters', 'string.max': 'Username must not exceed 50 characters', 'string.alphanum': 'Username must contain only alphanumeric characters', 'any.required': 'Username is required' }),
-  email: Joi.string().email().required().messages({ 'string.email': 'Please enter a valid email address', 'any.required': 'Email is required' }),
-  password: Joi.string().min(8).max(100).required().pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])/i).messages({ 'string.min': 'Password must be at least 8 characters', 'string.pattern.base': 'Password must contain uppercase, lowercase, number, and special character', 'any.required': 'Password is required' }),
-  name: Joi.string().max(100).required().messages({ 'any.required': 'Name is required', 'string.max': 'Name must not exceed 100 characters' }),
-  phone: Joi.string().pattern(/^[0-9]{10}$/).optional().messages({ 'string.pattern.base': 'Phone must be a valid 10-digit number' }),
-  role: Joi.string().valid('admin', 'student').required().messages({ 'any.only': 'Role must be either admin or student', 'any.required': 'Role is required' })
-});
+/* =========================================
+   REGISTER SCHEMA
 
-export const refreshTokenSchema = Joi.object({
-  refreshToken: Joi.string().required().messages({ 'any.required': 'Refresh token is required' })
-});
+   Fields (all required):
+   - name     : string, min 1 char
+   - username : string, min 3 chars, no spaces
+   - email    : valid email format
+   - password : 6-10 chars, 1 uppercase, 1 digit, 1 special char
+   - phone    : exactly 10 digits
+
+   No extra fields allowed
+========================================= */
+export const registerValidator = {
+  type: 'object',
+
+  required: [
+    'name',
+    'username',
+    'email',
+    'password',
+    'phone',
+  ],
+
+  properties: {
+
+    name: {
+      type: 'string',
+      minLength: 1,
+      errorMessage: {
+        type: 'Name must be a string',
+        minLength: 'Name is required',
+      },
+    },
+
+    username: {
+      type: 'string',
+      minLength: 3,
+      pattern: '^\\S+$',
+      errorMessage: {
+        type: 'Username must be a string',
+        minLength: 'Username must be at least 3 characters',
+        pattern: 'Username cannot contain spaces',
+      },
+    },
+
+    email: {
+      type: 'string',
+      format: 'email',
+      errorMessage: {
+        type: 'Email must be a string',
+        format: 'Enter a valid email address',
+      },
+    },
+
+    password: {
+      type: 'string',
+      pattern: '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$',
+      errorMessage: {
+        type: 'Password must be a string',
+        pattern:
+          'Password must be 6-10 characters and include at least one uppercase letter, one number, and one special character (@$!%*?&)',
+      },
+    },
+
+    phone: {
+      type: 'string',
+      pattern: '^\\d{10}$',
+      errorMessage: {
+        type: 'Phone must be a string',
+        pattern: 'Phone number must be exactly 10 digits',
+      },
+    },
+
+  },
+
+  additionalProperties: false,
+
+  errorMessage: {
+    required: {
+      name: 'Name is required',
+      username: 'Username is required',
+      email: 'Email is required',
+      password: 'Password is required',
+      phone: 'Phone number is required',
+    },
+    additionalProperties: 'Extra fields are not allowed',
+  },
+};
+
+/* =========================================
+   LOGIN SCHEMA
+
+   Fields (all required):
+   - username : non-empty string
+   - password : non-empty string
+
+   No extra fields allowed
+========================================= */
+export const loginValidator = {
+  type: 'object',
+
+  required: [
+    'username',
+    'password',
+  ],
+
+  properties: {
+
+    username: {
+      type: 'string',
+      minLength: 1,
+      errorMessage: {
+        type: 'Username must be a string',
+        minLength: 'Username is required',
+      },
+    },
+
+    password: {
+      type: 'string',
+      minLength: 1,
+      errorMessage: {
+        type: 'Password must be a string',
+        minLength: 'Password is required',
+      },
+    },
+
+  },
+
+  additionalProperties: false,
+
+  errorMessage: {
+    required: {
+      username: 'Username is required',
+      password: 'Password is required',
+    },
+    additionalProperties: 'Extra fields are not allowed',
+  },
+};
+
+/* =========================================
+   COMPILED VALIDATORS
+========================================= */
+export const validateRegister = ajv.compile(registerValidator);
+export const validateLogin    = ajv.compile(loginValidator);

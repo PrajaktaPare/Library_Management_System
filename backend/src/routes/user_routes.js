@@ -1,18 +1,114 @@
 import express from 'express';
-import { UserController } from '../controllers/index.js';
-import { validateMiddleware, authMiddleware, roleMiddleware } from '../middleware/index.js';
-import { updateProfileSchema, changePasswordSchema } from '../validators/index.js';
+
+import {
+  getAllUsers,
+  getUserByID,
+  patchUser,
+  postUser,
+  putUser,
+  deleteUser,
+  getProfile,
+  updateProfile,
+} from '../controllers/user_controller.js';
+
+import {
+  verifyJWT,
+  authorizeRoles,
+} from '../middleware/auth_middleware.js';
+
+import {
+  validateJson,
+  validateParams,
+} from '../middleware/validator_middleware.js';
+
+import {
+  userIdValidator,
+  createUserValidator,
+  putUserValidator,
+  patchUserValidator,
+  updateProfileValidator,
+} from '../validators/user_validator.js';
 
 const router = express.Router();
 
-// Protected routes
-router.get('/profile', authMiddleware, UserController.getProfile);
-router.put('/profile', authMiddleware, validateMiddleware(updateProfileSchema, 'body'), UserController.updateProfile);
-router.put('/password', authMiddleware, validateMiddleware(changePasswordSchema, 'body'), UserController.changePassword);
+/* =========================================
+   PROFILE ROUTES
+   Logged-in user manages their own profile
+========================================= */
 
-// Admin only routes
-router.get('/', authMiddleware, roleMiddleware(['admin']), UserController.getAllUsers);
-router.post('/', authMiddleware, roleMiddleware(['admin']), UserController.createUser);
-router.put('/:id/status', authMiddleware, roleMiddleware(['admin']), UserController.toggleUserStatus);
+// Get own profile — no body, no params to validate
+router.get(
+  '/profile/me',
+  verifyJWT,
+  getProfile
+);
+
+// Update own profile — only name and phone allowed
+router.patch(
+  '/profile/me',
+  verifyJWT,
+  validateJson(updateProfileValidator),
+  updateProfile
+);
+
+/* =========================================
+   ADMIN ROUTES
+   Only role = 'admin' can access these
+========================================= */
+
+// Get all users — filters/pagination handled in controller
+router.get(
+  '/',
+  verifyJWT,
+  authorizeRoles('1'),
+  getAllUsers
+);
+
+// Get single user by id
+router.get(
+  '/:id',
+  verifyJWT,
+  authorizeRoles('1'),
+  validateParams(userIdValidator),
+  getUserByID
+);
+
+// Create new user (admin sets is_active + is_verified = 1 directly)
+router.post(
+  '/',
+  verifyJWT,
+  authorizeRoles('1'),
+  validateJson(createUserValidator),
+  postUser
+);
+
+// Partial update — at least one field required
+router.patch(
+  '/:id',
+  verifyJWT,
+  authorizeRoles('1'),
+  validateParams(userIdValidator),
+  validateJson(patchUserValidator),
+  patchUser
+);
+
+// Full replacement — all fields required
+router.put(
+  '/:id',
+  verifyJWT,
+  authorizeRoles('1'),
+  validateParams(userIdValidator),
+  validateJson(putUserValidator),
+  putUser
+);
+
+// Delete user
+router.delete(
+  '/:id',
+  verifyJWT,
+  authorizeRoles('1'),
+  validateParams(userIdValidator),
+  deleteUser
+);
 
 export default router;

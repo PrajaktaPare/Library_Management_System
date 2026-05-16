@@ -1,42 +1,50 @@
 {
-  "name": "project",
+  "name": "smart-library-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Production-grade Express backend for Smart Library Management System",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "format": "prettier --write .",
-    "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "seed": "node src/database/seed.js"
   },
-  "keywords": [],
+  "keywords": [
+    "library",
+    "management",
+    "express",
+    "nodejs"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ajv": "^8.20.0",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^3.0.1",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
-    "dotenv": "^17.4.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "ejs": "^5.0.2",
-    "express": "^5.2.1",
-    "express-validator": "^7.3.2",
-    "jsonwebtoken": "^9.0.3",
-    "multer": "^2.1.1",
-    "mysql2": "^3.22.3",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.6.5",
+    "node-cron": "^4.2.1",
     "nodemailer": "^8.0.7",
-    "winston": "^3.19.0"
+    "prettier": "^3.8.3",
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "eslint": "^9.39.4",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^5.5.5",
-    "nodemon": "^3.1.14",
-    "prettier": "^3.8.3"
+    "nodemon": "^3.0.2"
   }
 }

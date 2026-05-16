@@ -1,0 +1,281 @@
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-05-16T21:25:32.559Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:27:47.872Z"}
+{"level":"info","message":"URL: /auth/register","timestamp":"2026-05-16T21:27:47.873Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"9865a755-cf01-4e76-b762-95ab2b5e5867\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"136\"}","timestamp":"2026-05-16T21:27:47.873Z"}
+{"level":"info","message":"EMAIL TEMPLATE LOADED","timestamp":"2026-05-16T21:27:48.108Z"}
+{"level":"info","message":"EMAIL LINK INSERTED INTO TEMPLATE","timestamp":"2026-05-16T21:27:48.109Z"}
+{"level":"info","message":"EMAIL SENT SUCCESSFULLY: <994f54ae-d217-15de-18ba-1732d1102b29@undefined>","timestamp":"2026-05-16T21:27:50.879Z"}
+{"level":"info","message":"USER REGISTERED: johndoe","timestamp":"2026-05-16T21:27:50.880Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:28:00.625Z"}
+{"level":"info","message":"URL: /confirm?uid=1&token=76e484d3707045a940af","timestamp":"2026-05-16T21:28:00.627Z"}
+{"level":"info","message":"HEADERS: {\"host\":\"localhost:3000\",\"connection\":\"keep-alive\",\"upgrade-insecure-requests\":\"1\",\"user-agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Postman/12.10.6 Electron/37.10.3 Safari/537.36\",\"accept\":\"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\",\"sec-fetch-site\":\"cross-site\",\"sec-fetch-mode\":\"navigate\",\"sec-fetch-user\":\"?1\",\"sec-fetch-dest\":\"document\",\"accept-encoding\":\"gzip, deflate, br, zstd\",\"accept-language\":\"en-US\"}","timestamp":"2026-05-16T21:28:00.627Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:28:42.514Z"}
+{"level":"info","message":"URL: /confirm?uid=1&token=76e484d3707045a940af","timestamp":"2026-05-16T21:28:42.515Z"}
+{"level":"info","message":"HEADERS: {\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"e8956808-d677-41e6-aadf-313eac64388e\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:28:42.515Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-05-16T21:31:01.310Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:32:41.868Z"}
+{"level":"info","message":"URL: /auth/register","timestamp":"2026-05-16T21:32:41.869Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"a4c8c666-12ac-4df1-85fc-ef5b04faf291\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"136\"}","timestamp":"2026-05-16T21:32:41.870Z"}
+{"level":"info","message":"EMAIL TEMPLATE LOADED","timestamp":"2026-05-16T21:32:42.097Z"}
+{"level":"info","message":"EMAIL LINK INSERTED INTO TEMPLATE","timestamp":"2026-05-16T21:32:42.098Z"}
+{"level":"info","message":"EMAIL SENT SUCCESSFULLY: <9ce64af4-02b2-6ee9-36bc-f3974e267a3a@undefined>","timestamp":"2026-05-16T21:32:44.607Z"}
+{"level":"info","message":"USER REGISTERED: johndoe","timestamp":"2026-05-16T21:32:44.608Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:32:51.122Z"}
+{"level":"info","message":"URL: /auth/verify-email?uid=2&token=249f9874d7546f488519","timestamp":"2026-05-16T21:32:51.123Z"}
+{"level":"info","message":"HEADERS: {\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"e0a2cfdc-956f-4edd-9029-590846ec6558\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:32:51.123Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:33:33.462Z"}
+{"level":"info","message":"URL: /auth/register","timestamp":"2026-05-16T21:33:33.462Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"6ef787df-4517-4562-b787-39f16a3acff5\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"136\"}","timestamp":"2026-05-16T21:33:33.462Z"}
+{"level":"error","message":"REGISTER SERVICE ERROR USER_ALREADY_EXISTS","stack":"Error: USER_ALREADY_EXISTS\n    at registerService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:110:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async register (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:33:7)","timestamp":"2026-05-16T21:33:33.465Z"}
+{"level":"error","message":"REGISTER CONTROLLER ERROR USER_ALREADY_EXISTS","stack":"Error: USER_ALREADY_EXISTS\n    at registerService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:110:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async register (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:33:7)","timestamp":"2026-05-16T21:33:33.465Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:33:39.797Z"}
+{"level":"info","message":"URL: /auth/register","timestamp":"2026-05-16T21:33:39.797Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"cd6ff4b6-d19f-496b-b648-2a2f35f2b1e9\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"137\"}","timestamp":"2026-05-16T21:33:39.797Z"}
+{"level":"error","message":"REGISTER SERVICE ERROR USER_ALREADY_EXISTS","stack":"Error: USER_ALREADY_EXISTS\n    at registerService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:110:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async register (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:33:7)","timestamp":"2026-05-16T21:33:39.799Z"}
+{"level":"error","message":"REGISTER CONTROLLER ERROR USER_ALREADY_EXISTS","stack":"Error: USER_ALREADY_EXISTS\n    at registerService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:110:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async register (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:33:7)","timestamp":"2026-05-16T21:33:39.799Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:33:49.171Z"}
+{"level":"info","message":"URL: /auth/register","timestamp":"2026-05-16T21:33:49.171Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"ed5ecf81-ac3c-4a83-836b-0ec5d48429da\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"138\"}","timestamp":"2026-05-16T21:33:49.171Z"}
+{"level":"error","message":"REGISTER SERVICE ERROR USER_ALREADY_EXISTS","stack":"Error: USER_ALREADY_EXISTS\n    at registerService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:110:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async register (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:33:7)","timestamp":"2026-05-16T21:33:49.173Z"}
+{"level":"error","message":"REGISTER CONTROLLER ERROR USER_ALREADY_EXISTS","stack":"Error: USER_ALREADY_EXISTS\n    at registerService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:110:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async register (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:33:7)","timestamp":"2026-05-16T21:33:49.173Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:35:14.641Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:35:14.642Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"faa6bac6-5577-4485-807a-91219586e040\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"55\"}","timestamp":"2026-05-16T21:35:14.642Z"}
+{"level":"info","message":"LOGIN SUCCESS: johndoe","timestamp":"2026-05-16T21:35:14.765Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:35:51.748Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:35:51.748Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"a79aaff1-47ae-4134-9de5-75b07e5da092\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"52\"}","timestamp":"2026-05-16T21:35:51.749Z"}
+{"level":"error","message":"LOGIN SERVICE ERROR INVALID_PASSWORD","stack":"Error: INVALID_PASSWORD\n    at loginService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:285:13)\n    at async login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:77:7)","timestamp":"2026-05-16T21:35:51.824Z"}
+{"level":"error","message":"LOGIN CONTROLLER ERROR INVALID_PASSWORD","stack":"Error: INVALID_PASSWORD\n    at loginService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:285:13)\n    at async login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:77:7)","timestamp":"2026-05-16T21:35:51.825Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:36:07.530Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:36:07.530Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"9d11f921-8891-483e-bc43-47d61c7e366d\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"51\"}","timestamp":"2026-05-16T21:36:07.531Z"}
+{"level":"error","message":"LOGIN SERVICE ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at loginService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:254:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:77:7)","timestamp":"2026-05-16T21:36:07.558Z"}
+{"level":"error","message":"LOGIN CONTROLLER ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at loginService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:254:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:77:7)","timestamp":"2026-05-16T21:36:07.558Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:36:27.542Z"}
+{"level":"info","message":"URL: /auth/register","timestamp":"2026-05-16T21:36:27.542Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"8e9645be-6f96-4925-b33c-917f01ce5d2e\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"152\"}","timestamp":"2026-05-16T21:36:27.543Z"}
+{"level":"info","message":"EMAIL TEMPLATE LOADED","timestamp":"2026-05-16T21:36:27.727Z"}
+{"level":"info","message":"EMAIL LINK INSERTED INTO TEMPLATE","timestamp":"2026-05-16T21:36:27.727Z"}
+{"level":"info","message":"EMAIL SENT SUCCESSFULLY: <a94ae63b-7629-4055-2b04-b6948ee5550f@undefined>","timestamp":"2026-05-16T21:36:30.500Z"}
+{"level":"info","message":"USER REGISTERED: unverified","timestamp":"2026-05-16T21:36:30.501Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:36:43.017Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:36:43.017Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"26e6bb3b-d3bc-4fad-8716-3117497022f5\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"64\"}","timestamp":"2026-05-16T21:36:43.018Z"}
+{"level":"error","message":"LOGIN SERVICE ERROR ACCOUNT_NOT_ACTIVE","stack":"Error: ACCOUNT_NOT_ACTIVE\n    at loginService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:262:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:77:7)","timestamp":"2026-05-16T21:36:43.020Z"}
+{"level":"error","message":"LOGIN CONTROLLER ERROR ACCOUNT_NOT_ACTIVE","stack":"Error: ACCOUNT_NOT_ACTIVE\n    at loginService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:262:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:77:7)","timestamp":"2026-05-16T21:36:43.020Z"}
+{"body":"{\r\n  \"username\": \"johnoe\",\r\n\n}\r\n\r\n\n\n\n","expose":true,"level":"error","message":"GLOBAL ERROR Expected double-quoted property name in JSON at position 29 (line 4 column 1)","stack":"SyntaxError: Expected double-quoted property name in JSON at position 29 (line 4 column 1)\n    at JSON.parse (<anonymous>)\n    at parse (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\types\\json.js:92:19)\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\read.js:128:18\n    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)\n    at invokeCallback (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:238:16)\n    at done (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:227:7)\n    at IncomingMessage.onEnd (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:287:7)\n    at IncomingMessage.emit (node:events:519:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)","status":400,"statusCode":400,"timestamp":"2026-05-16T21:37:04.633Z","type":"entity.parse.failed"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:37:13.364Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:37:13.364Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"98218719-17dc-4a05-aeab-45e35cfcb189\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"36\"}","timestamp":"2026-05-16T21:37:13.364Z"}
+{"0":{"instancePath":"","keyword":"errorMessage","message":"Password is required","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"required","message":"must have required property 'password'","params":{"missingProperty":"password"},"schemaPath":"#/required"}]},"schemaPath":"#/errorMessage"},"level":"warn","message":"BODY VALIDATION FAILED","timestamp":"2026-05-16T21:37:13.365Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:37:25.480Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:37:25.481Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"c7198620-54a6-4795-b81c-02c874b470ac\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"13\"}","timestamp":"2026-05-16T21:37:25.481Z"}
+{"0":{"instancePath":"","keyword":"errorMessage","message":"Username is required","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"required","message":"must have required property 'username'","params":{"missingProperty":"username"},"schemaPath":"#/required"}]},"schemaPath":"#/errorMessage"},"1":{"instancePath":"","keyword":"errorMessage","message":"Password is required","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"required","message":"must have required property 'password'","params":{"missingProperty":"password"},"schemaPath":"#/required"}]},"schemaPath":"#/errorMessage"},"level":"warn","message":"BODY VALIDATION FAILED","timestamp":"2026-05-16T21:37:25.481Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:37:54.032Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:37:54.032Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"fcfcdd3b-a602-4a0b-891d-2d62951c757f\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"58\"}","timestamp":"2026-05-16T21:37:54.032Z"}
+{"level":"error","message":"LOGIN SERVICE ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at loginService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:254:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:77:7)","timestamp":"2026-05-16T21:37:54.034Z"}
+{"level":"error","message":"LOGIN CONTROLLER ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at loginService (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/auth_service.js:254:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth_controller.js:77:7)","timestamp":"2026-05-16T21:37:54.034Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:38:32.670Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:38:32.670Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"72c04c5b-2638-4fcc-86b3-6e30a6122d20\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"62\"}","timestamp":"2026-05-16T21:38:32.670Z"}
+{"level":"info","message":"LOGIN SUCCESS: johndoe","timestamp":"2026-05-16T21:38:32.757Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:39:11.700Z"}
+{"level":"info","message":"URL: /users/profile/me","timestamp":"2026-05-16T21:39:11.701Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MiwiaWF0IjoxNzc4OTY3NTEyLCJleHAiOjE3NzkwNTM5MTJ9.o2T_4ILVNXOrTgejj1o-QcaAMIPnD454bYDr2BMptL4\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"cdea988b-abc1-43b4-9506-788dd262b438\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:39:11.701Z"}
+{"level":"info","message":"User authenticated: 2","timestamp":"2026-05-16T21:39:11.722Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:40:02.155Z"}
+{"level":"info","message":"URL: /users/profile/me","timestamp":"2026-05-16T21:40:02.155Z"}
+{"level":"info","message":"HEADERS: {\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"2ce94a6d-d85f-4acd-b838-5a0386a86d91\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:40:02.156Z"}
+{"level":"warn","message":"Unauthorized: No token","timestamp":"2026-05-16T21:40:02.156Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:40:07.626Z"}
+{"level":"info","message":"URL: /users/profile/me","timestamp":"2026-05-16T21:40:07.626Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MiwiaWF0IjoxNzc4OTY3NTEyLCJleHAiOjE3NzkwNTM5MTJ9.o2T_4ILVNXOrTgejj1o-QcaAMIPnD454bYDr2BMptL4\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"06fcf8b7-037e-4d4c-b489-01acabbb7222\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:40:07.626Z"}
+{"level":"info","message":"User authenticated: 2","timestamp":"2026-05-16T21:40:07.628Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:40:26.969Z"}
+{"level":"info","message":"URL: /users/profile/me","timestamp":"2026-05-16T21:40:26.969Z"}
+{"level":"info","message":"HEADERS: {\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"60009302-8cca-4689-bdd9-802d6a088468\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:40:26.969Z"}
+{"level":"warn","message":"Unauthorized: No token","timestamp":"2026-05-16T21:40:26.970Z"}
+{"level":"info","message":"METHOD: PATCH","timestamp":"2026-05-16T21:41:05.307Z"}
+{"level":"info","message":"URL: /users/profile/me","timestamp":"2026-05-16T21:41:05.307Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MiwiaWF0IjoxNzc4OTY3NTEyLCJleHAiOjE3NzkwNTM5MTJ9.o2T_4ILVNXOrTgejj1o-QcaAMIPnD454bYDr2BMptL4\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"1fc6ce88-5417-45eb-94d2-b61ad541fa9f\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"56\"}","timestamp":"2026-05-16T21:41:05.307Z"}
+{"level":"info","message":"User authenticated: 2","timestamp":"2026-05-16T21:41:05.308Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:41:11.570Z"}
+{"level":"info","message":"URL: /users/profile/me","timestamp":"2026-05-16T21:41:11.570Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MiwiaWF0IjoxNzc4OTY3NTEyLCJleHAiOjE3NzkwNTM5MTJ9.o2T_4ILVNXOrTgejj1o-QcaAMIPnD454bYDr2BMptL4\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"0989b1da-a678-4d3c-9a32-829f2fa722a5\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:41:11.570Z"}
+{"level":"info","message":"User authenticated: 2","timestamp":"2026-05-16T21:41:11.571Z"}
+{"level":"info","message":"METHOD: PATCH","timestamp":"2026-05-16T21:41:45.976Z"}
+{"level":"info","message":"URL: /users/profile/me","timestamp":"2026-05-16T21:41:45.976Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MiwiaWF0IjoxNzc4OTY3NTEyLCJleHAiOjE3NzkwNTM5MTJ9.o2T_4ILVNXOrTgejj1o-QcaAMIPnD454bYDr2BMptL4\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"78918fcf-31b0-4178-96bc-4cbddc5ee362\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"72\"}","timestamp":"2026-05-16T21:41:45.977Z"}
+{"level":"info","message":"User authenticated: 2","timestamp":"2026-05-16T21:41:45.977Z"}
+{"0":{"instancePath":"","keyword":"errorMessage","message":"Only name and phone can be updated","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"additionalProperties","message":"must NOT have additional properties","params":{"additionalProperty":"email"},"schemaPath":"#/additionalProperties"}]},"schemaPath":"#/errorMessage"},"level":"warn","message":"BODY VALIDATION FAILED","timestamp":"2026-05-16T21:41:45.977Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:42:44.540Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:42:44.540Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"9497b93c-3268-4b74-893c-8f4c615694fd\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"69\"}","timestamp":"2026-05-16T21:42:44.540Z"}
+{"level":"info","message":"LOGIN SUCCESS: admin","timestamp":"2026-05-16T21:42:44.624Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:44:08.136Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:44:08.136Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY3NzY0LCJleHAiOjE3NzkwNTQxNjR9.1haO6cX1y49cE7HoQbX-gVFXmolv5Ou4-z9tflHvYdA\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"f1edfad3-6bfd-4dfc-8c15-49017f9e1e06\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:44:08.136Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:44:08.137Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:44:08.137Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:44:08.138Z"}
+{"level":"warn","message":"Access denied for role: undefined","timestamp":"2026-05-16T21:44:08.138Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:44:17.675Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:44:17.675Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"ce132f86-27e1-4b8d-88a4-172b3c5a6cd4\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"69\"}","timestamp":"2026-05-16T21:44:17.675Z"}
+{"level":"info","message":"LOGIN SUCCESS: admin","timestamp":"2026-05-16T21:44:17.784Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:44:32.521Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:44:32.521Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY3ODU3LCJleHAiOjE3NzkwNTQyNTd9.SLb0x4E-ogT3fvb7WKbb8hxbWyAGWXi8RDc7RKrzwZc\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"c1a32d1e-4482-4d0c-909a-36f0702d4e89\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:44:32.521Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:44:32.522Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:44:32.522Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:44:32.522Z"}
+{"level":"warn","message":"Access denied for role: undefined","timestamp":"2026-05-16T21:44:32.522Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-05-16T21:45:40.243Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:45:44.081Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:45:44.082Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY3ODU3LCJleHAiOjE3NzkwNTQyNTd9.SLb0x4E-ogT3fvb7WKbb8hxbWyAGWXi8RDc7RKrzwZc\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"d43a8fd1-c893-443f-a69a-39139f95922d\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:45:44.082Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:45:44.086Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:45:44.087Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:45:44.087Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:45:44.088Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:46:54.692Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:46:54.693Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"44be2fd8-a8a5-4bdc-886a-fdd39fca5212\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"70\"}","timestamp":"2026-05-16T21:46:54.693Z"}
+{"level":"info","message":"LOGIN SUCCESS: johndoe","timestamp":"2026-05-16T21:46:54.812Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:47:05.070Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:47:05.070Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MiwiaWF0IjoxNzc4OTY4MDE0LCJleHAiOjE3NzkwNTQ0MTR9.9sORH0OLDfQyXXsxzrf9Q8yhoHMhAx9WDMJPZOFa49k\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"a3ad020f-9b4a-43c9-9aac-28e4cf259d68\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:47:05.070Z"}
+{"level":"info","message":"User authenticated: 2","timestamp":"2026-05-16T21:47:05.071Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:47:05.071Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:47:05.072Z"}
+{"level":"warn","message":"Access denied for role: undefined","timestamp":"2026-05-16T21:47:05.072Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:47:13.376Z"}
+{"level":"info","message":"URL: /auth/login","timestamp":"2026-05-16T21:47:13.376Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"98ffd582-e9b3-4e4a-b36e-429d02e20246\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"69\"}","timestamp":"2026-05-16T21:47:13.377Z"}
+{"level":"info","message":"LOGIN SUCCESS: admin","timestamp":"2026-05-16T21:47:13.446Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:47:23.738Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:47:23.739Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"e7ede770-4417-47af-b943-5c5ddc6e2eb9\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:47:23.739Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:47:23.740Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:47:23.740Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:47:23.740Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:47:23.740Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:50:10.937Z"}
+{"level":"info","message":"URL: /users?username=johndoe","timestamp":"2026-05-16T21:50:10.938Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"f1aead53-33a1-4d95-899f-324f5d3b6da4\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:50:10.938Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:50:10.939Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:50:10.939Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:50:10.939Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:50:10.939Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:50:22.936Z"}
+{"level":"info","message":"URL: /users?id=1","timestamp":"2026-05-16T21:50:22.936Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"0194182a-32b0-413c-952b-30a5c4c74b11\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:50:22.937Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:50:22.937Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:50:22.937Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:50:22.938Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:50:22.938Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:50:37.412Z"}
+{"level":"info","message":"URL: /users?email=john@example.com","timestamp":"2026-05-16T21:50:37.412Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"c6cc7329-45a2-4202-9b49-ef66dab9667c\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:50:37.412Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:50:37.413Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:50:37.413Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:50:37.413Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:50:37.413Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:51:37.470Z"}
+{"level":"info","message":"URL: /users?email=john@example.co","timestamp":"2026-05-16T21:51:37.471Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"720f5229-8bc5-49c0-afa0-a58d2478ae3c\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:51:37.471Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:51:37.472Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:51:37.473Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:51:37.473Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:51:37.473Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T21:51:45.300Z"}
+{"level":"info","message":"URL: /users?email=john@examp.com","timestamp":"2026-05-16T21:51:45.300Z"}
+{"level":"info","message":"HEADERS: {\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"92cf89bc-d012-4d1a-bfa8-9f246913ae1a\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\"}","timestamp":"2026-05-16T21:51:45.301Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:51:45.301Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:51:45.302Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:51:45.302Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:51:45.302Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:56:59.938Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:56:59.938Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"07621af7-196f-476b-8780-7d40350111ec\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"165\"}","timestamp":"2026-05-16T21:56:59.938Z"}
+{"level":"warn","message":"Unauthorized: No token","timestamp":"2026-05-16T21:56:59.939Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:57:24.554Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:57:24.555Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"74e63d91-abbe-4f7f-a831-94af1bd73708\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"165\"}","timestamp":"2026-05-16T21:57:24.555Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:57:24.556Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:57:24.556Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:57:24.556Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:57:24.556Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:58:20.032Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:58:20.033Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"0bca503e-f609-46fd-b03d-63ffedb2fb99\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"166\"}","timestamp":"2026-05-16T21:58:20.033Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:58:20.034Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:58:20.034Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:58:20.034Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:58:20.034Z"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","message":"CREATE USER ERROR Duplicate entry 'newstudent@example.com' for key 'users.email'","sql":"\n      INSERT INTO users\n      (\n        username,\n        email,\n        password_hash,\n        name,\n        phone,\n        role_id,\n        is_active,\n        is_verified\n      )\n\n      VALUES\n      (\n        ?, ?, ?, ?, ?, ?, ?, ?\n      )\n      ","sqlMessage":"Duplicate entry 'newstudent@example.com' for key 'users.email'","sqlState":"23000","stack":"Error: Duplicate entry 'newstudent@example.com' for key 'users.email'\n    at createUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/user_services.js:175:16)\n    at postUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user_controller.js:220:13)","timestamp":"2026-05-16T21:58:20.139Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T21:58:40.595Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T21:58:40.595Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"812b138c-a984-415f-bfc9-c1b62399738d\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"166\"}","timestamp":"2026-05-16T21:58:40.595Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T21:58:40.596Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T21:58:40.596Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T21:58:40.596Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T21:58:40.596Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-05-16T22:00:59.116Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T22:01:20.144Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T22:01:20.145Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"50210be9-f9c8-48b2-ac16-9fc5816f1409\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"167\"}","timestamp":"2026-05-16T22:01:20.146Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T22:01:20.150Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T22:01:20.151Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T22:01:20.152Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T22:01:20.152Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-05-16T22:03:26.511Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T22:04:01.721Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T22:04:01.721Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"7ac2b659-5cf3-41e9-a585-21777e43bd38\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"153\"}","timestamp":"2026-05-16T22:04:01.722Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T22:04:01.725Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T22:04:01.726Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T22:04:01.726Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T22:04:01.727Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-05-16T22:05:04.219Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T22:05:38.467Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T22:05:38.468Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"257367e4-8e48-4866-b2df-7348293f73d5\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"153\"}","timestamp":"2026-05-16T22:05:38.468Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T22:05:38.471Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T22:05:38.472Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T22:05:38.473Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T22:05:38.473Z"}
+{"level":"info","message":"EMAIL TEMPLATE LOADED","timestamp":"2026-05-16T22:05:38.710Z"}
+{"level":"info","message":"EMAIL LINK INSERTED INTO TEMPLATE","timestamp":"2026-05-16T22:05:38.711Z"}
+{"level":"info","message":"EMAIL SENT SUCCESSFULLY: <99d6aba4-93e1-3c4a-c504-67a0aa3e1c50@undefined>","timestamp":"2026-05-16T22:05:49.022Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T22:06:05.074Z"}
+{"level":"info","message":"URL: /auth/verify-email?uid=10&token=81840a173b986f36a8ff","timestamp":"2026-05-16T22:06:05.075Z"}
+{"level":"info","message":"HEADERS: {\"host\":\"localhost:3000\",\"connection\":\"keep-alive\",\"sec-ch-ua\":\"\\\"Chromium\\\";v=\\\"148\\\", \\\"Google Chrome\\\";v=\\\"148\\\", \\\"Not/A)Brand\\\";v=\\\"99\\\"\",\"sec-ch-ua-mobile\":\"?0\",\"sec-ch-ua-platform\":\"\\\"Windows\\\"\",\"upgrade-insecure-requests\":\"1\",\"user-agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36\",\"accept\":\"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\",\"sec-fetch-site\":\"cross-site\",\"sec-fetch-mode\":\"navigate\",\"sec-fetch-user\":\"?1\",\"sec-fetch-dest\":\"document\",\"accept-encoding\":\"gzip, deflate, br, zstd\",\"accept-language\":\"en-GB,en-US;q=0.9,en;q=0.8\"}","timestamp":"2026-05-16T22:06:05.075Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T22:06:05.186Z"}
+{"level":"info","message":"URL: /favicon.ico","timestamp":"2026-05-16T22:06:05.186Z"}
+{"level":"info","message":"HEADERS: {\"host\":\"localhost:3000\",\"connection\":\"keep-alive\",\"sec-ch-ua-platform\":\"\\\"Windows\\\"\",\"user-agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36\",\"sec-ch-ua\":\"\\\"Chromium\\\";v=\\\"148\\\", \\\"Google Chrome\\\";v=\\\"148\\\", \\\"Not/A)Brand\\\";v=\\\"99\\\"\",\"sec-ch-ua-mobile\":\"?0\",\"accept\":\"image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8\",\"sec-fetch-site\":\"same-origin\",\"sec-fetch-mode\":\"no-cors\",\"sec-fetch-dest\":\"image\",\"referer\":\"http://localhost:3000/auth/verify-email?uid=10&token=81840a173b986f36a8ff\",\"accept-encoding\":\"gzip, deflate, br, zstd\",\"accept-language\":\"en-GB,en-US;q=0.9,en;q=0.8\"}","timestamp":"2026-05-16T22:06:05.187Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-05-16T22:07:40.621Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T22:07:57.345Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T22:07:57.345Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"2464c852-ba1f-41ea-bb24-cf0f48e09be4\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"153\"}","timestamp":"2026-05-16T22:07:57.346Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T22:07:57.349Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T22:07:57.350Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T22:07:57.350Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T22:07:57.351Z"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","message":"CREATE USER ERROR Duplicate entry 'trail' for key 'users.username'","sql":"\n    INSERT INTO users\n    (\n      username,\n      email,\n      password_hash,\n      name,\n      phone,\n      role_id,\n      is_active,\n      is_verified,\n      verification_token\n    )\n    VALUES\n    (\n      ?, ?, ?, ?, ?, ?, ?, ?, ?\n    )\n    ","sqlMessage":"Duplicate entry 'trail' for key 'users.username'","sqlState":"23000","stack":"Error: Duplicate entry 'trail' for key 'users.username'\n    at createUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/user_services.js:183:31)\n    at async postUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user_controller.js:220:7)","timestamp":"2026-05-16T22:07:57.548Z"}
+{"level":"info","message":"METHOD: POST","timestamp":"2026-05-16T22:08:15.794Z"}
+{"level":"info","message":"URL: /users","timestamp":"2026-05-16T22:08:15.795Z"}
+{"level":"info","message":"HEADERS: {\"content-type\":\"application/json\",\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZV9pZCI6MSwiaWF0IjoxNzc4OTY4MDMzLCJleHAiOjE3NzkwNTQ0MzN9.YP1IeVnT0J9Qzd09L-zwh0Grr_bN4BLQQAJHy4_ybtQ\",\"user-agent\":\"PostmanRuntime/7.54.0\",\"accept\":\"*/*\",\"postman-token\":\"7ca4cc7d-6d6b-4162-8541-2acb244eac02\",\"host\":\"localhost:3000\",\"accept-encoding\":\"gzip, deflate, br\",\"connection\":\"keep-alive\",\"content-length\":\"153\"}","timestamp":"2026-05-16T22:08:15.795Z"}
+{"level":"info","message":"User authenticated: 4","timestamp":"2026-05-16T22:08:15.796Z"}
+{"level":"info","message":"Allowed Roles: 1","timestamp":"2026-05-16T22:08:15.796Z"}
+{"level":"info","message":"User Role: undefined","timestamp":"2026-05-16T22:08:15.796Z"}
+{"level":"info","message":"User authorized","timestamp":"2026-05-16T22:08:15.797Z"}
+{"level":"info","message":"EMAIL TEMPLATE LOADED","timestamp":"2026-05-16T22:08:16.032Z"}
+{"level":"info","message":"EMAIL LINK INSERTED INTO TEMPLATE","timestamp":"2026-05-16T22:08:16.033Z"}
+{"level":"info","message":"EMAIL SENT SUCCESSFULLY: <a2bfa235-5ce2-a14f-7cd5-792a2139e305@undefined>","timestamp":"2026-05-16T22:08:18.624Z"}
+{"level":"info","message":"METHOD: GET","timestamp":"2026-05-16T22:08:37.691Z"}
+{"level":"info","message":"URL: /auth/verify-email?uid=12&token=9e7d689287b1721162fc","timestamp":"2026-05-16T22:08:37.692Z"}
+{"level":"info","message":"HEADERS: {\"host\":\"localhost:3000\",\"connection\":\"keep-alive\",\"sec-ch-ua\":\"\\\"Chromium\\\";v=\\\"148\\\", \\\"Google Chrome\\\";v=\\\"148\\\", \\\"Not/A)Brand\\\";v=\\\"99\\\"\",\"sec-ch-ua-mobile\":\"?0\",\"sec-ch-ua-platform\":\"\\\"Windows\\\"\",\"upgrade-insecure-requests\":\"1\",\"user-agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36\",\"accept\":\"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\",\"sec-fetch-site\":\"cross-site\",\"sec-fetch-mode\":\"navigate\",\"sec-fetch-user\":\"?1\",\"sec-fetch-dest\":\"document\",\"accept-encoding\":\"gzip, deflate, br, zstd\",\"accept-language\":\"en-GB,en-US;q=0.9,en;q=0.8\"}","timestamp":"2026-05-16T22:08:37.692Z"}

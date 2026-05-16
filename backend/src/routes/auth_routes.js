@@ -1,16 +1,42 @@
 import express from 'express';
-import { AuthController } from '../controllers/index.js';
-import { validateMiddleware, authMiddleware } from '../middleware/index.js';
-import { loginSchema, registerSchema, refreshTokenSchema } from '../validators/index.js';
-import { loginLimiter } from '../middleware/rate_limit_middleware.js';
+
+import {
+  register,
+  login,
+  verifyEmail,
+} from '../controllers/auth_controller.js';
+
+import { validateJson } from '../middleware/validator_middleware.js';
+
+import {
+  registerValidator,
+  loginValidator,
+} from '../validators/auth_validator.js';
 
 const router = express.Router();
 
-router.post('/login', loginLimiter, validateMiddleware(loginSchema, 'body'), AuthController.login);
-router.post('/register', validateMiddleware(registerSchema, 'body'), AuthController.register);
-router.post('/refresh-token', authMiddleware, validateMiddleware(refreshTokenSchema, 'body'), AuthController.refreshToken);
-router.post('/logout', authMiddleware, AuthController.logout);
-router.post('/logout-all', authMiddleware, AuthController.logoutAll);
-router.post('/reset-password', AuthController.resetPassword);
+/* =========================================
+   AUTH ROUTES
+========================================= */
+
+// Register user
+router.post(
+  '/register',
+  validateJson(registerValidator),
+  register
+);
+
+// Login user
+router.post(
+  '/login',
+  validateJson(loginValidator),
+  login
+);
+
+// Verify email — no body, no validation needed
+router.get(
+  '/verify-email',
+  verifyEmail
+);
 
 export default router;

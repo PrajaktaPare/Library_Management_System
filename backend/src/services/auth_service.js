@@ -1,125 +1,322 @@
-import { query } from '../database/connection.js';
-import { ApiError, PasswordHelper, JwtHelper, DateHelper, EmailHelper } from '../utils/index.js';
+import bcrypt from 'bcryptjs'; 
 
-class AuthService {
-  // ─── DB helpers (previously in AuthRepository) ──────────────────────
-  static async _findUserByUsername(username) {
-    const results = await query('SELECT * FROM users WHERE username = ?', [username]);
-    return results.length > 0 ? results[0] : null;
-  }
+import crypto from 'crypto';
 
-  static async _findUserByEmail(email) {
-    const results = await query('SELECT * FROM users WHERE email = ?', [email]);
-    return results.length > 0 ? results[0] : null;
-  }
+import db from '../config/db.js';
 
-  static async _findUserById(userId) {
-    const results = await query(
-      'SELECT id, username, email, name, phone, role, profile_image, is_active, last_login, created_at FROM users WHERE id = ?',
-      [userId]
+import logger from '../utils/logger.js';
+
+import { generateToken } from './jwt_service.js';
+
+import { sendVerificationEmail } from './email_service.js';
+
+/* =========================================
+   FUNCTION: hashPassword
+
+   PURPOSE:
+   Hash password using bcrypt
+
+   PARAMETER:
+   - password
+
+   RETURN:
+   - hashed password
+========================================= */
+export const hashPassword = async password => {
+
+  try {
+
+    const hashedPassword = await bcrypt.hash(
+      password,
+      10
     );
-    return results.length > 0 ? results[0] : null;
-  }
 
-  static async _createUser(username, email, passwordHash, name, phone, role) {
-    const result = await query(
-      'INSERT INTO users (username, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)',
-      [username, email, passwordHash, name, phone, role]
+    return hashedPassword;
+
+  } catch (error) {
+
+    logger.error(
+      'HASH PASSWORD ERROR',
+      error
     );
-    return result.insertId;
+
+    throw new Error(
+      'PASSWORD_HASH_FAILED'
+    );
   }
+};
 
-  static async _usernameExists(username) {
-    const results = await query('SELECT COUNT(*) as count FROM users WHERE username = ?', [username]);
-    return results[0].count > 0;
-  }
+/* =========================================
+   FUNCTION: registerService
 
-  static async _emailExists(email) {
-    const results = await query('SELECT COUNT(*) as count FROM users WHERE email = ?', [email]);
-    return results[0].count > 0;
-  }
+   PURPOSE:
+   Register new student user
+   and send verification email
 
-  // ─── Business logic ─────────────────────────────────────────────────
-  static async login(usernameOrEmail, password, role) {
-    let user = await this._findUserByUsername(usernameOrEmail);
-    if (!user) user = await this._findUserByEmail(usernameOrEmail);
-    if (!user) throw ApiError.badRequest('Invalid username/email or password');
-    if (!user.is_active) throw ApiError.unauthorized('Account is inactive');
-    if (user.role !== role) throw ApiError.badRequest(`User not registered as ${role}`);
+   PARAMETER:
+   - name
+   - username
+   - email
+   - password
+   - phone
 
-    const passwordMatch = await PasswordHelper.comparePasswords(password, user.password_hash);
-    if (!passwordMatch) throw ApiError.badRequest('Invalid username/email or password');
+   RETURN:
+   - inserted user data
+========================================= */
+export const registerService = async ({
+  name,
+  username,
+  email,
+  password,
+  phone,
+}) => {
 
-    await query('UPDATE users SET last_login = NOW() WHERE id = ?', [user.id]);
+  try {
 
-    const payload = { id: user.id, username: user.username, role: user.role, name: user.name };
-    const { accessToken, refreshToken } = JwtHelper.generateTokenPair(payload);
-    const expiresAt = DateHelper.addDays(new Date(), 7);
-    await query('INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)', [user.id, refreshToken, expiresAt]);
+    // Validate required fields
+    if (
+      !name ||
+      !username ||
+      !email ||
+      !password ||
+      !phone
+    ) {
 
+      throw new Error(
+        'MISSING_REQUIRED_FIELDS'
+      );
+    }
+
+    // Check existing user
+    const [existingUsers] = await db.query(
+      `
+      SELECT id
+      FROM users
+      WHERE
+        username = ?
+        OR email = ?
+        OR phone = ?
+      `,
+      [
+        username,
+        email,
+        phone,
+      ]
+    );
+
+    // User already exists
+    if (existingUsers.length > 0) {
+
+      throw new Error(
+        'USER_ALREADY_EXISTS'
+      );
+    }
+
+    // Hash password
+    const hashedPassword =
+      await hashPassword(password);
+
+    // Generate random verification token
+    const rawVerificationToken =
+      crypto.randomBytes(10).toString('hex');
+
+    // Hash verification token
+    const hashedVerificationToken =
+      await bcrypt.hash(
+        rawVerificationToken,
+        10
+      );
+
+    // Insert user into database
+    const [result] = await db.query(
+      `
+      INSERT INTO users
+      (
+        username,
+        email,
+        password_hash,
+        name,
+        phone,
+        role_id,
+        is_active,
+        is_verified,
+        verification_token
+      )
+
+      VALUES
+      (
+        ?, ?, ?, ?, ?, ?, ?, ?, ?
+      )
+      `,
+      [
+        username,
+        email,
+        hashedPassword,
+        name,
+        phone,
+        2,
+        null,
+        null,
+        hashedVerificationToken,
+      ]
+    );
+
+    // Create verification link
+    // FIXED
+const verificationLink =
+  `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawVerificationToken}`;
+
+    // Send verification email
+    await sendVerificationEmail(
+      email,
+      verificationLink
+    );
+
+    logger.info(
+      `USER REGISTERED: ${username}`
+    );
+
+    // Return response
     return {
-      user: { id: user.id, username: user.username, name: user.name, email: user.email, phone: user.phone, role: user.role, profile_image: user.profile_image },
-      accessToken,
-      refreshToken
+      user_id: result.insertId,
+      verification_link:
+        verificationLink,
     };
-  }
 
-  static async register(registerData) {
-    if (await this._usernameExists(registerData.username)) throw ApiError.conflict('Username already taken');
-    if (registerData.email && await this._emailExists(registerData.email)) throw ApiError.conflict('Email already registered');
+  } catch (error) {
 
-    const validation = PasswordHelper.validatePasswordStrength(registerData.password);
-    if (!validation.isValid) throw ApiError.badRequest('Password does not meet requirements', validation.errors);
-
-    const passwordHash = await PasswordHelper.hashPassword(registerData.password);
-    const userId = await this._createUser(registerData.username, registerData.email || null, passwordHash, registerData.name, registerData.phone || null, registerData.role);
-
-    if (registerData.email) {
-      EmailHelper.sendWelcomeEmail(registerData.email, registerData.name, registerData.username)
-        .catch(err => console.error('Welcome email failed:', err.message));
-    }
-    return { id: userId, username: registerData.username, name: registerData.name, email: registerData.email, role: registerData.role };
-  }
-
-  static async refreshAccessToken(userId, refreshToken) {
-    const tokens = await query(
-      'SELECT * FROM refresh_tokens WHERE user_id = ? AND token = ? AND revoked = FALSE AND expires_at > NOW()',
-      [userId, refreshToken]
+    logger.error(
+      'REGISTER SERVICE ERROR',
+      error
     );
-    if (tokens.length === 0) throw ApiError.unauthorized('Invalid or expired refresh token');
 
-    const user = await this._findUserById(userId);
-    if (!user) throw ApiError.notFound('User not found');
-
-    const payload = { id: user.id, username: user.username, role: user.role, name: user.name };
-    const accessToken = JwtHelper.generateAccessToken(payload);
-    return { accessToken, refreshToken };
+    throw error;
   }
+};
 
-  static async logout(userId, refreshToken) {
-    await query('UPDATE refresh_tokens SET revoked = TRUE WHERE token = ?', [refreshToken]);
-  }
+/* =========================================
+   FUNCTION: loginService
 
-  static async logoutAll(userId) {
-    await query('UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = ?', [userId]);
-  }
+   PURPOSE:
+   Authenticate user login
 
-  static async resetPassword(email, newPassword) {
-    const user = await this._findUserByEmail(email);
-    if (!user) throw ApiError.notFound('No account found with this email');
+   PARAMETER:
+   - username
+   - password
 
-    const validation = PasswordHelper.validatePasswordStrength(newPassword);
-    if (!validation.isValid) throw ApiError.badRequest('Password does not meet requirements', validation.errors);
+   RETURN:
+   - jwt token
+   - user data
+========================================= */
+export const loginService = async ({
+  username,
+  password,
+}) => {
 
-    const passwordHash = await PasswordHelper.hashPassword(newPassword);
-    await query('UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?', [passwordHash, user.id]);
+  try {
 
-    if (user.email) {
-      EmailHelper.sendPasswordChangedEmail(user.email, user.name)
-        .catch(err => console.error('Password change email failed:', err.message));
+    // Validate required fields
+    if (!username || !password) {
+
+      throw new Error(
+        'USERNAME_AND_PASSWORD_REQUIRED'
+      );
     }
-    return true;
-  }
-}
 
-export default AuthService;
+    // Find user
+    const [rows] = await db.query(
+      `
+      SELECT
+        users.id,
+        users.username,
+        users.email,
+        users.password_hash,
+        users.role_id,
+        roles.role_name,
+        users.is_active,
+        users.is_verified
+
+      FROM users
+
+      LEFT JOIN roles
+      ON users.role_id = roles.id
+
+      WHERE users.username = ?
+      `,
+      [username]
+    );
+
+    const user = rows[0];
+
+    // User not found
+    if (!user) {
+
+      throw new Error(
+        'USER_NOT_FOUND'
+      );
+    }
+
+    // Account inactive
+    if (user.is_active !== 1) {
+
+      throw new Error(
+        'ACCOUNT_NOT_ACTIVE'
+      );
+    }
+
+    // Email not verified
+    if (user.is_verified !== 1) {
+
+      throw new Error(
+        'EMAIL_NOT_VERIFIED'
+      );
+    }
+
+    // Compare password
+    const isPasswordMatched =
+      await bcrypt.compare(
+        password,
+        user.password_hash
+      );
+
+    // Invalid password
+    if (!isPasswordMatched) {
+
+      throw new Error(
+        'INVALID_PASSWORD'
+      );
+    }
+
+    // Generate JWT token
+    const token = generateToken({
+      id: user.id,
+      role_id: user.role_id,
+    });
+
+    logger.info(
+      `LOGIN SUCCESS: ${username}`
+    );
+
+    // Return response
+    return {
+      token,
+
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role_id: user.role_id,
+        role_name: user.role_name,
+      },
+    };
+
+  } catch (error) {
+
+    logger.error(
+      'LOGIN SERVICE ERROR',
+      error
+    );
+
+    throw error;
+  }
+};

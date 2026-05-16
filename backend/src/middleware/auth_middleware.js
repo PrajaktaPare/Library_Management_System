@@ -1,16 +1,60 @@
-import { JwtHelper, ApiError, asyncHandler } from '../utils/index.js';
+import { verifyToken } from '../services/jwt_service.js';
+import logger from '../utils/logger.js';
 
-const authMiddleware = asyncHandler((req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    throw ApiError.unauthorized('No token provided');
+export const verifyJWT = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+      logger.warn('Unauthorized: No token');
+      return res.status(401).json({ message: 'Unauthorized: No token' });
+    }
+
+    if (!authHeader.startsWith('Bearer ')) {
+      logger.warn('Unauthorized: Invalid token format');
+      return res.status(401).json({ message: 'Invalid token format' });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+      logger.warn('Unauthorized: Empty token');
+      return res.status(401).json({ message: 'Invalid token format' });
+    }
+
+    const decoded = verifyToken(token);
+
+    req.user = decoded;
+
+    logger.info(`User authenticated: ${decoded?.id}`);
+
+    next();
+  } catch (error) {
+    logger.error('JWT ERROR', error);
+
+    return res.status(401).json({
+      message: 'Invalid or expired token',
+    });
   }
-  const token = authHeader.substring(7);
-  const decoded = JwtHelper.verifyAccessToken(token);
-  req.user = decoded;
-  next();
-});
+};
 
-// Named export for files that import as { authenticate }
-export const authenticate = authMiddleware;
-export default authMiddleware;
+
+
+export const authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    logger.info(`Allowed Roles: ${roles}`);
+    logger.info(`User Role: ${req.user?.role}`);
+
+    if (!roles.includes(String(req.user.role_id))) {
+      logger.warn(`Access denied for role: ${req.user.role}`);
+
+      return res.status(403).json({
+        message: 'Access denied',
+      });
+    }
+
+    logger.info('User authorized');
+
+    next();
+  };
+};

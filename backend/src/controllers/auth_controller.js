@@ -1,47 +1,191 @@
-import { AuthService } from '../services/index.js';
-import { ApiResponse, asyncHandler, ApiError } from '../utils/index.js';
+import bcrypt from 'bcrypt';
 
-class AuthController {
-  static login = asyncHandler(async (req, res) => {
-    const result = await AuthService.login(req.body.username, req.body.password, req.body.role);
-    res.cookie('refreshToken', result.refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict', maxAge: 7 * 24 * 60 * 60 * 1000 });
-    res.status(200).json(ApiResponse.ok('Login successful', { user: result.user, accessToken: result.accessToken }));
-  });
+import logger from '../utils/logger.js';
 
-  static register = asyncHandler(async (req, res) => {
-    const result = await AuthService.register(req.body);
-    res.status(201).json(ApiResponse.created('Registration successful', { user: result }));
-  });
+import db from '../config/db.js';
 
-  static refreshToken = asyncHandler(async (req, res) => {
-    const token = req.cookies.refreshToken || req.body.refreshToken;
-    if (!token) throw ApiError.unauthorized('Refresh token not provided');
-    const userId = req.user.id;
-    const result = await AuthService.refreshAccessToken(userId, token);
-    res.status(200).json(ApiResponse.ok('Token refreshed', { accessToken: result.accessToken }));
-  });
+import {
+  registerService,
+  loginService,
+} from '../services/auth_service.js';
 
-  static logout = asyncHandler(async (req, res) => {
-    const token = req.cookies.refreshToken || req.body.refreshToken;
-    const userId = req.user.id;
-    if (token) await AuthService.logout(userId, token);
-    res.clearCookie('refreshToken');
-    res.status(200).json(ApiResponse.ok('Logout successful'));
-  });
+/* =========================================
+   FUNCTION: register
 
-  static logoutAll = asyncHandler(async (req, res) => {
-    const userId = req.user.id;
-    await AuthService.logoutAll(userId);
-    res.clearCookie('refreshToken');
-    res.status(200).json(ApiResponse.ok('Logged out from all devices'));
-  });
+   PURPOSE:
+   Register user
 
-  static resetPassword = asyncHandler(async (req, res) => {
-    const { email, newPassword } = req.body;
-    if (!email || !newPassword) throw ApiError.badRequest('Email and new password are required');
-    await AuthService.resetPassword(email, newPassword);
-    res.status(200).json(ApiResponse.ok('Password reset successful'));
-  });
-}
+   PARAMETER:
+   - req
+   - res
 
-export default AuthController;
+   RETURN:
+   - json response
+========================================= */
+export const register = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const result =
+      await registerService(req.body);
+
+    return res.status(201).json({
+      success_flag: true,
+      message:
+        'Registration successful. Please verify your email.',
+      data: result,
+    });
+
+  } catch (error) {
+
+    logger.error(
+      'REGISTER CONTROLLER ERROR',
+      error
+    );
+
+    return res.status(500).json({
+      success_flag: false,
+      message: error.message,
+    });
+  }
+};
+
+/* =========================================
+   FUNCTION: login
+
+   PURPOSE:
+   Login user
+
+   PARAMETER:
+   - req
+   - res
+
+   RETURN:
+   - json response
+========================================= */
+export const login = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const result =
+      await loginService(req.body);
+
+    return res.status(200).json({
+      success_flag: true,
+      message: 'Login successful',
+      data: result,
+    });
+
+  } catch (error) {
+
+    logger.error(
+      'LOGIN CONTROLLER ERROR',
+      error
+    );
+
+    return res.status(401).json({
+      success_flag: false,
+      message: error.message,
+    });
+  }
+};
+
+/* =========================================
+   FUNCTION: verifyEmail
+
+   PURPOSE:
+   Verify email link
+
+   PARAMETER:
+   - req
+   - res
+
+   RETURN:
+   - json response
+========================================= */
+export const verifyEmail = async (req, res) => {
+
+  try {
+
+    const { uid, token } = req.query;
+
+    if (!uid || !token) {
+      return res.status(400).json({
+        success_flag: false,
+        message: 'INVALID_VERIFICATION_LINK',
+      });
+    }
+
+    // Fetch user
+    const [rows] = await db.query(
+      `SELECT * FROM users WHERE id = ?`,
+      [uid]
+    );
+    const user = rows[0];
+
+    if (!user) {
+      return res.status(404).json({
+        success_flag: false,
+        message: 'USER_NOT_FOUND',
+      });
+    }
+
+    // Already verified — 2nd click lands here
+    if (user.is_verified === 1) {
+      return res.status(400).json({
+        success_flag: false,
+        message: 'USER_ALREADY_VERIFIED',
+      });
+    }
+
+    // Check expiry using created_at + 10 mins
+    const expiresAt = new Date(user.created_at.getTime() + 10 * 60 * 1000);
+
+    if (new Date() > expiresAt) {
+      return res.status(400).json({
+        success_flag: false,
+        message: 'VERIFICATION_LINK_EXPIRED',
+      });
+    }
+
+    // Validate token
+    const isValid = await bcrypt.compare(token, user.verification_token);
+
+    if (!isValid) {
+      return res.status(400).json({
+        success_flag: false,
+        message: 'INVALID_VERIFICATION_TOKEN',
+      });
+    }
+
+    // Activate user and clear token
+    await db.query(
+      `UPDATE users
+       SET is_active = 1,
+           is_verified = 1,
+           verification_token = NULL
+       WHERE id = ?`,
+      [uid]
+    );
+
+    return res.status(200).json({
+      success_flag: true,
+      message: 'EMAIL_VERIFIED_SUCCESSFULLY',
+    });
+
+  } catch (error) {
+
+    logger.error('VERIFY EMAIL ERROR', error);
+
+    return res.status(500).json({
+      success_flag: false,
+      message: error.message,
+    });
+  }
+};
