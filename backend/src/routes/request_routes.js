@@ -1,7 +1,7 @@
-const express = require('express');
-const { RequestController } = require('../controllers');
-const { validateMiddleware, authMiddleware, roleMiddleware } = require('../middleware');
-const { createRequestSchema, approveRequestSchema } = require('../validators');
+import express from 'express';
+import { RequestController } from '../controllers/index.js';
+import { validateMiddleware, authMiddleware, roleMiddleware } from '../middleware/index.js';
+import { createRequestSchema, approveRequestSchema } from '../validators/index.js';
 
 const router = express.Router();
 
@@ -18,4 +18,4 @@ router.put('/:id/issue', authMiddleware, roleMiddleware(['admin']), RequestContr
 router.put('/:id/return', authMiddleware, roleMiddleware(['admin']), RequestController.returnBook);
 router.get('/admin/overdue', authMiddleware, roleMiddleware(['admin']), RequestController.getOverdueBooks);
 
-module.exports = router;
+export default router;

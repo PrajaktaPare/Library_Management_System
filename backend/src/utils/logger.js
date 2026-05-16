@@ -1,5 +1,9 @@
-const winston = require('winston');
-const path = require('path');
+import winston from 'winston';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -39,4 +43,4 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 
-module.exports = logger;
+export default logger;

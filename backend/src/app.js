@@ -1,75 +1,60 @@
-// Import Express framework
-const express = require('express');
-// Import CORS middleware for cross-origin requests
-const cors = require('cors');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import routes from './routes/index.js';
+import { errorMiddleware, notFoundMiddleware, loggerMiddleware } from './middleware/index.js';
+import { apiLimiter } from './middleware/rate_limit_middleware.js';
+import { EmailHelper } from './utils/index.js';
 
-// Import cookie-parser to parse cookies from requests
-const cookieParser = require('cookie-parser');
-// Enable async error handling in Express routes
-require('express-async-errors');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Import application route definitions
-const apiRoutes = require('./routes');
-// Import custom middleware functions
-const { errorMiddleware, notFoundMiddleware, loggerMiddleware } = require('./middleware');
-
-// Create Express application instance
 const app = express();
 
+// Security middleware
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' }
+}));
 
-// Configure CORS to allow frontend origin and credentials
+// CORS
 app.use(cors({
-  origin: function(origin, callback) {
-    // List of allowed origins for API access
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
-      'http://localhost:5173',
-      'http://127.0.0.1:5173',
-      'http://localhost:5500',
-      'http://127.0.0.1:5500',
-      'http://localhost:8000',
-      'http://127.0.0.1:8000',
-      'http://localhost:8080',
-      'http://127.0.0.1:8080',
-      process.env.FRONTEND_URL,
-    ].filter(Boolean);
-
-    // In development mode, allow all origins
-    if (process.env.NODE_ENV === 'development') {
-      callback(null, true);
-      return;
-    }
-
-    // In production, only allow listed origins
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS not allowed'));
-    }
-  },
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Parse JSON bodies up to 10MB
+// Body parsers
 app.use(express.json({ limit: '10mb' }));
-// Parse URL-encoded bodies up to 10MB
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
-// Parse cookies from incoming requests
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
-// Apply HTTP request logging middleware
+
+// Request logging
 app.use(loggerMiddleware);
 
-// Mount all API routes under /api/v1 prefix
-app.use('/api/v1', apiRoutes);
+// Rate limiting
+app.use('/api/', apiLimiter);
 
-// Catch-all 404 handler for unmatched routes
+// Serve static files (uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Initialize email service
+EmailHelper.initialize();
+
+// API routes
+app.use('/api', routes);
+
+// Health check
+app.get('/', (req, res) => {
+  res.json({ message: 'Smart Library API', version: '1.0.0', status: 'running' });
+});
+
+// Error handling
 app.use(notFoundMiddleware);
-
-// Global error handling middleware (must be registered last)
 app.use(errorMiddleware);
 
-// Export the configured app instance
-module.exports = app;
+export default app;

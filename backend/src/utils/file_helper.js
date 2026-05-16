@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 class FileHelper {
   static deleteFile(filePath) {
@@ -39,4 +39,4 @@ class FileHelper {
   }
 }
 
-module.exports = FileHelper;
+export default FileHelper;

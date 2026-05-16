@@ -1,5 +1,5 @@
-const { BookService } = require('../services');
-const { ApiResponse, asyncHandler, PaginationHelper } = require('../utils');
+import { BookService } from '../services/index.js';
+import { ApiResponse, asyncHandler, PaginationHelper } from '../utils/index.js';
 
 class BookController {
   static createBook = asyncHandler(async (req, res) => {
@@ -9,12 +9,7 @@ class BookController {
 
   static getBooks = asyncHandler(async (req, res) => {
     const pagination = PaginationHelper.getPaginationParams(req.query);
-    const filters = {
-      category: req.query.category,
-      status: req.query.status,
-      search: req.query.search
-    };
-
+    const filters = { category: req.query.category, status: req.query.status, search: req.query.search };
     const result = await BookService.getBooks(pagination, filters);
     res.status(200).json(ApiResponse.paginated('Books retrieved', result.books, result.total, pagination.page, pagination.limit));
   });
@@ -41,14 +36,10 @@ class BookController {
 
   static searchBooks = asyncHandler(async (req, res) => {
     const pagination = PaginationHelper.getPaginationParams(req.query);
-    const filters = {
-      category: req.query.category,
-      status: req.query.status
-    };
-
+    const filters = { category: req.query.category, status: req.query.status };
     const result = await BookService.searchBooks(req.query.search, pagination, filters);
     res.status(200).json(ApiResponse.paginated('Books found', result.books, result.total, pagination.page, pagination.limit));
   });
 }
 
-module.exports = BookController;
+export default BookController;

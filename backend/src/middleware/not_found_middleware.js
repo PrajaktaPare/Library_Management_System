@@ -1,7 +1,7 @@
-const { ApiError } = require('../utils');
+import { ApiError } from '../utils/index.js';
 
 const notFoundMiddleware = (req, res, next) => {
   throw ApiError.notFound(`Route ${req.originalUrl} not found`);
 };
 
-module.exports = notFoundMiddleware;
+export default notFoundMiddleware;

@@ -1,6 +1,6 @@
 // Email helper using Nodemailer for sending transactional emails
-const nodemailer = require('nodemailer');
-const logger = require('./logger');
+import nodemailer from 'nodemailer';
+import logger from './logger.js';
 
 class EmailHelper {
   static transporter = null;
@@ -185,4 +185,4 @@ class EmailHelper {
   }
 }
 
-module.exports = EmailHelper;
+export default EmailHelper;

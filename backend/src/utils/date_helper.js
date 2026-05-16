@@ -32,4 +32,13 @@ class DateHelper {
   }
 }
 
-module.exports = DateHelper;
+// Named export for destructured imports (e.g. student_controller)
+export const calculateFine = (dueDate) => {
+  const now = new Date();
+  const due = new Date(dueDate);
+  if (now <= due) return 0;
+  const daysOverdue = Math.ceil((now - due) / (1000 * 60 * 60 * 24));
+  return daysOverdue * 5; // ₹5 per day
+};
+
+export default DateHelper;

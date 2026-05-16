@@ -1,7 +1,10 @@
-const morgan = require('morgan');
-const path = require('path');
-const fs = require('fs');
-const logger = require('../utils/logger');
+import morgan from 'morgan';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Create logs directory if it doesn't exist
 const logsDir = path.join(__dirname, '../logs');
@@ -19,4 +22,4 @@ const morganMiddleware = morgan(
   { stream: accessLogStream }
 );
 
-module.exports = morganMiddleware;
+export default morganMiddleware;

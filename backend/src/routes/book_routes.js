@@ -1,7 +1,7 @@
-const express = require('express');
-const { BookController } = require('../controllers');
-const { validateMiddleware, authMiddleware, roleMiddleware } = require('../middleware');
-const { createBookSchema, updateBookSchema } = require('../validators');
+import express from 'express';
+import { BookController } from '../controllers/index.js';
+import { validateMiddleware, authMiddleware, roleMiddleware } from '../middleware/index.js';
+import { createBookSchema, updateBookSchema } from '../validators/index.js';
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.post('/', authMiddleware, roleMiddleware(['admin']), validateMiddleware(c
 router.put('/:id', authMiddleware, roleMiddleware(['admin']), validateMiddleware(updateBookSchema, 'body'), BookController.updateBook);
 router.delete('/:id', authMiddleware, roleMiddleware(['admin']), BookController.deleteBook);
 
-module.exports = router;
+export default router;

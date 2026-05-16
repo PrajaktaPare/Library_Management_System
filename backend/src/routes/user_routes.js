@@ -1,7 +1,7 @@
-const express = require('express');
-const { UserController } = require('../controllers');
-const { validateMiddleware, authMiddleware, roleMiddleware } = require('../middleware');
-const { updateProfileSchema, changePasswordSchema } = require('../validators');
+import express from 'express';
+import { UserController } from '../controllers/index.js';
+import { validateMiddleware, authMiddleware, roleMiddleware } from '../middleware/index.js';
+import { updateProfileSchema, changePasswordSchema } from '../validators/index.js';
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.get('/', authMiddleware, roleMiddleware(['admin']), UserController.getAll
 router.post('/', authMiddleware, roleMiddleware(['admin']), UserController.createUser);
 router.put('/:id/status', authMiddleware, roleMiddleware(['admin']), UserController.toggleUserStatus);
 
-module.exports = router;
+export default router;

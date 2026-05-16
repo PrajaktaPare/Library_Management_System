@@ -1,8 +1,6 @@
-module.exports = {
-  AuthService: require('./auth_service'),
-  BookService: require('./book_service'),
-  RequestService: require('./request_service'),
-  IssueService: require('./issue_service'),
-  NotificationService: require('./notification_service'),
-  UserService: require('./user_service')
-};
+export { default as AuthService } from './auth_service.js';
+export { default as BookService } from './book_service.js';
+export { default as RequestService } from './request_service.js';
+export { default as IssueService } from './issue_service.js';
+export { default as NotificationService } from './notification_service.js';
+export { default as UserService } from './user_service.js';

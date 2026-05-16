@@ -1,7 +1,7 @@
-const express = require('express');
-const { IssueController } = require('../controllers');
-const { validateMiddleware, authMiddleware, roleMiddleware } = require('../middleware');
-const { createIssueSchema, updateIssueSchema } = require('../validators');
+import express from 'express';
+import { IssueController } from '../controllers/index.js';
+import { validateMiddleware, authMiddleware, roleMiddleware } from '../middleware/index.js';
+import { createIssueSchema, updateIssueSchema } from '../validators/index.js';
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.get('/', authMiddleware, roleMiddleware(['admin']), IssueController.getIs
 router.get('/:id', authMiddleware, IssueController.getIssueById);
 router.put('/:id', authMiddleware, roleMiddleware(['admin']), validateMiddleware(updateIssueSchema, 'body'), IssueController.updateIssue);
 
-module.exports = router;
+export default router;

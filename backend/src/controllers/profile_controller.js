@@ -1,24 +1,20 @@
 // profile_controller — logged-in user's own profile
-const asyncHandler = require('../utils/async_handler');
-const ApiResponse = require('../utils/api_response');
-const profileService = require('../services/profile_service');
-const { UserService } = require('../services');
+import asyncHandler from '../utils/async_handler.js';
+import apiResponse from '../utils/api_response.js';
+import * as profileService from '../services/profile_service.js';
+import * as userService from '../services/user_service.js';
+import { HTTP } from '../utils/constants.js';
 
 // GET /api/profile
-const getProfile = asyncHandler(async (req, res) => {
+export const getProfile = asyncHandler(async (req, res) => {
   const profile = await profileService.getProfile(req.user.id);
-  res.status(200).json(ApiResponse.ok('Profile fetched', profile));
+  return apiResponse(res, HTTP.OK, 'Profile fetched', profile);
 });
 
 // PATCH /api/profile — update own name, phone, or avatar
-const updateProfile = asyncHandler(async (req, res) => {
-  const updateData = { ...req.body };
+export const updateProfile = asyncHandler(async (req, res) => {
   // req.file set by multer if avatar uploaded
-  if (req.file) {
-    updateData.profile_image = req.file.path;
-  }
-  const updated = await UserService.updateProfile(req.user.id, updateData);
-  res.status(200).json(ApiResponse.ok('Profile updated', updated));
+  const avatarPath = req.file ? req.file.path : null;
+  const updated = await userService.updateOwnProfile(req.user.id, { ...req.body, avatarPath });
+  return apiResponse(res, HTTP.OK, 'Profile updated', updated);
 });
-
-module.exports = { getProfile, updateProfile };

@@ -1,16 +1,19 @@
 // Seed script: creates all tables and inserts default admin + sample books
-require('dotenv').config({ path: require('path').join(__dirname, '../../.env') });
-const mysql = require('mysql2/promise');
-const bcrypt = require('bcryptjs');
-const fs = require('fs');
-const path = require('path');
-const logger = require('../utils/logger');
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import mysql from 'mysql2/promise';
+import bcrypt from 'bcryptjs';
+import fs from 'fs';
 
-// Main seed function
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../../.env') });
+
 async function seed() {
   let connection;
   try {
-    // Connect without specifying a database first
     connection = await mysql.createConnection({
       host: process.env.DB_HOST || 'localhost',
       user: process.env.DB_USER || 'root',
@@ -20,54 +23,35 @@ async function seed() {
     });
 
     const dbName = process.env.DB_NAME || 'library_db';
-
-    // Create the database if it doesn't exist
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\``);
     console.log(`✓ Database "${dbName}" ensured`);
-
-    // Switch to the target database
     await connection.query(`USE \`${dbName}\``);
 
-    // Read and execute the schema SQL file to create all tables
     const schemaPath = path.join(__dirname, 'schema.sql');
     const schemaSql = fs.readFileSync(schemaPath, 'utf8');
     await connection.query(schemaSql);
     console.log('✓ All tables created');
 
-    // Check if admin user already exists
     const [admins] = await connection.query('SELECT id FROM users WHERE username = ?', ['admin']);
     if (admins.length === 0) {
-      // Hash the default admin password
       const adminHash = await bcrypt.hash('Admin@123', 12);
-      // Insert the default admin user
-      await connection.query(
-        'INSERT INTO users (username, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)',
-        ['admin', 'admin@library.com', adminHash, 'Library Admin', '9999999999', 'admin']
-      );
+      await connection.query('INSERT INTO users (username, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)', ['admin', 'admin@library.com', adminHash, 'Library Admin', '9999999999', 'admin']);
       console.log('✓ Default admin created (username: admin, password: Admin@123)');
     } else {
       console.log('→ Admin user already exists, skipping');
     }
 
-    // Check if a test student already exists
     const [students] = await connection.query('SELECT id FROM users WHERE username = ?', ['student1']);
     if (students.length === 0) {
-      // Hash the default student password
       const studentHash = await bcrypt.hash('Student@123', 12);
-      // Insert a test student user
-      await connection.query(
-        'INSERT INTO users (username, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)',
-        ['student1', 'student1@library.com', studentHash, 'Test Student', '8888888888', 'student']
-      );
+      await connection.query('INSERT INTO users (username, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)', ['student1', 'student1@library.com', studentHash, 'Test Student', '8888888888', 'student']);
       console.log('✓ Default student created (username: student1, password: Student@123)');
     } else {
       console.log('→ Student user already exists, skipping');
     }
 
-    // Check if books have been seeded already
     const [bookCount] = await connection.query('SELECT COUNT(*) as count FROM books');
     if (bookCount[0].count === 0) {
-      // Insert sample books into the database
       const books = [
         ['Quantitative Aptitude', 'R.S. Aggarwal', '9789351760148', 'Competitive Exam', 'Aptitude', 10, 10],
         ['General Knowledge 2025', 'Lucent', '9789384761549', 'Competitive Exam', 'GK', 8, 8],
@@ -82,13 +66,8 @@ async function seed() {
         ['Rich Dad Poor Dad', 'Robert Kiyosaki', '9781612680194', 'Reading', 'Biography', 7, 7],
         ['Atomic Habits', 'James Clear', '9780735211292', 'Reading', 'Biography', 6, 6]
       ];
-
-      // Insert each book row into the books table
       for (const book of books) {
-        await connection.query(
-          'INSERT INTO books (title, author, isbn, category, sub_category, total_copies, available_copies) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          book
-        );
+        await connection.query('INSERT INTO books (title, author, isbn, category, sub_category, total_copies, available_copies) VALUES (?, ?, ?, ?, ?, ?, ?)', book);
       }
       console.log(`✓ ${books.length} sample books seeded`);
     } else {
@@ -99,17 +78,13 @@ async function seed() {
     console.log('Default Credentials:');
     console.log('  Admin   → username: admin      password: Admin@123');
     console.log('  Student → username: student1   password: Student@123');
-
   } catch (error) {
-    // Log any errors that occurred during seeding
     console.error('Seed failed:', error.message);
     process.exit(1);
   } finally {
-    // Close the database connection when done
     if (connection) await connection.end();
     process.exit(0);
   }
 }
 
-// Execute the seed function
 seed();

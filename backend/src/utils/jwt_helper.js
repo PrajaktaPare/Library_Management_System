@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const ApiError = require('./api_error');
+import jwt from 'jsonwebtoken';
+import ApiError from './api_error.js';
 
 class JwtHelper {
   static generateAccessToken(payload) {
@@ -44,4 +44,4 @@ class JwtHelper {
   }
 }
 
-module.exports = JwtHelper;
+export default JwtHelper;

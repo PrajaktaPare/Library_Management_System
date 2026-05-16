@@ -1,8 +1,8 @@
-const express = require('express');
-const { AuthController } = require('../controllers');
-const { validateMiddleware, authMiddleware } = require('../middleware');
-const { loginSchema, registerSchema, refreshTokenSchema } = require('../validators');
-const { loginLimiter } = require('../middleware/rate_limit_middleware');
+import express from 'express';
+import { AuthController } from '../controllers/index.js';
+import { validateMiddleware, authMiddleware } from '../middleware/index.js';
+import { loginSchema, registerSchema, refreshTokenSchema } from '../validators/index.js';
+import { loginLimiter } from '../middleware/rate_limit_middleware.js';
 
 const router = express.Router();
 
@@ -13,4 +13,4 @@ router.post('/logout', authMiddleware, AuthController.logout);
 router.post('/logout-all', authMiddleware, AuthController.logoutAll);
 router.post('/reset-password', AuthController.resetPassword);
 
-module.exports = router;
+export default router;

@@ -4,7 +4,7 @@ import * as ctrl from '../controllers/profile_controller.js';
 import { authenticate } from '../middleware/auth_middleware.js';
 import { handleProfileUpload } from '../middleware/upload_middleware.js';
 import validate from '../middleware/validate_middleware.js';
-import { updateProfileValidator } from '../validators/user_validators.js';
+import { updateProfileSchema as updateProfileValidator } from '../validators/user_validator.js';
 
 const router = Router();
 

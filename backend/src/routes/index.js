@@ -1,11 +1,13 @@
-const express = require('express');
-
-const authRoutes = require('./auth_routes');
-const bookRoutes = require('./book_routes');
-const requestRoutes = require('./request_routes');
-const issueRoutes = require('./issue_routes');
-const notificationRoutes = require('./notification_routes');
-const userRoutes = require('./user_routes');
+import express from 'express';
+import authRoutes from './auth_routes.js';
+import bookRoutes from './book_routes.js';
+import requestRoutes from './request_routes.js';
+import issueRoutes from './issue_routes.js';
+import notificationRoutes from './notification_routes.js';
+import userRoutes from './user_routes.js';
+import adminRoutes from './admin_routes.js';
+import studentRoutes from './student_routes.js';
+import profileRoutes from './profile_routes.js';
 
 const router = express.Router();
 
@@ -15,9 +17,12 @@ router.use('/requests', requestRoutes);
 router.use('/issues', issueRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/users', userRoutes);
+router.use('/admin', adminRoutes);
+router.use('/student', studentRoutes);
+router.use('/profile', profileRoutes);
 
 router.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-module.exports = router;
+export default router;
