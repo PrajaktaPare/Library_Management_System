@@ -1,6 +1,6 @@
-import bcrypt from 'bcryptjs'; 
-
 import crypto from 'crypto';
+
+import bcrypt from 'bcrypt';
 
 import db from '../config/db.js';
 
@@ -23,26 +23,14 @@ import { sendVerificationEmail } from './email_service.js';
    - hashed password
 ========================================= */
 export const hashPassword = async password => {
-
   try {
-
-    const hashedPassword = await bcrypt.hash(
-      password,
-      10
-    );
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     return hashedPassword;
-
   } catch (error) {
+    logger.error('HASH PASSWORD ERROR', error);
 
-    logger.error(
-      'HASH PASSWORD ERROR',
-      error
-    );
-
-    throw new Error(
-      'PASSWORD_HASH_FAILED'
-    );
+    throw new Error('PASSWORD_HASH_FAILED');
   }
 };
 
@@ -70,21 +58,10 @@ export const registerService = async ({
   password,
   phone,
 }) => {
-
   try {
-
     // Validate required fields
-    if (
-      !name ||
-      !username ||
-      !email ||
-      !password ||
-      !phone
-    ) {
-
-      throw new Error(
-        'MISSING_REQUIRED_FIELDS'
-      );
+    if (!name || !username || !email || !password || !phone) {
+      throw new Error('MISSING_REQUIRED_FIELDS');
     }
 
     // Check existing user
@@ -97,35 +74,22 @@ export const registerService = async ({
         OR email = ?
         OR phone = ?
       `,
-      [
-        username,
-        email,
-        phone,
-      ]
+      [username, email, phone]
     );
 
     // User already exists
     if (existingUsers.length > 0) {
-
-      throw new Error(
-        'USER_ALREADY_EXISTS'
-      );
+      throw new Error('USER_ALREADY_EXISTS');
     }
 
     // Hash password
-    const hashedPassword =
-      await hashPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     // Generate random verification token
-    const rawVerificationToken =
-      crypto.randomBytes(10).toString('hex');
+    const rawVerificationToken = crypto.randomBytes(10).toString('hex');
 
     // Hash verification token
-    const hashedVerificationToken =
-      await bcrypt.hash(
-        rawVerificationToken,
-        10
-      );
+    const hashedVerificationToken = await bcrypt.hash(rawVerificationToken, 10);
 
     // Insert user into database
     const [result] = await db.query(
@@ -163,32 +127,20 @@ export const registerService = async ({
 
     // Create verification link
     // FIXED
-const verificationLink =
-  `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawVerificationToken}`;
+    const verificationLink = `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawVerificationToken}`;
 
     // Send verification email
-    await sendVerificationEmail(
-      email,
-      verificationLink
-    );
+    await sendVerificationEmail(email, verificationLink);
 
-    logger.info(
-      `USER REGISTERED: ${username}`
-    );
+    logger.info(`USER REGISTERED: ${username}`);
 
     // Return response
     return {
       user_id: result.insertId,
-      verification_link:
-        verificationLink,
+      verification_link: verificationLink,
     };
-
   } catch (error) {
-
-    logger.error(
-      'REGISTER SERVICE ERROR',
-      error
-    );
+    logger.error('REGISTER SERVICE ERROR', error);
 
     throw error;
   }
@@ -208,19 +160,11 @@ const verificationLink =
    - jwt token
    - user data
 ========================================= */
-export const loginService = async ({
-  username,
-  password,
-}) => {
-
+export const loginService = async ({ username, password }) => {
   try {
-
     // Validate required fields
     if (!username || !password) {
-
-      throw new Error(
-        'USERNAME_AND_PASSWORD_REQUIRED'
-      );
+      throw new Error('USERNAME_AND_PASSWORD_REQUIRED');
     }
 
     // Find user
@@ -250,41 +194,28 @@ export const loginService = async ({
 
     // User not found
     if (!user) {
-
-      throw new Error(
-        'USER_NOT_FOUND'
-      );
+      throw new Error('USER_NOT_FOUND');
     }
 
     // Account inactive
     if (user.is_active !== 1) {
-
-      throw new Error(
-        'ACCOUNT_NOT_ACTIVE'
-      );
+      throw new Error('ACCOUNT_NOT_ACTIVE');
     }
 
     // Email not verified
     if (user.is_verified !== 1) {
-
-      throw new Error(
-        'EMAIL_NOT_VERIFIED'
-      );
+      throw new Error('EMAIL_NOT_VERIFIED');
     }
 
     // Compare password
-    const isPasswordMatched =
-      await bcrypt.compare(
-        password,
-        user.password_hash
-      );
+    const isPasswordMatched = await bcrypt.compare(
+      password,
+      user.password_hash
+    );
 
     // Invalid password
     if (!isPasswordMatched) {
-
-      throw new Error(
-        'INVALID_PASSWORD'
-      );
+      throw new Error('INVALID_PASSWORD');
     }
 
     // Generate JWT token
@@ -293,9 +224,7 @@ export const loginService = async ({
       role_id: user.role_id,
     });
 
-    logger.info(
-      `LOGIN SUCCESS: ${username}`
-    );
+    logger.info(`LOGIN SUCCESS: ${username}`);
 
     // Return response
     return {
@@ -309,13 +238,8 @@ export const loginService = async ({
         role_name: user.role_name,
       },
     };
-
   } catch (error) {
-
-    logger.error(
-      'LOGIN SERVICE ERROR',
-      error
-    );
+    logger.error('LOGIN SERVICE ERROR', error);
 
     throw error;
   }

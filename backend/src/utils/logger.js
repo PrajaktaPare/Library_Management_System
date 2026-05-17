@@ -1,8 +1,7 @@
-import winston from "winston";
-import fs from "fs";
-import path from "path";
-
-const logDir = path.join(process.cwd(), "src", "logs");
+import fs from 'fs';
+import path from 'path';
+import winston from 'winston';
+const logDir = path.join(process.cwd(), 'src', 'logs');
 
 // ensure folder exists
 if (!fs.existsSync(logDir)) {
@@ -10,7 +9,7 @@ if (!fs.existsSync(logDir)) {
 }
 
 const logger = winston.createLogger({
-  level: "info",
+  level: 'info',
 
   format: winston.format.combine(
     winston.format.timestamp(),
@@ -27,12 +26,12 @@ const logger = winston.createLogger({
     }),
 
     new winston.transports.File({
-      filename: path.join(logDir, "error.log"),
-      level: "error",
+      filename: path.join(logDir, 'error.log'),
+      level: 'error',
     }),
 
     new winston.transports.File({
-      filename: path.join(logDir, "combined.log"),
+      filename: path.join(logDir, 'combined.log'),
     }),
   ],
 

@@ -14,7 +14,6 @@ const schemaCache = new Map();
    Compiles schema once, caches it
 ========================================= */
 const getValidator = schema => {
-
   if (schemaCache.has(schema)) {
     return schemaCache.get(schema);
   }
@@ -43,19 +42,13 @@ const formatErrors = errors =>
    router.post('/register', validateJson(registerValidator), register);
 ========================================= */
 export const validateJson = schema => {
-
   const validateFn = getValidator(schema);
 
   return (req, res, next) => {
-
     const valid = validateFn(req.body);
 
     if (!valid) {
-
-      logger.warn(
-        'BODY VALIDATION FAILED',
-        validateFn.errors
-      );
+      logger.warn('BODY VALIDATION FAILED', validateFn.errors);
 
       return res.status(400).json({
         success_flag: false,
@@ -78,19 +71,13 @@ export const validateJson = schema => {
    router.get('/:id', validateParams(userIdValidator), getUserByID);
 ========================================= */
 export const validateParams = schema => {
-
   const validateFn = getValidator(schema);
 
   return (req, res, next) => {
-
     const valid = validateFn(req.params);
 
     if (!valid) {
-
-      logger.warn(
-        'PARAMS VALIDATION FAILED',
-        validateFn.errors
-      );
+      logger.warn('PARAMS VALIDATION FAILED', validateFn.errors);
 
       return res.status(400).json({
         success_flag: false,

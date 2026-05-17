@@ -24,7 +24,6 @@ export const userIdValidator = {
   required: ['id'],
 
   properties: {
-
     id: {
       type: 'string',
       pattern: '^[1-9]\\d*$',
@@ -33,7 +32,6 @@ export const userIdValidator = {
         pattern: 'User ID must be a valid positive integer',
       },
     },
-
   },
 
   errorMessage: {
@@ -63,17 +61,9 @@ export const userIdValidator = {
 export const createUserValidator = {
   type: 'object',
 
-  required: [
-    'name',
-    'username',
-    'email',
-    'password',
-    'phone',
-    'role_id',
-  ],
+  required: ['name', 'username', 'email', 'password', 'phone', 'role_id'],
 
   properties: {
-
     name: {
       type: 'string',
       minLength: 1,
@@ -130,7 +120,6 @@ export const createUserValidator = {
         minimum: 'Role ID must be at least 1',
       },
     },
-
   },
 
   additionalProperties: false,
@@ -182,7 +171,6 @@ export const putUserValidator = {
   ],
 
   properties: {
-
     name: {
       type: 'string',
       minLength: 1,
@@ -257,7 +245,6 @@ export const putUserValidator = {
         enum: 'is_verified must be 0 or 1',
       },
     },
-
   },
 
   additionalProperties: false,
@@ -300,7 +287,6 @@ export const patchUserValidator = {
   minProperties: 1,
 
   properties: {
-
     name: {
       type: 'string',
       minLength: 1,
@@ -365,7 +351,6 @@ export const patchUserValidator = {
         enum: 'is_verified must be 0 or 1',
       },
     },
-
   },
 
   additionalProperties: false,
@@ -395,7 +380,6 @@ export const updateProfileValidator = {
   minProperties: 1,
 
   properties: {
-
     name: {
       type: 'string',
       minLength: 1,
@@ -413,7 +397,6 @@ export const updateProfileValidator = {
         pattern: 'Phone number must be exactly 10 digits',
       },
     },
-
   },
 
   additionalProperties: false,
@@ -427,8 +410,8 @@ export const updateProfileValidator = {
 /* =========================================
    COMPILED VALIDATORS
 ========================================= */
-export const validateUserId        = ajv.compile(userIdValidator);
-export const validateCreateUser    = ajv.compile(createUserValidator);
-export const validatePutUser       = ajv.compile(putUserValidator);
-export const validatePatchUser     = ajv.compile(patchUserValidator);
+export const validateUserId = ajv.compile(userIdValidator);
+export const validateCreateUser = ajv.compile(createUserValidator);
+export const validatePutUser = ajv.compile(putUserValidator);
+export const validatePatchUser = ajv.compile(patchUserValidator);
 export const validateUpdateProfile = ajv.compile(updateProfileValidator);

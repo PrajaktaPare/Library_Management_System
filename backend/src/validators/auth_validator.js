@@ -21,16 +21,9 @@ ajvErrors(ajv);
 export const registerValidator = {
   type: 'object',
 
-  required: [
-    'name',
-    'username',
-    'email',
-    'password',
-    'phone',
-  ],
+  required: ['name', 'username', 'email', 'password', 'phone'],
 
   properties: {
-
     name: {
       type: 'string',
       minLength: 1,
@@ -78,7 +71,6 @@ export const registerValidator = {
         pattern: 'Phone number must be exactly 10 digits',
       },
     },
-
   },
 
   additionalProperties: false,
@@ -107,13 +99,9 @@ export const registerValidator = {
 export const loginValidator = {
   type: 'object',
 
-  required: [
-    'username',
-    'password',
-  ],
+  required: ['username', 'password'],
 
   properties: {
-
     username: {
       type: 'string',
       minLength: 1,
@@ -131,7 +119,6 @@ export const loginValidator = {
         minLength: 'Password is required',
       },
     },
-
   },
 
   additionalProperties: false,
@@ -149,4 +136,4 @@ export const loginValidator = {
    COMPILED VALIDATORS
 ========================================= */
 export const validateRegister = ajv.compile(registerValidator);
-export const validateLogin    = ajv.compile(loginValidator);
+export const validateLogin = ajv.compile(loginValidator);

@@ -38,8 +38,6 @@ export const verifyJWT = (req, res, next) => {
   }
 };
 
-
-
 export const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     logger.info(`Allowed Roles: ${roles}`);

@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Request Rejected</title>
+  </head>
+
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+      font-family: Arial, Helvetica, sans-serif;
+    "
+  >
+    <table
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      style="background: #f4f6f9; padding: 30px 0"
+    >
+      <tr>
+        <td align="center">
+          <table
+            width="600"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            style="background: #ffffff; border-radius: 10px"
+          >
+            <!-- Header -->
+            <tr>
+              <td
+                align="center"
+                style="
+                  background: #1a73e8;
+                  padding: 35px 20px;
+                  border-top-left-radius: 10px;
+                  border-top-right-radius: 10px;
+                "
+              >
+                <h1
+                  style="
+                    margin: 0;
+                    color: white;
+                    font-size: 28px;
+                    font-weight: bold;
+                  "
+                >
+                  📚 Library Management System
+                </h1>
+                <p style="margin-top: 8px; color: #cce0ff; font-size: 15px">
+                  Book Request Update
+                </p>
+              </td>
+            </tr>
+
+            <!-- Red rejected banner -->
+            <tr>
+              <td
+                align="center"
+                style="
+                  background: #ffebee;
+                  padding: 18px 35px;
+                  border-bottom: 2px solid #ffcdd2;
+                "
+              >
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #c62828;
+                  "
+                >
+                  ❌ Your Book Request Has Been Rejected
+                </p>
+              </td>
+            </tr>
+
+            <!-- Body -->
+            <tr>
+              <td style="padding: 35px 35px 20px 35px; color: #333333">
+                <p
+                  style="
+                    font-size: 16px;
+                    line-height: 1.8;
+                    color: #555555;
+                    margin-top: 0;
+                  "
+                >
+                  Dear <strong>{{STUDENT_NAME}}</strong>,
+                </p>
+
+                <p style="font-size: 16px; line-height: 1.8; color: #555555">
+                  We regret to inform you that your request for the following
+                  book has been
+                  <strong style="color: #c62828">rejected</strong> by the
+                  library administrator.
+                </p>
+
+                <!-- Book Details Card -->
+                <table
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  style="
+                    background: #f8f9ff;
+                    border: 1px solid #dde3f5;
+                    border-radius: 8px;
+                    margin: 25px 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 20px 25px">
+                      <p
+                        style="
+                          margin: 0 0 5px 0;
+                          font-size: 13px;
+                          color: #888;
+                          text-transform: uppercase;
+                          letter-spacing: 1px;
+                        "
+                      >
+                        Requested Book
+                      </p>
+                      <hr
+                        style="
+                          border: none;
+                          border-top: 1px solid #e0e0e0;
+                          margin: 10px 0 18px 0;
+                        "
+                      />
+
+                      <!-- Title -->
+                      <table
+                        width="100%"
+                        cellpadding="0"
+                        cellspacing="0"
+                        style="margin-bottom: 12px"
+                      >
+                        <tr>
+                          <td
+                            width="140"
+                            style="font-size: 14px; color: #888888"
+                          >
+                            📖 Title
+                          </td>
+                          <td
+                            style="
+                              font-size: 15px;
+                              font-weight: bold;
+                              color: #222222;
+                            "
+                          >
+                            {{BOOK_TITLE}}
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Author -->
+                      <table
+                        width="100%"
+                        cellpadding="0"
+                        cellspacing="0"
+                        style="margin-bottom: 12px"
+                      >
+                        <tr>
+                          <td
+                            width="140"
+                            style="font-size: 14px; color: #888888"
+                          >
+                            ✍️ Author
+                          </td>
+                          <td style="font-size: 15px; color: #333333">
+                            {{BOOK_AUTHOR}}
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Category -->
+                      <table
+                        width="100%"
+                        cellpadding="0"
+                        cellspacing="0"
+                        style="margin-bottom: 12px"
+                      >
+                        <tr>
+                          <td
+                            width="140"
+                            style="font-size: 14px; color: #888888"
+                          >
+                            🏷️ Category
+                          </td>
+                          <td style="font-size: 15px; color: #333333">
+                            {{BOOK_CATEGORY}}
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- ISBN -->
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td
+                            width="140"
+                            style="font-size: 14px; color: #888888"
+                          >
+                            🔢 ISBN
+                          </td>
+                          <td style="font-size: 15px; color: #333333">
+                            {{BOOK_ISBN}}
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Reason Card -->
+                <table
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  style="
+                    background: #fff8e1;
+                    border: 1px solid #ffe082;
+                    border-radius: 8px;
+                    margin-bottom: 25px;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 16px 20px">
+                      <p
+                        style="
+                          margin: 0 0 8px 0;
+                          font-size: 14px;
+                          font-weight: bold;
+                          color: #f57f17;
+                        "
+                      >
+                        📋 Reason for Rejection:
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 14px;
+                          color: #555555;
+                          line-height: 1.7;
+                        "
+                      >
+                        {{REJECTION_REASON}}
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Request Info -->
+                <table
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  style="margin-bottom: 25px"
+                >
+                  <tr>
+                    <td
+                      width="48%"
+                      style="
+                        background: #f5f5f5;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 8px;
+                        padding: 18px 20px;
+                        text-align: center;
+                      "
+                    >
+                      <p
+                        style="
+                          margin: 0 0 6px 0;
+                          font-size: 13px;
+                          color: #757575;
+                          text-transform: uppercase;
+                          letter-spacing: 1px;
+                        "
+                      >
+                        📅 Requested On
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 17px;
+                          font-weight: bold;
+                          color: #424242;
+                        "
+                      >
+                        {{REQUESTED_AT}}
+                      </p>
+                    </td>
+
+                    <td width="4%"></td>
+
+                    <td
+                      width="48%"
+                      style="
+                        background: #ffebee;
+                        border: 1px solid #ffcdd2;
+                        border-radius: 8px;
+                        padding: 18px 20px;
+                        text-align: center;
+                      "
+                    >
+                      <p
+                        style="
+                          margin: 0 0 6px 0;
+                          font-size: 13px;
+                          color: #c62828;
+                          text-transform: uppercase;
+                          letter-spacing: 1px;
+                        "
+                      >
+                        🚫 Rejected On
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 17px;
+                          font-weight: bold;
+                          color: #b71c1c;
+                        "
+                      >
+                        {{REJECTED_AT}}
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="font-size: 15px; line-height: 1.8; color: #555555">
+                  You may browse other available books and submit a new request.
+                  If you believe this rejection was in error, please contact
+                  your library administrator.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Divider -->
+            <tr>
+              <td style="padding: 0 35px">
+                <hr style="border: none; border-top: 1px solid #eeeeee" />
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                align="center"
+                style="
+                  background: #f7f7f7;
+                  padding: 20px;
+                  border-bottom-left-radius: 10px;
+                  border-bottom-right-radius: 10px;
+                "
+              >
+                <p style="margin: 0 0 5px 0; font-size: 13px; color: #888888">
+                  Need help? Contact your library administrator.
+                </p>
+                <p style="margin: 0; font-size: 13px; color: #888888">
+                  © 2026 Library Management System. All rights reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

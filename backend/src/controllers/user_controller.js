@@ -28,22 +28,9 @@ import logger from '../utils/logger.js';
    RETURN:
    - users list
 ========================================= */
-export const getAllUsers = async (
-  req,
-  res
-) => {
-
+export const getAllUsers = async (req, res) => {
   try {
-
-    const {
-      username,
-      email,
-      phone,
-      page,
-      limit,
-      sortBy,
-      order,
-    } = req.query;
+    const { username, email, phone, page, limit, sortBy, order } = req.query;
 
     // Filters
     const filters = {
@@ -53,40 +40,29 @@ export const getAllUsers = async (
     };
 
     // Pagination
-    let pagination = {
+    const pagination = {
       limit: null,
       offset: null,
     };
 
     if (page || limit) {
-
       if (!page || !limit) {
-
         return res.status(400).json({
           success_flag: false,
-          message:
-            'PAGE_AND_LIMIT_REQUIRED',
+          message: 'PAGE_AND_LIMIT_REQUIRED',
         });
       }
 
-      if (
-        isNaN(page) ||
-        isNaN(limit)
-      ) {
-
+      if (isNaN(page) || isNaN(limit)) {
         return res.status(400).json({
           success_flag: false,
-          message:
-            'PAGE_AND_LIMIT_MUST_BE_NUMBER',
+          message: 'PAGE_AND_LIMIT_MUST_BE_NUMBER',
         });
       }
 
-      pagination.limit =
-        Number(limit);
+      pagination.limit = Number(limit);
 
-      pagination.offset =
-        (Number(page) - 1) *
-        Number(limit);
+      pagination.offset = (Number(page) - 1) * Number(limit);
     }
 
     // Sorting
@@ -96,31 +72,19 @@ export const getAllUsers = async (
     };
 
     // Fetch users
-    const users =
-      await getAllUsersService(
-        filters,
-        pagination,
-        sorting
-      );
+    const users = await getAllUsersService(filters, pagination, sorting);
 
     return res.status(200).json({
       success_flag: true,
-      message:
-        'USERS_FETCHED_SUCCESSFULLY',
+      message: 'USERS_FETCHED_SUCCESSFULLY',
       data: users,
     });
-
   } catch (error) {
-
-    logger.error(
-      'GET ALL USERS ERROR',
-      error
-    );
+    logger.error('GET ALL USERS ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
-      message:
-        'INTERNAL_SERVER_ERROR',
+      message: 'INTERNAL_SERVER_ERROR',
     });
   }
 };
@@ -138,46 +102,31 @@ export const getAllUsers = async (
    RETURN:
    - user data
 ========================================= */
-export const getUserByID = async (
-  req,
-  res
-) => {
-
+export const getUserByID = async (req, res) => {
   try {
-
     const { id } = req.params;
 
-    const user =
-      await getUserByIDService(id);
+    const user = await getUserByIDService(id);
 
     // User not found
     if (!user) {
-
       return res.status(404).json({
         success_flag: false,
-        message:
-          'USER_NOT_FOUND',
+        message: 'USER_NOT_FOUND',
       });
     }
 
     return res.status(200).json({
       success_flag: true,
-      message:
-        'USER_FETCHED_SUCCESSFULLY',
+      message: 'USER_FETCHED_SUCCESSFULLY',
       data: user,
     });
-
   } catch (error) {
-
-    logger.error(
-      'GET USER BY ID ERROR',
-      error
-    );
+    logger.error('GET USER BY ID ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
-      message:
-        'INTERNAL_SERVER_ERROR',
+      message: 'INTERNAL_SERVER_ERROR',
     });
   }
 };
@@ -195,60 +144,38 @@ export const getUserByID = async (
    RETURN:
    - inserted user id
 ========================================= */
-export const postUser = async (
-  req,
-  res
-) => {
-
+export const postUser = async (req, res) => {
   try {
+    const { username, email, password, name, phone, role_id } = req.body;
 
-    const {
+    // Hash password
+    const password_hash = await hashPassword(password);
+
+    // Create user
+    const result = await createUser({
       username,
       email,
-      password,
+      password_hash,
       name,
       phone,
       role_id,
-    } = req.body;
-
-    // Hash password
-    const password_hash =
-      await hashPassword(password);
-
-    // Create user
-    const result =
-      await createUser({
-        username,
-        email,
-        password_hash,
-        name,
-        phone,
-        role_id,
-        is_active: 1,
-        is_verified: 1,
-      });
+      is_active: 1,
+      is_verified: 1,
+    });
 
     return res.status(201).json({
       success_flag: true,
-      message:
-        'USER_CREATED_SUCCESSFULLY',
+      message: 'USER_CREATED_SUCCESSFULLY',
       data: {
-        user_id:
-          result.insertId,
+        user_id: result.insertId,
       },
     });
-
   } catch (error) {
-
-    logger.error(
-      'CREATE USER ERROR',
-      error
-    );
+    logger.error('CREATE USER ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
-      message:
-        error.message,
+      message: error.message,
     });
   }
 };
@@ -266,24 +193,15 @@ export const postUser = async (
    RETURN:
    - update response
 ========================================= */
-export const patchUser = async (
-  req,
-  res
-) => {
-
+export const patchUser = async (req, res) => {
   try {
-
     const { id } = req.params;
 
     // Empty body validation
-    if (
-      !Object.keys(req.body).length
-    ) {
-
+    if (!Object.keys(req.body).length) {
       return res.status(400).json({
         success_flag: false,
-        message:
-          'NO_FIELDS_PROVIDED',
+        message: 'NO_FIELDS_PROVIDED',
       });
     }
 
@@ -302,15 +220,8 @@ export const patchUser = async (
     const values = [];
 
     // Build dynamic update query
-    for (
-      const key of Object.keys(
-        req.body
-      )
-    ) {
-
-      if (
-        !allowedFields.includes(key)
-      ) {
+    for (const key of Object.keys(req.body)) {
+      if (!allowedFields.includes(key)) {
         continue;
       }
 
@@ -321,51 +232,33 @@ export const patchUser = async (
 
     // No valid fields
     if (!fields.length) {
-
       return res.status(400).json({
         success_flag: false,
-        message:
-          'NO_VALID_FIELDS_PROVIDED',
+        message: 'NO_VALID_FIELDS_PROVIDED',
       });
     }
 
     // Update user
-    const result =
-      await patchUserService(
-        id,
-        fields,
-        values
-      );
+    const result = await patchUserService(id, fields, values);
 
     // User not found
-    if (
-      result.affectedRows === 0
-    ) {
-
+    if (result.affectedRows === 0) {
       return res.status(404).json({
         success_flag: false,
-        message:
-          'USER_NOT_FOUND',
+        message: 'USER_NOT_FOUND',
       });
     }
 
     return res.status(200).json({
       success_flag: true,
-      message:
-        'USER_UPDATED_SUCCESSFULLY',
+      message: 'USER_UPDATED_SUCCESSFULLY',
     });
-
   } catch (error) {
-
-    logger.error(
-      'PATCH USER ERROR',
-      error
-    );
+    logger.error('PATCH USER ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
-      message:
-        'INTERNAL_SERVER_ERROR',
+      message: 'INTERNAL_SERVER_ERROR',
     });
   }
 };
@@ -383,13 +276,8 @@ export const patchUser = async (
    RETURN:
    - update response
 ========================================= */
-export const putUser = async (
-  req,
-  res
-) => {
-
+export const putUser = async (req, res) => {
   try {
-
     const { id } = req.params;
 
     const {
@@ -404,52 +292,39 @@ export const putUser = async (
     } = req.body;
 
     // Hash password
-    const password_hash =
-      await hashPassword(password);
+    const password_hash = await hashPassword(password);
 
     // Replace user
-    const result =
-      await putUserService({
-        id,
-        username,
-        email,
-        password_hash,
-        name,
-        phone,
-        role_id,
-        is_active,
-        is_verified,
-      });
+    const result = await putUserService({
+      id,
+      username,
+      email,
+      password_hash,
+      name,
+      phone,
+      role_id,
+      is_active,
+      is_verified,
+    });
 
     // User not found
-    if (
-      result.affectedRows === 0
-    ) {
-
+    if (result.affectedRows === 0) {
       return res.status(404).json({
         success_flag: false,
-        message:
-          'USER_NOT_FOUND',
+        message: 'USER_NOT_FOUND',
       });
     }
 
     return res.status(200).json({
       success_flag: true,
-      message:
-        'USER_REPLACED_SUCCESSFULLY',
+      message: 'USER_REPLACED_SUCCESSFULLY',
     });
-
   } catch (error) {
-
-    logger.error(
-      'PUT USER ERROR',
-      error
-    );
+    logger.error('PUT USER ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
-      message:
-        'INTERNAL_SERVER_ERROR',
+      message: 'INTERNAL_SERVER_ERROR',
     });
   }
 };
@@ -467,47 +342,30 @@ export const putUser = async (
    RETURN:
    - delete response
 ========================================= */
-export const deleteUser = async (
-  req,
-  res
-) => {
-
+export const deleteUser = async (req, res) => {
   try {
-
     const { id } = req.params;
 
-    const result =
-      await deleteUserService(id);
+    const result = await deleteUserService(id);
 
     // User not found
-    if (
-      result.affectedRows === 0
-    ) {
-
+    if (result.affectedRows === 0) {
       return res.status(404).json({
         success_flag: false,
-        message:
-          'USER_NOT_FOUND',
+        message: 'USER_NOT_FOUND',
       });
     }
 
     return res.status(200).json({
       success_flag: true,
-      message:
-        'USER_DELETED_SUCCESSFULLY',
+      message: 'USER_DELETED_SUCCESSFULLY',
     });
-
   } catch (error) {
-
-    logger.error(
-      'DELETE USER ERROR',
-      error
-    );
+    logger.error('DELETE USER ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
-      message:
-        'INTERNAL_SERVER_ERROR',
+      message: 'INTERNAL_SERVER_ERROR',
     });
   }
 };
@@ -525,39 +383,23 @@ export const deleteUser = async (
    RETURN:
    - profile data
 ========================================= */
-export const getProfile = async (
-  req,
-  res
-) => {
-
+export const getProfile = async (req, res) => {
   try {
+    const userId = req.user.id;
 
-    const userId =
-      req.user.id;
-
-    const user =
-      await getProfileService(
-        userId
-      );
+    const user = await getProfileService(userId);
 
     return res.status(200).json({
       success_flag: true,
-      message:
-        'PROFILE_FETCHED_SUCCESSFULLY',
+      message: 'PROFILE_FETCHED_SUCCESSFULLY',
       data: user,
     });
-
   } catch (error) {
-
-    logger.error(
-      'GET PROFILE ERROR',
-      error
-    );
+    logger.error('GET PROFILE ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
-      message:
-        'INTERNAL_SERVER_ERROR',
+      message: 'INTERNAL_SERVER_ERROR',
     });
   }
 };
@@ -575,87 +417,50 @@ export const getProfile = async (
    RETURN:
    - update response
 ========================================= */
-export const updateProfile = async (
-  req,
-  res
-) => {
-
+export const updateProfile = async (req, res) => {
   try {
-
-    const userId =
-      req.user.id;
+    const userId = req.user.id;
 
     // Empty body validation
-    if (
-      !Object.keys(req.body).length
-    ) {
-
+    if (!Object.keys(req.body).length) {
       return res.status(400).json({
         success_flag: false,
-        message:
-          'NO_FIELDS_PROVIDED',
+        message: 'NO_FIELDS_PROVIDED',
       });
     }
 
-    const allowedFields = [
-      'name',
-      'phone',
-    ];
+    const allowedFields = ['name', 'phone'];
 
     const filteredData = {};
 
     // Filter fields
-    for (
-      const key of Object.keys(
-        req.body
-      )
-    ) {
-
-      if (
-        allowedFields.includes(key)
-      ) {
-
-        filteredData[key] =
-          req.body[key];
+    for (const key of Object.keys(req.body)) {
+      if (allowedFields.includes(key)) {
+        filteredData[key] = req.body[key];
       }
     }
 
     // No valid fields
-    if (
-      !Object.keys(filteredData)
-        .length
-    ) {
-
+    if (!Object.keys(filteredData).length) {
       return res.status(400).json({
         success_flag: false,
-        message:
-          'NO_VALID_FIELDS_PROVIDED',
+        message: 'NO_VALID_FIELDS_PROVIDED',
       });
     }
 
     // Update profile
-    await updateProfileService(
-      userId,
-      filteredData
-    );
+    await updateProfileService(userId, filteredData);
 
     return res.status(200).json({
       success_flag: true,
-      message:
-        'PROFILE_UPDATED_SUCCESSFULLY',
+      message: 'PROFILE_UPDATED_SUCCESSFULLY',
     });
-
   } catch (error) {
-
-    logger.error(
-      'UPDATE PROFILE ERROR',
-      error
-    );
+    logger.error('UPDATE PROFILE ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
-      message:
-        'INTERNAL_SERVER_ERROR',
+      message: 'INTERNAL_SERVER_ERROR',
     });
   }
 };

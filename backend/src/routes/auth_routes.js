@@ -20,23 +20,12 @@ const router = express.Router();
 ========================================= */
 
 // Register user
-router.post(
-  '/register',
-  validateJson(registerValidator),
-  register
-);
+router.post('/register', validateJson(registerValidator), register);
 
 // Login user
-router.post(
-  '/login',
-  validateJson(loginValidator),
-  login
-);
+router.post('/login', validateJson(loginValidator), login);
 
 // Verify email — no body, no validation needed
-router.get(
-  '/verify-email',
-  verifyEmail
-);
+router.get('/verify-email', verifyEmail);
 
 export default router;

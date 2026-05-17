@@ -11,10 +11,7 @@ import {
   updateProfile,
 } from '../controllers/user_controller.js';
 
-import {
-  verifyJWT,
-  authorizeRoles,
-} from '../middleware/auth_middleware.js';
+import { verifyJWT, authorizeRoles } from '../middleware/auth_middleware.js';
 
 import {
   validateJson,
@@ -37,11 +34,7 @@ const router = express.Router();
 ========================================= */
 
 // Get own profile — no body, no params to validate
-router.get(
-  '/profile/me',
-  verifyJWT,
-  getProfile
-);
+router.get('/profile/me', verifyJWT, getProfile);
 
 // Update own profile — only name and phone allowed
 router.patch(
@@ -57,12 +50,7 @@ router.patch(
 ========================================= */
 
 // Get all users — filters/pagination handled in controller
-router.get(
-  '/',
-  verifyJWT,
-  authorizeRoles('1'),
-  getAllUsers
-);
+router.get('/', verifyJWT, authorizeRoles('1'), getAllUsers);
 
 // Get single user by id
 router.get(

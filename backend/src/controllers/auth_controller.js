@@ -4,10 +4,7 @@ import logger from '../utils/logger.js';
 
 import db from '../config/db.js';
 
-import {
-  registerService,
-  loginService,
-} from '../services/auth_service.js';
+import { registerService, loginService } from '../services/auth_service.js';
 
 /* =========================================
    FUNCTION: register
@@ -22,29 +19,17 @@ import {
    RETURN:
    - json response
 ========================================= */
-export const register = async (
-  req,
-  res
-) => {
-
+export const register = async (req, res) => {
   try {
-
-    const result =
-      await registerService(req.body);
+    const result = await registerService(req.body);
 
     return res.status(201).json({
       success_flag: true,
-      message:
-        'Registration successful. Please verify your email.',
+      message: 'Registration successful. Please verify your email.',
       data: result,
     });
-
   } catch (error) {
-
-    logger.error(
-      'REGISTER CONTROLLER ERROR',
-      error
-    );
+    logger.error('REGISTER CONTROLLER ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
@@ -66,28 +51,17 @@ export const register = async (
    RETURN:
    - json response
 ========================================= */
-export const login = async (
-  req,
-  res
-) => {
-
+export const login = async (req, res) => {
   try {
-
-    const result =
-      await loginService(req.body);
+    const result = await loginService(req.body);
 
     return res.status(200).json({
       success_flag: true,
       message: 'Login successful',
       data: result,
     });
-
   } catch (error) {
-
-    logger.error(
-      'LOGIN CONTROLLER ERROR',
-      error
-    );
+    logger.error('LOGIN CONTROLLER ERROR', error);
 
     return res.status(401).json({
       success_flag: false,
@@ -110,9 +84,7 @@ export const login = async (
    - json response
 ========================================= */
 export const verifyEmail = async (req, res) => {
-
   try {
-
     const { uid, token } = req.query;
 
     if (!uid || !token) {
@@ -123,10 +95,7 @@ export const verifyEmail = async (req, res) => {
     }
 
     // Fetch user
-    const [rows] = await db.query(
-      `SELECT * FROM users WHERE id = ?`,
-      [uid]
-    );
+    const [rows] = await db.query(`SELECT * FROM users WHERE id = ?`, [uid]);
     const user = rows[0];
 
     if (!user) {
@@ -178,9 +147,7 @@ export const verifyEmail = async (req, res) => {
       success_flag: true,
       message: 'EMAIL_VERIFIED_SUCCESSFULLY',
     });
-
   } catch (error) {
-
     logger.error('VERIFY EMAIL ERROR', error);
 
     return res.status(500).json({

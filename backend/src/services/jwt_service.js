@@ -13,7 +13,6 @@ import jwt from 'jsonwebtoken';
    - jwt token
 ========================================= */
 export const generateToken = user => {
-
   return jwt.sign(
     {
       id: user.id,
@@ -21,8 +20,7 @@ export const generateToken = user => {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn:
-        process.env.JWT_EXPIRES_IN,
+      expiresIn: process.env.JWT_EXPIRES_IN,
     }
   );
 };
@@ -40,9 +38,5 @@ export const generateToken = user => {
    - decoded token
 ========================================= */
 export const verifyToken = token => {
-
-  return jwt.verify(
-    token,
-    process.env.JWT_SECRET
-  );
+  return jwt.verify(token, process.env.JWT_SECRET);
 };

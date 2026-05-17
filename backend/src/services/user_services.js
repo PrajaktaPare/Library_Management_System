@@ -1,8 +1,8 @@
 // user_service.js
 
-import pool from '../config/db.js';
 import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
+import pool from '../config/db.js';
 import { sendVerificationEmail } from './email_service.js';
 
 /* =========================================
@@ -24,7 +24,6 @@ export const getAllUsersService = async (
   pagination = {},
   sorting = {}
 ) => {
-
   let sql = `
     SELECT
       users.id,
@@ -50,28 +49,18 @@ export const getAllUsersService = async (
   const values = [];
 
   // Apply filters
-  Object.entries(filters).forEach(
-    ([key, value]) => {
-
-      if (value) {
-
-        sql += `
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value) {
+      sql += `
           AND users.${key} LIKE ?
         `;
 
-        values.push(
-          `%${value}%`
-        );
-      }
+      values.push(`%${value}%`);
     }
-  );
+  });
 
   // Apply sorting
-  if (
-    sorting.sortBy &&
-    sorting.order
-  ) {
-
+  if (sorting.sortBy && sorting.order) {
     sql += `
       ORDER BY
       users.${sorting.sortBy}
@@ -80,30 +69,15 @@ export const getAllUsersService = async (
   }
 
   // Apply pagination
-  if (
-    pagination.limit !== null &&
-    pagination.offset !== null
-  ) {
-
+  if (pagination.limit !== null && pagination.offset !== null) {
     sql += `
       LIMIT ? OFFSET ?
     `;
 
-    values.push(
-      Number(
-        pagination.limit
-      ),
-      Number(
-        pagination.offset
-      )
-    );
+    values.push(Number(pagination.limit), Number(pagination.offset));
   }
 
-  const [rows] =
-    await pool.query(
-      sql,
-      values
-    );
+  const [rows] = await pool.query(sql, values);
 
   return rows;
 };
@@ -121,10 +95,8 @@ export const getAllUsersService = async (
    - user object
 ========================================= */
 export const getUserByIDService = async id => {
-
-  const [rows] =
-    await pool.execute(
-      `
+  const [rows] = await pool.execute(
+    `
       SELECT
         users.id,
         users.username,
@@ -145,8 +117,8 @@ export const getUserByIDService = async id => {
 
       WHERE users.id = ?
       `,
-      [id]
-    );
+    [id]
+  );
 
   return rows[0];
 };
@@ -171,14 +143,11 @@ export const createUser = async ({
   phone,
   role_id,
 }) => {
-
   // Generate random verification token
-  const rawVerificationToken =
-    crypto.randomBytes(10).toString('hex');
+  const rawVerificationToken = crypto.randomBytes(10).toString('hex');
 
   // Hash verification token
-  const hashedVerificationToken =
-    await bcrypt.hash(rawVerificationToken, 10);
+  const hashedVerificationToken = await bcrypt.hash(rawVerificationToken, 10);
 
   const [result] = await pool.execute(
     `
@@ -213,8 +182,7 @@ export const createUser = async ({
   );
 
   // Create verification link
-  const verificationLink =
-    `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawVerificationToken}`;
+  const verificationLink = `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawVerificationToken}`;
 
   // Send verification email
   await sendVerificationEmail(email, verificationLink);
@@ -239,12 +207,7 @@ export const createUser = async ({
    RETURN:
    - update result
 ========================================= */
-export const patchUserService = async (
-  id,
-  fields,
-  values
-) => {
-
+export const patchUserService = async (id, fields, values) => {
   values.push(id);
 
   const sql = `
@@ -253,11 +216,7 @@ export const patchUserService = async (
     WHERE id = ?
   `;
 
-  const [result] =
-    await pool.execute(
-      sql,
-      values
-    );
+  const [result] = await pool.execute(sql, values);
 
   return result;
 };
@@ -285,10 +244,8 @@ export const putUserService = async ({
   is_active,
   is_verified,
 }) => {
-
-  const [result] =
-    await pool.execute(
-      `
+  const [result] = await pool.execute(
+    `
       UPDATE users
 
       SET
@@ -303,18 +260,18 @@ export const putUserService = async ({
 
       WHERE id = ?
       `,
-      [
-        username,
-        email,
-        password_hash,
-        name,
-        phone,
-        role_id,
-        is_active,
-        is_verified,
-        id,
-      ]
-    );
+    [
+      username,
+      email,
+      password_hash,
+      name,
+      phone,
+      role_id,
+      is_active,
+      is_verified,
+      id,
+    ]
+  );
 
   return result;
 };
@@ -332,15 +289,13 @@ export const putUserService = async ({
    - delete result
 ========================================= */
 export const deleteUserService = async id => {
-
-  const [result] =
-    await pool.execute(
-      `
+  const [result] = await pool.execute(
+    `
       DELETE FROM users
       WHERE id = ?
       `,
-      [id]
-    );
+    [id]
+  );
 
   return result;
 };
@@ -358,10 +313,8 @@ export const deleteUserService = async id => {
    - user profile
 ========================================= */
 export const getProfileService = async id => {
-
-  const [rows] =
-    await pool.execute(
-      `
+  const [rows] = await pool.execute(
+    `
       SELECT
         users.id,
         users.username,
@@ -382,8 +335,8 @@ export const getProfileService = async id => {
 
       WHERE users.id = ?
       `,
-      [id]
-    );
+    [id]
+  );
 
   return rows[0];
 };
@@ -401,21 +354,14 @@ export const getProfileService = async id => {
    RETURN:
    - update result
 ========================================= */
-export const updateProfileService = async (
-  id,
-  data
-) => {
-
+export const updateProfileService = async (id, data) => {
   const fields = [];
 
   const values = [];
 
   // Build dynamic query
   for (const key in data) {
-
-    fields.push(
-      `${key} = ?`
-    );
+    fields.push(`${key} = ?`);
 
     values.push(data[key]);
   }
@@ -428,11 +374,7 @@ export const updateProfileService = async (
     WHERE id = ?
   `;
 
-  const [result] =
-    await pool.execute(
-      sql,
-      values
-    );
+  const [result] = await pool.execute(sql, values);
 
   return result;
 };

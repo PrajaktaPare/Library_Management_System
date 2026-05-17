@@ -37,11 +37,11 @@ app.use('/', routes);
 GLOBAL ERROR HANDLER (UNCOMMENTED + UPDATED)
 */
 app.use((error, req, res, next) => {
-  logger.error("GLOBAL ERROR", error);
+  logger.error('GLOBAL ERROR', error);
 
   return res.status(error.statusCode || 500).json({
     success: false,
-    message: error.message || "Internal Server Error",
+    message: error.message || 'Internal Server Error',
   });
 });
 
@@ -58,7 +58,7 @@ const startServer = async () => {
       logger.info(`Server running on port ${port}`);
     });
   } catch (error) {
-    logger.error("SERVER START ERROR", error);
+    logger.error('SERVER START ERROR', error);
   }
 };
 
