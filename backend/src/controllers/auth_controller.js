@@ -31,9 +31,21 @@ export const register = async (req, res) => {
   } catch (error) {
     logger.error('REGISTER CONTROLLER ERROR', error);
 
+    if (
+      error.message === 'USER_ALREADY_EXISTS' ||
+      error.message === 'USERNAME_ALREADY_EXISTS' ||
+      error.message === 'EMAIL_ALREADY_EXISTS' ||
+      error.message === 'PHONE_ALREADY_EXISTS'
+    ) {
+      return res.status(409).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+
     return res.status(500).json({
       success_flag: false,
-      message: error.message,
+      message: 'INTERNAL_SERVER_ERROR',
     });
   }
 };

@@ -26,11 +26,6 @@ import {
 
 const router = express.Router();
 
-/* =========================================
-   STUDENT ROUTES
-   Require JWT (any authenticated user)
-========================================= */
-
 // POST /book-requests
 // Student submits a book request
 router.post('/', verifyJWT, validateJson(requestBookValidator), requestBook);

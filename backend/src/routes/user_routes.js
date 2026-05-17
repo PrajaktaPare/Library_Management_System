@@ -28,12 +28,7 @@ import {
 
 const router = express.Router();
 
-/* =========================================
-   PROFILE ROUTES
-   Logged-in user manages their own profile
-========================================= */
-
-// Get own profile — no body, no params to validate
+// Get own profile
 router.get('/profile/me', verifyJWT, getProfile);
 
 // Update own profile — only name and phone allowed
@@ -43,11 +38,6 @@ router.patch(
   validateJson(updateProfileValidator),
   updateProfile
 );
-
-/* =========================================
-   ADMIN ROUTES
-   Only role = 'admin' can access these
-========================================= */
 
 // Get all users — filters/pagination handled in controller
 router.get('/', verifyJWT, authorizeRoles('1'), getAllUsers);

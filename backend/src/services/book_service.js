@@ -1,12 +1,8 @@
-// book_service.js
-
 import pool from '../config/db.js';
 import logger from '../utils/logger.js';
 
-/* =========================================
-   ALLOWED SORT COLUMNS WHITELIST
-   Prevents SQL injection via sortBy param
-========================================= */
+// Allowed columns for sorting
+// Prevents SQL injection in sortBy parameter
 const ALLOWED_SORT_COLUMNS = [
   'id',
   'title',
@@ -16,13 +12,14 @@ const ALLOWED_SORT_COLUMNS = [
   'available_copies',
 ];
 
+// Allowed sorting orders
 const ALLOWED_SORT_ORDERS = ['ASC', 'DESC'];
 
 /* =========================================
    FUNCTION: createBookRecord
 
    PURPOSE:
-   Insert a new book into the database
+   Insert a new book into database
 
    PARAMETER:
    - bookData
@@ -68,7 +65,7 @@ export const createBookRecord = async bookData => {
    FUNCTION: findBookById
 
    PURPOSE:
-   Fetch a single book by ID
+   Fetch single book by ID
 
    PARAMETER:
    - id
@@ -86,21 +83,28 @@ export const findBookById = async id => {
    FUNCTION: findByISBN
 
    PURPOSE:
-   Check if a book with the given ISBN exists
+   Check if ISBN already exists
 
    PARAMETER:
    - isbn
-   - excludeId (optional, for update checks)
+   - excludeId
 
    RETURN:
    - book object or null
 ========================================= */
 export const findByISBN = async (isbn, excludeId = null) => {
-  let sql = `SELECT * FROM books WHERE isbn = ?`;
+  let sql = `
+    SELECT *
+    FROM books
+    WHERE isbn = ?
+  `;
+
   const values = [isbn];
 
+  // Exclude current book during update
   if (excludeId) {
     sql += ` AND id != ?`;
+
     values.push(excludeId);
   }
 
@@ -113,21 +117,16 @@ export const findByISBN = async (isbn, excludeId = null) => {
    FUNCTION: getAllBooksService
 
    PURPOSE:
-   Fetch books with optional filters,
-   search, sorting, and pagination.
-
-   Mirrors the user service pattern:
-   - Filters applied via LIKE or exact match
-   - Pagination is optional (null = no limit)
-   - Sorting is optional (default: created_at DESC)
+   Fetch all books with filters,
+   search, sorting and pagination
 
    PARAMETER:
-   - filters   : { category, status, search }
-   - pagination: { limit, offset }  — null values = fetch all
-   - sorting   : { sortBy, order }
+   - filters
+   - pagination
+   - sorting
 
    RETURN:
-   - { books, total }
+   - books list and total count
 ========================================= */
 export const getAllBooksService = async (
   filters = {},
@@ -159,45 +158,57 @@ export const getAllBooksService = async (
   `;
 
   const values = [];
+
   const countValues = [];
 
-  // Filter: category — exact match (like users.role_id exact)
+  // Filter by category
   if (filters.category) {
     const clause = ` AND category = ?`;
+
     sql += clause;
+
     countSql += clause;
+
     values.push(filters.category);
+
     countValues.push(filters.category);
   }
 
-  // Filter: status — exact match
+  // Filter by status
   if (filters.status) {
     const clause = ` AND status = ?`;
+
     sql += clause;
+
     countSql += clause;
+
     values.push(filters.status);
+
     countValues.push(filters.status);
   }
 
-  // Filter: search — LIKE across title, author, isbn
-  // Mirrors how user service does LIKE on username/email/phone
+  // Search by title, author or ISBN
   if (filters.search) {
     const clause = `
       AND (
-        title  LIKE ?
+        title LIKE ?
         OR author LIKE ?
-        OR isbn   LIKE ?
+        OR isbn LIKE ?
       )
     `;
+
     sql += clause;
+
     countSql += clause;
 
     const term = `%${filters.search}%`;
+
     values.push(term, term, term);
+
     countValues.push(term, term, term);
   }
 
-  // Sorting — whitelisted to prevent SQL injection
+  // Apply sorting
   const sortBy = ALLOWED_SORT_COLUMNS.includes(sorting.sortBy)
     ? sorting.sortBy
     : 'created_at';
@@ -208,14 +219,15 @@ export const getAllBooksService = async (
 
   sql += ` ORDER BY ${sortBy} ${order}`;
 
-  // Pagination — only applied when both limit and offset are provided
-  // Matches user service: null = no limit, fetch all
+  // Apply pagination
   if (pagination.limit !== null && pagination.offset !== null) {
     sql += ` LIMIT ? OFFSET ?`;
+
     values.push(Number(pagination.limit), Number(pagination.offset));
   }
 
   const [books] = await pool.query(sql, values);
+
   const [countResult] = await pool.query(countSql, countValues);
 
   return {
@@ -228,14 +240,14 @@ export const getAllBooksService = async (
    FUNCTION: updateBookRecord
 
    PURPOSE:
-   Dynamically update allowed book fields
+   Update allowed book fields
 
    PARAMETER:
    - id
    - updateData
 
    RETURN:
-   - affectedRows
+   - affected rows count
 ========================================= */
 export const updateBookRecord = async (id, updateData) => {
   const ALLOWED_UPDATE_FIELDS = [
@@ -250,27 +262,39 @@ export const updateBookRecord = async (id, updateData) => {
     'status',
   ];
 
+  // Auto update status using available copies
   if (updateData.available_copies !== undefined) {
     updateData.status =
-      updateData.available_copies > 0 ? 'available' : 'issued';
+      updateData.available_copies > 0 ? 'available' : 'unavailable';
   }
 
   const fields = [];
+
   const values = [];
 
   for (const key of Object.keys(updateData)) {
-    if (!ALLOWED_UPDATE_FIELDS.includes(key)) continue;
+    if (!ALLOWED_UPDATE_FIELDS.includes(key)) {
+      continue;
+    }
 
     fields.push(`${key} = ?`);
+
     values.push(updateData[key]);
   }
 
-  if (!fields.length) return 0;
+  // No valid fields provided
+  if (!fields.length) {
+    return 0;
+  }
 
   values.push(id);
 
   const [result] = await pool.execute(
-    `UPDATE books SET ${fields.join(', ')} WHERE id = ?`,
+    `
+    UPDATE books
+    SET ${fields.join(', ')}
+    WHERE id = ?
+    `,
     values
   );
 
@@ -281,13 +305,13 @@ export const updateBookRecord = async (id, updateData) => {
    FUNCTION: deleteBookRecord
 
    PURPOSE:
-   Hard delete a book by ID
+   Delete book by ID
 
    PARAMETER:
    - id
 
    RETURN:
-   - affectedRows
+   - affected rows count
 ========================================= */
 export const deleteBookRecord = async id => {
   const [result] = await pool.execute(`DELETE FROM books WHERE id = ?`, [id]);
@@ -299,10 +323,10 @@ export const deleteBookRecord = async id => {
    FUNCTION: getDistinctCategories
 
    PURPOSE:
-   Fetch all unique book categories
+   Fetch unique book categories
 
    RETURN:
-   - string[]
+   - categories array
 ========================================= */
 export const getDistinctCategories = async () => {
   const [rows] = await pool.execute(
@@ -317,21 +341,33 @@ export const getDistinctCategories = async () => {
 };
 
 /* =========================================
-   BUSINESS LOGIC
-========================================= */
+   FUNCTION: createBookService
 
-/* ─── createBookService ─── */
+   PURPOSE:
+   Create new book
+
+   PARAMETER:
+   - bookData
+
+   RETURN:
+   - created book
+========================================= */
 export const createBookService = async bookData => {
   try {
-    // ISBN is required — always check for duplicates
+    // Check duplicate ISBN
     const existing = await findByISBN(bookData.isbn);
-    if (existing) throw new Error('ISBN_ALREADY_EXISTS');
 
-    // Auto-set status based on available_copies
+    if (existing) {
+      throw new Error('ISBN_ALREADY_EXISTS');
+    }
+
+    // Auto set status
     const availableCopies = bookData.available_copies ?? bookData.total_copies;
-    bookData.status = availableCopies > 0 ? 'available' : 'issued';
+
+    bookData.status = availableCopies > 0 ? 'available' : 'unavailable';
 
     const insertId = await createBookRecord(bookData);
+
     const book = await findBookById(insertId);
 
     logger.info(`BOOK CREATED: ${book.title} (ID: ${insertId})`);
@@ -339,11 +375,25 @@ export const createBookService = async bookData => {
     return book;
   } catch (error) {
     logger.error('CREATE BOOK SERVICE ERROR', error);
+
     throw error;
   }
 };
 
-/* ─── getBooksService ─── */
+/* =========================================
+   FUNCTION: getBooksService
+
+   PURPOSE:
+   Fetch all books
+
+   PARAMETER:
+   - filters
+   - pagination
+   - sorting
+
+   RETURN:
+   - books data
+========================================= */
 export const getBooksService = async (
   filters = {},
   pagination = {},
@@ -353,40 +403,77 @@ export const getBooksService = async (
     return await getAllBooksService(filters, pagination, sorting);
   } catch (error) {
     logger.error('GET BOOKS SERVICE ERROR', error);
+
     throw error;
   }
 };
 
-/* ─── getBookByIdService ─── */
+/* =========================================
+   FUNCTION: getBookByIdService
+
+   PURPOSE:
+   Fetch single book details
+
+   PARAMETER:
+   - id
+
+   RETURN:
+   - book details
+========================================= */
 export const getBookByIdService = async id => {
   try {
     const book = await findBookById(id);
 
-    if (!book) throw new Error('BOOK_NOT_FOUND');
+    // Book not found
+    if (!book) {
+      throw new Error('BOOK_NOT_FOUND');
+    }
 
     return book;
   } catch (error) {
     logger.error('GET BOOK BY ID SERVICE ERROR', error);
+
     throw error;
   }
 };
 
-/* ─── updateBookService ─── */
+/* =========================================
+   FUNCTION: updateBookService
+
+   PURPOSE:
+   Update existing book
+
+   PARAMETER:
+   - id
+   - updateData
+
+   RETURN:
+   - updated book
+========================================= */
 export const updateBookService = async (id, updateData) => {
   try {
     const book = await findBookById(id);
 
-    if (!book) throw new Error('BOOK_NOT_FOUND');
+    // Book not found
+    if (!book) {
+      throw new Error('BOOK_NOT_FOUND');
+    }
 
+    // Check duplicate ISBN
     if (updateData.isbn && updateData.isbn !== book.isbn) {
       const existing = await findByISBN(updateData.isbn, id);
 
-      if (existing) throw new Error('ISBN_ALREADY_EXISTS');
+      if (existing) {
+        throw new Error('ISBN_ALREADY_EXISTS');
+      }
     }
 
     const affectedRows = await updateBookRecord(id, updateData);
 
-    if (affectedRows === 0) throw new Error('NO_VALID_FIELDS_PROVIDED');
+    // No fields updated
+    if (affectedRows === 0) {
+      throw new Error('NO_VALID_FIELDS_PROVIDED');
+    }
 
     const updated = await findBookById(id);
 
@@ -395,16 +482,31 @@ export const updateBookService = async (id, updateData) => {
     return updated;
   } catch (error) {
     logger.error('UPDATE BOOK SERVICE ERROR', error);
+
     throw error;
   }
 };
 
-/* ─── deleteBookService ─── */
+/* =========================================
+   FUNCTION: deleteBookService
+
+   PURPOSE:
+   Delete book
+
+   PARAMETER:
+   - id
+
+   RETURN:
+   - true
+========================================= */
 export const deleteBookService = async id => {
   try {
     const book = await findBookById(id);
 
-    if (!book) throw new Error('BOOK_NOT_FOUND');
+    // Book not found
+    if (!book) {
+      throw new Error('BOOK_NOT_FOUND');
+    }
 
     await deleteBookRecord(id);
 
@@ -413,16 +515,26 @@ export const deleteBookService = async id => {
     return true;
   } catch (error) {
     logger.error('DELETE BOOK SERVICE ERROR', error);
+
     throw error;
   }
 };
 
-/* ─── getCategoriesService ─── */
+/* =========================================
+   FUNCTION: getCategoriesService
+
+   PURPOSE:
+   Fetch all categories
+
+   RETURN:
+   - categories array
+========================================= */
 export const getCategoriesService = async () => {
   try {
     return await getDistinctCategories();
   } catch (error) {
     logger.error('GET CATEGORIES SERVICE ERROR', error);
+
     throw error;
   }
 };

@@ -1,5 +1,3 @@
-// validators/index.js
-
 export {
   registerValidator,
   loginValidator,

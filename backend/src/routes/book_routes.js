@@ -26,11 +26,6 @@ import {
 
 const router = express.Router();
 
-/* =========================================
-   PUBLIC ROUTES
-   No authentication required
-========================================= */
-
 // GET /books
 // Query params: category, status, search, sortBy, order, page, limit
 router.get('/', getAllBooks);

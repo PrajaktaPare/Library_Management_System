@@ -1,5 +1,3 @@
-// book_controller.js
-
 import logger from '../utils/logger.js';
 
 import {
@@ -15,10 +13,11 @@ import {
    FUNCTION: createBook
 
    PURPOSE:
-   Create a new book (admin only)
+   Create a new book
 
    PARAMETER:
-   - req.body : book data
+   - req
+   - res
 
    RETURN:
    - json response with created book
@@ -53,37 +52,34 @@ export const createBook = async (req, res) => {
    FUNCTION: getAllBooks
 
    PURPOSE:
-   Get all books with optional filters,
-   search, sorting, and pagination
+   Get all books with filters,
+   pagination, and sorting
 
-   QUERY PARAMS:
-   - category     : filter by category
-   - status       : filter by status (available | issued)
-   - search       : search title, author, or ISBN
-   - sortBy       : column to sort by
-   - order        : ASC | DESC
-   - page + limit : both required if either is provided
+   PARAMETER:
+   - req
+   - res
 
    RETURN:
-   - paginated json response
+   - json response with books list
 ========================================= */
 export const getAllBooks = async (req, res) => {
   try {
     const { category, status, search, sortBy, order, page, limit } = req.query;
 
-    // Filters
+    // Filters object
     const filters = {
       category,
       status,
       search,
     };
 
-    // Pagination — both page and limit required if either provided
+    // Default pagination
     const pagination = {
       limit: null,
       offset: null,
     };
 
+    // Validate pagination
     if (page || limit) {
       if (!page || !limit) {
         return res.status(400).json({
@@ -100,10 +96,11 @@ export const getAllBooks = async (req, res) => {
       }
 
       pagination.limit = Math.min(100, Math.max(1, Number(limit)));
+
       pagination.offset = (Math.max(1, Number(page)) - 1) * pagination.limit;
     }
 
-    // Sorting
+    // Sorting object
     const sorting = {
       sortBy,
       order,
@@ -115,11 +112,12 @@ export const getAllBooks = async (req, res) => {
       sorting
     );
 
-    // Build response — include pagination block only when requested
+    // Response data
     const responseData =
       pagination.limit !== null
         ? {
             books,
+
             pagination: {
               total,
               page: Math.max(1, Number(page)),
@@ -127,7 +125,10 @@ export const getAllBooks = async (req, res) => {
               total_pages: Math.ceil(total / pagination.limit),
             },
           }
-        : { books, total };
+        : {
+            books,
+            total,
+          };
 
     return res.status(200).json({
       success_flag: true,
@@ -148,13 +149,14 @@ export const getAllBooks = async (req, res) => {
    FUNCTION: getBookById
 
    PURPOSE:
-   Get a single book by ID
+   Get single book by ID
 
    PARAMETER:
-   - req.params.id : book ID
+   - req
+   - res
 
    RETURN:
-   - json response with book data
+   - json response with book details
 ========================================= */
 export const getBookById = async (req, res) => {
   try {
@@ -188,11 +190,11 @@ export const getBookById = async (req, res) => {
    FUNCTION: updateBook
 
    PURPOSE:
-   Update an existing book (admin only)
+   Update existing book details
 
    PARAMETER:
-   - req.params.id : book ID
-   - req.body      : fields to update
+   - req
+   - res
 
    RETURN:
    - json response with updated book
@@ -201,6 +203,7 @@ export const updateBook = async (req, res) => {
   try {
     const { id } = req.params;
 
+    // Validate empty body
     if (!Object.keys(req.body).length) {
       return res.status(400).json({
         success_flag: false,
@@ -250,10 +253,11 @@ export const updateBook = async (req, res) => {
    FUNCTION: deleteBook
 
    PURPOSE:
-   Delete a book by ID (admin only)
+   Delete book by ID
 
    PARAMETER:
-   - req.params.id : book ID
+   - req
+   - res
 
    RETURN:
    - json success response
@@ -289,10 +293,14 @@ export const deleteBook = async (req, res) => {
    FUNCTION: getCategories
 
    PURPOSE:
-   Get all distinct book categories
+   Get all unique book categories
+
+   PARAMETER:
+   - req
+   - res
 
    RETURN:
-   - json response with categories array
+   - json response with categories
 ========================================= */
 export const getCategories = async (req, res) => {
   try {

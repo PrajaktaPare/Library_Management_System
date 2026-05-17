@@ -17,7 +17,6 @@ import {
 
 const router = express.Router();
 
-/* ─── Param schema for :issue_id ─── */
 const issueIdSchema = {
   type: 'object',
   required: ['issue_id'],
@@ -30,26 +29,16 @@ const issueIdSchema = {
   },
 };
 
-/* =========================================
-   STUDENT ROUTES
-========================================= */
-
 // GET /issues/my
-// Student views their own issued books + current fine
+// Student views their own issued books
 router.get('/my', verifyJWT, getMyIssues);
 
-// GET /issues/:issue_id
-// Student or Admin views a single issue
 router.get(
   '/:issue_id',
   verifyJWT,
   validateParams(issueIdSchema),
   getIssueById
 );
-
-/* =========================================
-   ADMIN ROUTES
-========================================= */
 
 // GET /issues
 // Admin views all issues

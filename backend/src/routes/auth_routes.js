@@ -15,10 +15,6 @@ import {
 
 const router = express.Router();
 
-/* =========================================
-   AUTH ROUTES
-========================================= */
-
 // Register user
 router.post('/register', validateJson(registerValidator), register);
 

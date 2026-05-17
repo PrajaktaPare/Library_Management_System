@@ -64,22 +64,46 @@ export const registerService = async ({
       throw new Error('MISSING_REQUIRED_FIELDS');
     }
 
-    // Check existing user
-    const [existingUsers] = await db.query(
+    // Check if username already exists
+    const [usernameRows] = await db.query(
       `
       SELECT id
       FROM users
-      WHERE
-        username = ?
-        OR email = ?
-        OR phone = ?
+      WHERE username = ?
       `,
-      [username, email, phone]
+      [username]
     );
 
-    // User already exists
-    if (existingUsers.length > 0) {
-      throw new Error('USER_ALREADY_EXISTS');
+    if (usernameRows.length > 0) {
+      throw new Error('USERNAME_ALREADY_EXISTS');
+    }
+
+    // Check if email already exists
+    const [emailRows] = await db.query(
+      `
+      SELECT id
+      FROM users
+      WHERE email = ?
+      `,
+      [email]
+    );
+
+    if (emailRows.length > 0) {
+      throw new Error('EMAIL_ALREADY_EXISTS');
+    }
+
+    // Check if phone already exists
+    const [phoneRows] = await db.query(
+      `
+      SELECT id
+      FROM users
+      WHERE phone = ?
+      `,
+      [phone]
+    );
+
+    if (phoneRows.length > 0) {
+      throw new Error('PHONE_ALREADY_EXISTS');
     }
 
     // Hash password
@@ -91,7 +115,7 @@ export const registerService = async ({
     // Hash verification token
     const hashedVerificationToken = await bcrypt.hash(rawVerificationToken, 10);
 
-    // Insert user into database
+    // Insert new user into database
     const [result] = await db.query(
       `
       INSERT INTO users
@@ -119,22 +143,23 @@ export const registerService = async ({
         name,
         phone,
         2,
-        null,
-        null,
+        0,
+        0,
         hashedVerificationToken,
       ]
     );
 
     // Create verification link
-    // FIXED
-    const verificationLink = `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawVerificationToken}`;
+    const verificationLink =
+      `${process.env.FRONTEND_BASE_URL}` +
+      `/auth/verify-email?uid=${result.insertId}&token=${rawVerificationToken}`;
 
     // Send verification email
     await sendVerificationEmail(email, verificationLink);
 
     logger.info(`USER REGISTERED: ${username}`);
 
-    // Return response
+    // Return inserted user data
     return {
       user_id: result.insertId,
       verification_link: verificationLink,
@@ -167,7 +192,7 @@ export const loginService = async ({ username, password }) => {
       throw new Error('USERNAME_AND_PASSWORD_REQUIRED');
     }
 
-    // Find user
+    // Find user by username
     const [rows] = await db.query(
       `
       SELECT
@@ -207,7 +232,7 @@ export const loginService = async ({ username, password }) => {
       throw new Error('EMAIL_NOT_VERIFIED');
     }
 
-    // Compare password
+    // Compare entered password with hashed password
     const isPasswordMatched = await bcrypt.compare(
       password,
       user.password_hash
@@ -226,7 +251,7 @@ export const loginService = async ({ username, password }) => {
 
     logger.info(`LOGIN SUCCESS: ${username}`);
 
-    // Return response
+    // Return token and user data
     return {
       token,
 

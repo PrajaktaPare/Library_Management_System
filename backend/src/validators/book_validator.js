@@ -1,20 +1,21 @@
-// book_validator.js
-
 /* =========================================
-   CREATE BOOK SCHEMA  (POST /books)
+   CREATE BOOK SCHEMA
 
-   Fields:
-   - title          : required, string, min 1
-   - author         : required, string, min 1
-   - isbn           : optional, string, max 20
-   - category       : required, string
-   - sub_category   : optional, string
-   - total_copies   : required, integer, min 1
-   - available_copies: optional, integer, min 0
-   - book_image     : optional, string (URL or path)
-   - status         : optional, enum: available | issued
+   PURPOSE:
+   Validate create book request body
 
-   No extra fields allowed
+   ROUTE:
+   POST /books
+
+   REQUIRED FIELDS:
+   - title
+   - author
+   - isbn
+   - category
+   - total_copies
+
+   RETURN:
+   - validated request body
 ========================================= */
 export const createBookValidator = {
   type: 'object',
@@ -119,15 +120,22 @@ export const createBookValidator = {
       category: 'Category is required',
       total_copies: 'Total copies is required',
     },
+
     additionalProperties: 'Extra fields are not allowed',
   },
 };
 
 /* =========================================
-   UPDATE BOOK SCHEMA  (PATCH /books/:id)
+   UPDATE BOOK SCHEMA
 
-   All fields optional — at least one required.
-   Same field rules as create.
+   PURPOSE:
+   Validate update book request body
+
+   ROUTE:
+   PATCH /books/:id
+
+   RETURN:
+   - validated request body
 ========================================= */
 export const updateBookValidator = {
   type: 'object',
@@ -227,12 +235,22 @@ export const updateBookValidator = {
 
   errorMessage: {
     minProperties: 'At least one field must be provided',
+
     additionalProperties: 'Extra fields are not allowed',
   },
 };
 
 /* =========================================
-   BOOK ID PARAM SCHEMA  (/:id routes)
+   BOOK ID PARAM SCHEMA
+
+   PURPOSE:
+   Validate book id route parameter
+
+   ROUTE:
+   /books/:id
+
+   RETURN:
+   - validated request params
 ========================================= */
 export const bookIdValidator = {
   type: 'object',
@@ -242,9 +260,12 @@ export const bookIdValidator = {
   properties: {
     id: {
       type: 'string',
+
       pattern: '^[1-9]\\d*$',
+
       errorMessage: {
         type: 'Book ID must be a string',
+
         pattern: 'Book ID must be a valid positive integer',
       },
     },

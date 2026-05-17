@@ -1,5 +1,3 @@
-// services/index.js
-
 export {
   getAllUsersService,
   getUserByIDService,

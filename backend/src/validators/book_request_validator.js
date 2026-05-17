@@ -1,10 +1,17 @@
-// book_request_validator.js
-
 /* =========================================
-   REQUEST BOOK SCHEMA  (POST /book-requests)
+   REQUEST BOOK SCHEMA
 
-   Fields:
-   - book_id : required, positive integer
+   PURPOSE:
+   Validate book request body
+
+   ROUTE:
+   POST /book-requests
+
+   REQUIRED FIELDS:
+   - book_id
+
+   RETURN:
+   - validated request body
 ========================================= */
 export const requestBookValidator = {
   type: 'object',
@@ -14,9 +21,12 @@ export const requestBookValidator = {
   properties: {
     book_id: {
       type: 'integer',
+
       minimum: 1,
+
       errorMessage: {
         type: 'Book ID must be an integer',
+
         minimum: 'Book ID must be a positive integer',
       },
     },
@@ -28,16 +38,22 @@ export const requestBookValidator = {
     required: {
       book_id: 'Book ID is required',
     },
+
     additionalProperties: 'Extra fields are not allowed',
   },
 };
 
 /* =========================================
    REJECT REQUEST SCHEMA
-   (PATCH /book-requests/:request_id/reject)
 
-   Fields:
-   - reason : optional string, max 500 chars
+   PURPOSE:
+   Validate reject request body
+
+   ROUTE:
+   PATCH /book-requests/:request_id/reject
+
+   RETURN:
+   - validated request body
 ========================================= */
 export const rejectRequestValidator = {
   type: 'object',
@@ -45,11 +61,16 @@ export const rejectRequestValidator = {
   properties: {
     reason: {
       type: 'string',
+
       minLength: 1,
+
       maxLength: 500,
+
       errorMessage: {
         type: 'Reason must be a string',
+
         minLength: 'Reason cannot be empty',
+
         maxLength: 'Reason must be at most 500 characters',
       },
     },
@@ -64,6 +85,15 @@ export const rejectRequestValidator = {
 
 /* =========================================
    REQUEST ID PARAM SCHEMA
+
+   PURPOSE:
+   Validate request id route parameter
+
+   ROUTE:
+   /book-requests/:request_id
+
+   RETURN:
+   - validated request params
 ========================================= */
 export const requestIdValidator = {
   type: 'object',
@@ -73,9 +103,12 @@ export const requestIdValidator = {
   properties: {
     request_id: {
       type: 'string',
+
       pattern: '^[1-9]\\d*$',
+
       errorMessage: {
         type: 'Request ID must be a string',
+
         pattern: 'Request ID must be a valid positive integer',
       },
     },

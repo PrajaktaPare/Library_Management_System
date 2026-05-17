@@ -201,7 +201,6 @@ export const sendBookReturnedEmail = async ({
 
     let html = fs.readFileSync(templatePath, 'utf-8');
 
-    // Build fine section dynamically
     const fineSection =
       fineAmount > 0
         ? `

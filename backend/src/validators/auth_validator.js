@@ -132,8 +132,5 @@ export const loginValidator = {
   },
 };
 
-/* =========================================
-   COMPILED VALIDATORS
-========================================= */
 export const validateRegister = ajv.compile(registerValidator);
 export const validateLogin = ajv.compile(loginValidator);

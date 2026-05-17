@@ -1,5 +1,3 @@
-// controllers/index.js
-
 export {
   getAllUsers,
   getUserByID,

@@ -1,38 +1,30 @@
-// issue_service.js
-
 import pool from '../config/db.js';
 import logger from '../utils/logger.js';
 
 import { sendBookReturnedEmail } from './email_service.js';
 
-/* =========================================
-   CONSTANTS
-========================================= */
-const FINE_PER_DAY = 5; // ₹5 per day
+// Fine amount charged per overdue day
+const FINE_PER_DAY = 5;
 
-/* =========================================
-   HELPER: calculateFine
-
-   PURPOSE:
-   Compare due_date with returned_at.
-   If overdue, calculate fine @ ₹5/day.
-
-   RETURN:
-   - { overdue_days, fine_amount }
-========================================= */
+// Calculate overdue fine
 const calculateFine = (dueDate, returnedAt) => {
   const due = new Date(dueDate);
+
   const returned = new Date(returnedAt);
 
-  // Reset time to midnight for fair day comparison
   due.setHours(0, 0, 0, 0);
+
   returned.setHours(0, 0, 0, 0);
 
   const diffMs = returned - due;
+
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
   if (diffDays <= 0) {
-    return { overdue_days: 0, fine_amount: 0 };
+    return {
+      overdue_days: 0,
+      fine_amount: 0,
+    };
   }
 
   return {
@@ -41,12 +33,7 @@ const calculateFine = (dueDate, returnedAt) => {
   };
 };
 
-/* =========================================
-   HELPER: formatDate
-
-   PURPOSE:
-   Format a date to Indian readable format
-========================================= */
+// Format date for email response
 const formatDate = d =>
   new Date(d).toLocaleDateString('en-IN', {
     day: '2-digit',
@@ -54,11 +41,25 @@ const formatDate = d =>
     year: 'numeric',
   });
 
-/* =========================================
-   DB HELPERS
-========================================= */
+// Update book availability status
+const updateBookStatus = async (bookId, connection) => {
+  const db = connection || pool;
 
-/* ─── findActiveIssueById ─── */
+  await db.execute(
+    `
+    UPDATE books
+    SET status = CASE
+      WHEN available_copies > 0
+        THEN 'available'
+      ELSE 'unavailable'
+    END
+    WHERE id = ?
+    `,
+    [bookId]
+  );
+};
+
+// Find issue details by issue ID
 const findActiveIssueById = async issueId => {
   const [rows] = await pool.execute(
     `
@@ -87,12 +88,15 @@ const findActiveIssueById = async issueId => {
 
     FROM issues i
 
-    JOIN users u  ON i.student_id = u.id
-    JOIN books b  ON i.book_id    = b.id
+    JOIN users u
+      ON i.student_id = u.id
+
+    JOIN books b
+      ON i.book_id = b.id
 
     LEFT JOIN book_requests br
-      ON  br.student_id = i.student_id
-      AND br.book_id    = i.book_id
+      ON br.student_id = i.student_id
+      AND br.book_id = i.book_id
       AND br.request_status = 'issued'
 
     WHERE i.id = ?
@@ -103,7 +107,7 @@ const findActiveIssueById = async issueId => {
   return rows[0] || null;
 };
 
-/* ─── getAllIssuesQuery ─── */
+// Fetch all issues with filters and pagination
 const getAllIssuesQuery = async (filters = {}, pagination = {}) => {
   let sql = `
     SELECT
@@ -130,19 +134,22 @@ const getAllIssuesQuery = async (filters = {}, pagination = {}) => {
 
       CASE
         WHEN i.issue_status = 'active'
-          AND CURDATE() > i.due_date
+        AND CURDATE() > i.due_date
         THEN DATEDIFF(CURDATE(), i.due_date) * ${FINE_PER_DAY}
         ELSE 0
       END AS current_fine
 
     FROM issues i
 
-    JOIN users u ON i.student_id = u.id
-    JOIN books b ON i.book_id    = b.id
+    JOIN users u
+      ON i.student_id = u.id
+
+    JOIN books b
+      ON i.book_id = b.id
 
     LEFT JOIN book_requests br
-      ON  br.student_id     = i.student_id
-      AND br.book_id        = i.book_id
+      ON br.student_id = i.student_id
+      AND br.book_id = i.book_id
       AND br.request_status = 'issued'
 
     WHERE 1=1
@@ -151,47 +158,67 @@ const getAllIssuesQuery = async (filters = {}, pagination = {}) => {
   let countSql = `
     SELECT COUNT(*) AS total
     FROM issues i
-    JOIN users u ON i.student_id = u.id
-    JOIN books b ON i.book_id    = b.id
+
+    JOIN users u
+      ON i.student_id = u.id
+
+    JOIN books b
+      ON i.book_id = b.id
+
     WHERE 1=1
   `;
 
   const values = [];
+
   const countValues = [];
 
-  // Filter: status (active | returned)
+  // Filter by issue status
   if (filters.status) {
-    const clause = ` AND i.issue_status = ?`;
-    sql += clause;
-    countSql += clause;
+    sql += ` AND i.issue_status = ?`;
+
+    countSql += ` AND i.issue_status = ?`;
+
     values.push(filters.status);
+
     countValues.push(filters.status);
   }
 
-  // Filter: overdue only
+  // Filter overdue issues
   if (filters.overdue === 'true') {
-    const clause = ` AND i.issue_status = 'active' AND CURDATE() > i.due_date`;
-    sql += clause;
-    countSql += clause;
+    sql += `
+      AND i.issue_status = 'active'
+      AND CURDATE() > i.due_date
+    `;
+
+    countSql += `
+      AND i.issue_status = 'active'
+      AND CURDATE() > i.due_date
+    `;
   }
 
-  // Filter: by student
+  // Filter by student ID
   if (filters.student_id) {
-    const clause = ` AND i.student_id = ?`;
-    sql += clause;
-    countSql += clause;
+    sql += ` AND i.student_id = ?`;
+
+    countSql += ` AND i.student_id = ?`;
+
     values.push(filters.student_id);
+
     countValues.push(filters.student_id);
   }
 
+  // Sort latest issues first
   sql += ` ORDER BY i.id DESC`;
 
+  // Apply pagination
   if (pagination.limit !== undefined) {
     sql += ` LIMIT ? OFFSET ?`;
+
     values.push(Number(pagination.limit), Number(pagination.offset || 0));
   }
 
   const [issues] = await pool.query(sql, values);
+
   const [countResult] = await pool.query(countSql, countValues);
 
   return {
@@ -201,71 +228,75 @@ const getAllIssuesQuery = async (filters = {}, pagination = {}) => {
 };
 
 /* =========================================
-   BUSINESS LOGIC
-========================================= */
+   FUNCTION: returnBookService
 
-/* ─── returnBookService ─── */
+   PURPOSE:
+   Return issued book,
+   calculate fine,
+   update issue and stock
+
+   PARAMETER:
+   - issueId
+
+   RETURN:
+   - returned book details
+========================================= */
 export const returnBookService = async issueId => {
   const connection = await pool.getConnection();
 
   try {
     await connection.beginTransaction();
 
-    // 1. Fetch the issue record with full details
     const issue = await findActiveIssueById(issueId);
 
+    // Issue not found
     if (!issue) {
       throw new Error('ISSUE_NOT_FOUND');
     }
 
+    // Book already returned
     if (issue.issue_status === 'returned') {
       throw new Error('BOOK_ALREADY_RETURNED');
     }
 
     const returnedAt = new Date();
+
     const returnedStr = returnedAt.toISOString().slice(0, 19).replace('T', ' ');
 
-    // 2. Calculate fine
     const { overdue_days, fine_amount } = calculateFine(
       issue.due_date,
       returnedAt
     );
 
-    // 3. Mark issue as returned
+    // Update issue record
     await connection.execute(
       `
       UPDATE issues
       SET
         issue_status = 'returned',
-        returned_at  = ?,
-        resolved_at  = ?,
-        fine_amount  = ?
+        returned_at = ?,
+        resolved_at = ?,
+        fine_amount = ?
       WHERE id = ?
       `,
       [returnedStr, returnedStr, fine_amount, issueId]
     );
 
-    // 4. Increase available_copies for the book
+    // Increase available copies
     await connection.execute(
       `
       UPDATE books
-      SET available_copies = available_copies + 1
+      SET available_copies =
+          available_copies + 1
       WHERE id = ?
       `,
       [issue.book_id]
     );
 
-    // 5. Set book status back to 'available'
-    await connection.execute(
-      `
-      UPDATE books
-      SET status = 'available'
-      WHERE id = ?
-      `,
-      [issue.book_id]
-    );
+    // Update book status
+    await updateBookStatus(issue.book_id, connection);
 
-    // 6. Update book_request status → returned (if exists)
+    // Update request status
     if (issue.request_id) {
       await connection.execute(
         `
@@ -279,7 +310,7 @@ export const returnBookService = async issueId => {
 
     await connection.commit();
 
-    // 7. Send return confirmation email
+    // Send return confirmation email
     await sendBookReturnedEmail({
       to: issue.student_email,
       studentName: issue.student_name,
@@ -294,9 +325,7 @@ export const returnBookService = async issueId => {
       finePerDay: FINE_PER_DAY,
     });
 
-    logger.info(
-      `BOOK RETURNED: Issue ${issueId} | Student ${issue.student_id} | Book ${issue.book_id} | Fine ₹${fine_amount}`
-    );
+    logger.info(`BOOK RETURNED: Issue ${issueId}`);
 
     return {
       issue_id: issueId,
@@ -319,7 +348,19 @@ export const returnBookService = async issueId => {
   }
 };
 
-/* ─── getAllIssuesService ─── */
+/* =========================================
+   FUNCTION: getAllIssuesService
+
+   PURPOSE:
+   Fetch all issues
+
+   PARAMETER:
+   - filters
+   - pagination
+
+   RETURN:
+   - issues list
+========================================= */
 export const getAllIssuesService = async (filters = {}, pagination = {}) => {
   try {
     return await getAllIssuesQuery(filters, pagination);
@@ -330,7 +371,19 @@ export const getAllIssuesService = async (filters = {}, pagination = {}) => {
   }
 };
 
-/* ─── getMyIssuesService ─── */
+/* =========================================
+   FUNCTION: getMyIssuesService
+
+   PURPOSE:
+   Fetch logged-in student issues
+
+   PARAMETER:
+   - studentId
+   - pagination
+
+   RETURN:
+   - student issue list
+========================================= */
 export const getMyIssuesService = async (studentId, pagination = {}) => {
   try {
     return await getAllIssuesQuery({ student_id: studentId }, pagination);
@@ -341,25 +394,40 @@ export const getMyIssuesService = async (studentId, pagination = {}) => {
   }
 };
 
-/* ─── getIssueByIdService ─── */
+/* =========================================
+   FUNCTION: getIssueByIdService
+
+   PURPOSE:
+   Fetch issue details by ID
+
+   PARAMETER:
+   - issueId
+
+   RETURN:
+   - issue details
+========================================= */
 export const getIssueByIdService = async issueId => {
   try {
     const issue = await findActiveIssueById(issueId);
 
+    // Issue not found
     if (!issue) {
       throw new Error('ISSUE_NOT_FOUND');
     }
 
-    // Calculate current running fine if active and overdue
+    // Calculate current fine for active issue
     if (issue.issue_status === 'active') {
       const { overdue_days, fine_amount } = calculateFine(
         issue.due_date,
         new Date()
       );
+
       issue.overdue_days = overdue_days;
+
       issue.current_fine = fine_amount;
     } else {
       issue.overdue_days = 0;
+
       issue.current_fine = issue.fine_amount;
     }
 

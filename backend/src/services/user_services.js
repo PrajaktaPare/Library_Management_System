@@ -1,5 +1,3 @@
-// user_service.js
-
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import pool from '../config/db.js';
@@ -143,16 +141,40 @@ export const createUser = async ({
   phone,
   role_id,
 }) => {
-  // Generate random verification token
+  const [existingUsername] = await pool.execute(
+    `SELECT id FROM users WHERE username = ?`,
+    [username]
+  );
+
+  if (existingUsername.length > 0) {
+    throw new Error('USERNAME_ALREADY_EXISTS');
+  }
+
+  const [existingEmail] = await pool.execute(
+    `SELECT id FROM users WHERE email = ?`,
+    [email]
+  );
+
+  if (existingEmail.length > 0) {
+    throw new Error('EMAIL_ALREADY_EXISTS');
+  }
+
+  const [existingPhone] = await pool.execute(
+    `SELECT id FROM users WHERE phone = ?`,
+    [phone]
+  );
+
+  if (existingPhone.length > 0) {
+    throw new Error('PHONE_ALREADY_EXISTS');
+  }
+
   const rawVerificationToken = crypto.randomBytes(10).toString('hex');
 
-  // Hash verification token
   const hashedVerificationToken = await bcrypt.hash(rawVerificationToken, 10);
 
   const [result] = await pool.execute(
     `
-    INSERT INTO users
-    (
+    INSERT INTO users (
       username,
       email,
       password_hash,
@@ -163,10 +185,7 @@ export const createUser = async ({
       is_verified,
       verification_token
     )
-    VALUES
-    (
-      ?, ?, ?, ?, ?, ?, ?, ?, ?
-    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
     [
       username,
@@ -181,10 +200,8 @@ export const createUser = async ({
     ]
   );
 
-  // Create verification link
   const verificationLink = `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawVerificationToken}`;
 
-  // Send verification email
   await sendVerificationEmail(email, verificationLink);
 
   return {

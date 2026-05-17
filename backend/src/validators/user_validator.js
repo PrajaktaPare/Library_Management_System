@@ -407,9 +407,6 @@ export const updateProfileValidator = {
   },
 };
 
-/* =========================================
-   COMPILED VALIDATORS
-========================================= */
 export const validateUserId = ajv.compile(userIdValidator);
 export const validateCreateUser = ajv.compile(createUserValidator);
 export const validatePutUser = ajv.compile(putUserValidator);
