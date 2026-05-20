@@ -3,42 +3,29 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Debug environment variables
-console.log(process.env.MAIL_USER);
+//debug mail credentials
 console.log(process.env.MAIL_PASS);
+console.log(process.env.MAIL_USER);
 
-/* =========================================
-   MAIL TRANSPORTER
-
-   PURPOSE:
-   Create nodemailer transporter
-   for sending emails
-========================================= */
+//create transporter
 const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_HOST,
-
-  port: parseInt(process.env.MAIL_PORT),
-
-  secure: false,
-
+  host: process.env.MAIL_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.MAIL_PORT) || 587,
+  service: 'gmail',
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
   },
 });
 
-/* =========================================
-   VERIFY MAIL CONNECTION
-
-   PURPOSE:
-   Verify SMTP connection on startup
-========================================= */
+//verify mail connection on startup
 transporter.verify((error, success) => {
   if (error) {
-    console.error('MAILER CONNECTION FAILED:', error.message);
+    console.error('Mailer connection failed:', error.message);
   } else {
-    console.log('MAILER IS READY TO SEND EMAILS');
+    console.log('Mailer is ready to send emails');
   }
 });
 
+//export transporter
 export default transporter;

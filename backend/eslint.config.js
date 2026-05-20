@@ -46,7 +46,7 @@ export default [
       // Allow console.log but show warning
       'no-console': 'warn',
 
-      // Warn for unused variables
+      // Warn for unused variable s
       'no-unused-vars': [
         'warn',
         {

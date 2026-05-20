@@ -1,23 +1,15 @@
-// routes/index.js
-
 import express from 'express';
-import logger from '../utils/logger.js';
-import userRoutes from './user_routes.js';
-import authRoutes from './auth_routes.js';
-import bookRoutes from './book_routes.js';
-import bookRequestRoutes from './book_request_routes.js';
-import issueRoutes from './issue_routes.js';
+import userRoutes from './user.route.js';
+import authRoutes from './auth.route.js';
 
+// Create router instance for managing routes
 const router = express.Router();
 
+// Handle all user APIs with /users prefix
 router.use('/users', userRoutes);
 
+// Handle all auth APIs with /auth prefix
 router.use('/auth', authRoutes);
 
-router.use('/books', bookRoutes);
-
-router.use('/book-requests', bookRequestRoutes);
-
-router.use('/issues', issueRoutes);
-
+// Export router for application use
 export default router;

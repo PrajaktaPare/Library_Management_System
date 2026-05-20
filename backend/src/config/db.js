@@ -14,7 +14,7 @@ const pool = mysql.createPool({
   connectionLimit: 10, // Maximum connections in pool
 });
 
-// Test database connection
+//Test MySQL pool connection on server startup
 const connectDB = async () => {
   try {
     const conn = await pool.getConnection(); // Get connection from pool
