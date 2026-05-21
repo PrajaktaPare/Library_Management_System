@@ -1,4 +1,61 @@
-//user id validator schema
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+import ajvErrors from 'ajv-errors';
+
+// allowed DB columns
+export const USER_COLUMNS = [
+  'id',
+  'email',
+  'first_name',
+  'last_name',
+  'phone',
+  'role_id',
+  'is_active',
+  'is_verified',
+  'created_at',
+  'updated_at',
+];
+
+// ajv instance
+export const ajv = new Ajv({
+  allErrors: true,
+  coerceTypes: true,
+  useDefaults: true,
+  strict: false,
+});
+
+addFormats(ajv);
+ajvErrors(ajv);
+
+// GET users validator
+export const getUsersValidator = {
+  type: 'object',
+  properties: {
+    filter: {
+      type: 'string',
+      properties: {
+        limit: { type: 'integer', minimum: 1, maximum: 100 },
+        offset: { type: 'integer', minimum: 0 },
+        order: {
+          type: 'object',
+          properties: {
+            column: { type: 'string', enum: USER_COLUMNS },
+            direction: { type: 'string', enum: ['ASC', 'DESC'] },
+          },
+          additionalProperties: false,
+        },
+        where: {
+          type: 'object',
+          additionalProperties: true,
+        },
+      },
+      additionalProperties: false,
+    },
+  },
+  additionalProperties: true,
+};
+
+// user id validator
 export const userIdValidator = {
   type: 'object',
   required: ['id'],
@@ -9,98 +66,49 @@ export const userIdValidator = {
     },
   },
   additionalProperties: false,
-  errorMessage: {
-    required: {
-      id: 'INVALID_USER_ID',
-    },
-  },
 };
 
-//create user validator schema
+// create user validator
 export const createUserValidator = {
   type: 'object',
-  required: ['first_name', 'last_name', 'email', 'password', 'phone'],
+  required: ['first_name', 'last_name', 'email', 'password', 'phone', 'role_id'],
   properties: {
-    first_name: {
-      type: 'string',
-      minLength: 1,
-    },
-    last_name: {
-      type: 'string',
-      minLength: 1,
-    },
-    email: {
-      type: 'string',
-      format: 'email',
-    },
+    first_name: { type: 'string', minLength: 1 },
+    last_name: { type: 'string', minLength: 1 },
+    email: { type: 'string', format: 'email' },
     password: {
       type: 'string',
       pattern: '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$',
     },
-    phone: {
-      type: 'string',
-      pattern: '^\\d{10}$',
-    },
+    phone: { type: 'string', pattern: '^\\d{10}$' },
+    role_id: { type: 'integer', enum: [1, 2] },
   },
   additionalProperties: false,
-  errorMessage: {
-    required: {
-      first_name: 'FIRST_NAME_REQUIRED',
-      last_name: 'LAST_NAME_REQUIRED',
-      email: 'EMAIL_REQUIRED',
-      password: 'PASSWORD_REQUIRED',
-      phone: 'PHONE_REQUIRED',
-    },
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
-  },
 };
 
-//update profile validator schema
-export const updateProfileValidator = {
-  type: 'object',
-  properties: {
-    first_name: {
-      type: 'string',
-      minLength: 1,
-    },
-    last_name: {
-      type: 'string',
-      minLength: 1,
-    },
-    phone: {
-      type: 'string',
-      pattern: '^\\d{10}$',
-    },
-  },
-  additionalProperties: false,
-  errorMessage: {
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
-  },
-};
-
-//patch user validator schema
+// PATCH user validator (✔ FIXED EXPORT)
 export const patchUserValidator = {
   type: 'object',
   properties: {
-    first_name: {
-      type: 'string',
-      minLength: 1,
-    },
-    last_name: {
-      type: 'string',
-      minLength: 1,
-    },
+    email: { type: 'string', format: 'email' },
+    first_name: { type: 'string', minLength: 1 },
+    last_name: { type: 'string', minLength: 1 },
+    phone: { type: 'string', pattern: '^\\d{10}$' },
+  },
+  additionalProperties: false,
+};
+
+// update profile validator
+export const updateProfileValidator = {
+  type: 'object',
+  properties: {
+    first_name: { type: 'string', minLength: 1 },
+    last_name: { type: 'string', minLength: 1 },
+    phone: { type: 'string', pattern: '^\\d{10}$' },
     password: {
       type: 'string',
       pattern: '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$',
     },
-    phone: {
-      type: 'string',
-      pattern: '^\\d{10}$',
-    },
   },
   additionalProperties: false,
-  errorMessage: {
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
-  },
 };

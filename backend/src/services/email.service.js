@@ -13,7 +13,7 @@ export const sendVerificationEmail = async (email, link, first_name) => {
     logger.info('EMAIL DEBUG', { email, link, first_name });
     logger.info(`SENDING VERIFICATION EMAIL TO ${email}`);
 
-    //template path
+    //html file template path
     const templatePath = path.join(
       process.cwd(),
       'src',

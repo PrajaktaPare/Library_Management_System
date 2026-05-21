@@ -4,34 +4,76 @@ import {
   getUserByID,
   postUser,
   patchUser,
-  putUser,
   deleteUser,
   getProfile,
   updateProfile,
 } from '../controllers/user.controller.js';
+
 import {
   userIdValidator,
   createUserValidator,
   patchUserValidator,
   updateProfileValidator,
+  getUsersValidator,
 } from '../validators/user.validator.js';
+
 import { validateSchema } from '../middlewares/schema.validator.middleware.js';
 import { verifyJWT, authorizeRoles } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
+// admin middleware
 const admin = [verifyJWT, authorizeRoles(1)];
 
-// profile routes
+// get own profile
 router.get('/profile/me', verifyJWT, getProfile);
-router.patch('/profile/me', verifyJWT, validateSchema(updateProfileValidator, 'body'), updateProfile);
 
-// user routes
-router.get('/', ...admin, getAllUsers);
-router.get('/:id', ...admin, validateSchema(userIdValidator, 'params'), getUserByID);
-router.post('/', ...admin, validateSchema(createUserValidator, 'body'), postUser);
-router.patch('/:id', ...admin, validateSchema(patchUserValidator, 'body'), patchUser);
-router.put('/:id', ...admin, validateSchema(userIdValidator, 'params'), putUser);
-router.delete('/:id', ...admin, validateSchema(userIdValidator, 'params'), deleteUser);
+// update own profile
+router.patch(
+  '/profile/me',
+  verifyJWT,
+  validateSchema(updateProfileValidator, 'body'),
+  updateProfile
+);
+
+// get users list
+router.get(
+  '/',
+  ...admin,
+  validateSchema(getUsersValidator, 'query'),
+  getAllUsers
+);
+
+// get user by id
+router.get(
+  '/:id',
+  ...admin,
+  validateSchema(userIdValidator, 'params'),
+  getUserByID
+);
+
+// create user
+router.post(
+  '/',
+  ...admin,
+  validateSchema(createUserValidator, 'body'),
+  postUser
+);
+
+// update user
+router.patch(
+  '/:id',
+  ...admin,
+  validateSchema(patchUserValidator, 'body'),
+  patchUser
+);
+
+// delete user
+router.delete(
+  '/:id',
+  ...admin,
+  validateSchema(userIdValidator, 'params'),
+  deleteUser
+);
 
 export default router;

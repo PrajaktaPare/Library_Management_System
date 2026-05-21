@@ -6,60 +6,6 @@ import { sendVerificationEmail } from '../services/email.service.js';
 import { generateVerificationToken } from '../services/verfication.token.service.js';
 
 /*
-function info:register new user
-function parameter purpose:req.body contains first_name,last_name,email,password,phone
-function return:returns user_id and success response
-*/
-export const register = async (req, res) => {
-  try {
-    const { first_name, last_name, email, password, phone } = req.body;
-
-    //hash password before saving
-    const password_hash = await bcrypt.hash(password, 10);
-
-    //generate verification token
-    const { rawToken, hashedToken } = await generateVerificationToken();
-
-    //insert user into database
-    const [result] = await db.execute(
-      `INSERT INTO users(first_name,last_name,email,password_hash,phone,is_active,is_verified,verification_token)
-       VALUES(?,?,?,?,?,?,?,?)`,
-      [first_name, last_name, email, password_hash, phone, 0, 0, hashedToken]
-    );
-
-    //create verification link
-    const verificationLink = `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawToken}`;
-
-    //send verification email
-    await sendVerificationEmail(email, verificationLink, first_name);
-
-    logger.info(`USER REGISTERED:${result.insertId}`);
-
-    return res.status(201).json({
-      success_flag: true,
-      message: 'REGISTRATION_SUCCESSFUL_VERIFY_EMAIL',
-      data: { user_id: result.insertId },
-    });
-  } catch (error) {
-    logger.error('REGISTER ERROR', error);
-
-    if (error.code === 'ER_DUP_ENTRY') {
-      const message = error.message.includes('email') ? 'EMAIL_ALREADY_EXISTS' : 'PHONE_ALREADY_EXISTS';
-
-      return res.status(409).json({
-        success_flag: false,
-        message,
-      });
-    }
-
-    return res.status(500).json({
-      success_flag: false,
-      message: 'INTERNAL_SERVER_ERROR',
-    });
-  }
-};
-
-/*
 function info:login user and generate jwt token
 function parameter purpose:req.body contains email,password
 function return:returns user data with jwt token
