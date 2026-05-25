@@ -23,7 +23,6 @@ const logger = winston.createLogger({
 
   //log transports
   transports: [
-    //console logs
     new winston.transports.Console({
       format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
     }),

@@ -2,13 +2,9 @@ import jwt from 'jsonwebtoken';
 import logger from './logger.service.js';
 
 /*
-  Purpose:
     Generate JWT token for authenticated user
-     Parameters:
-    - user: Object containing user details
-
-  Returns:
-    - Signed JWT token string
+    - takes user: Object containing user details
+    - it will return Signed JWT token string
 */
 export const generateToken = user => {
   logger.info(`GENERATING JWT TOKEN FOR USER ID ${user.id}`);
@@ -34,14 +30,10 @@ export const generateToken = user => {
 };
 
 /*
-  Purpose:
+
     Verify and decode JWT token
-
-  Parameters:
-    - token: JWT token string
-
-  Returns:
-    - Decoded token payload
+    -it takes token: JWT token string
+    -returns Decoded token payload
 */
 export const verifyToken = token => {
   logger.info('VERIFYING JWT TOKEN');

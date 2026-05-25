@@ -2,19 +2,36 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import logger from './logger.service.js';
 
-/*
-function info: generate secure verification token for email verification flow
-function parameter purpose: none required
-function return: returns raw token (for email link) and hashed token (for DB storage)
-*/
+/**
+ * Generate verification token for email verification.
+ *
+ * @returns {Promise<Object>}
+ * Returns:
+ * - rawToken → sent in email verification link
+ * - hashedToken → stored securely in database
+ */
 export const generateVerificationToken = async () => {
   try {
-    const rawToken = crypto.randomBytes(10).toString('hex');
-    const hashedToken = await bcrypt.hash(rawToken, 10);
+    // generate random token
+    const rawToken =
+      crypto.randomBytes(10).toString('hex');
 
-    return { rawToken, hashedToken };
+    // hash token before storing
+    const hashedToken =
+      await bcrypt.hash(rawToken, 10);
+
+    // return both tokens
+    return {
+      rawToken,
+      hashedToken,
+    };
   } catch (error) {
-    logger.error('TOKEN_GENERATION_ERROR', error);
-    throw new Error('TOKEN_GENERATION_FAILED');
+    // log token generation error
+    logger.error('TOKEN_GENERATION_ERROR',error);
+
+    // throw application error
+    throw new Error(
+      'TOKEN_GENERATION_FAILED'
+    );
   }
 };

@@ -34,24 +34,56 @@ export const getUsersValidator = {
     filter: {
       type: 'string',
       properties: {
-        limit: { type: 'integer', minimum: 1, maximum: 100 },
-        offset: { type: 'integer', minimum: 0 },
+        limit: {
+          type: 'integer',
+          minimum: 1,
+          maximum: 100,
+        },
+
+        offset: {
+          type: 'integer',
+          minimum: 0,
+        },
+
         order: {
           type: 'object',
           properties: {
-            column: { type: 'string', enum: USER_COLUMNS },
-            direction: { type: 'string', enum: ['ASC', 'DESC'] },
+            column: {
+              type: 'string',
+            },
+            direction: {
+              type: 'string',
+              enum: ['ASC', 'DESC'],
+            },
           },
           additionalProperties: false,
         },
+
         where: {
           type: 'object',
-          additionalProperties: true,
+          additionalProperties: {
+            anyOf: [
+              {
+                type: ['string', 'number', 'boolean'],
+              },
+              {
+                type: 'object',
+                properties: {
+                  like: {
+                    type: 'string',
+                  },
+                },
+                additionalProperties: false,
+              },
+            ],
+          },
         },
       },
+
       additionalProperties: false,
     },
   },
+
   additionalProperties: true,
 };
 
@@ -86,11 +118,10 @@ export const createUserValidator = {
   additionalProperties: false,
 };
 
-// PATCH user validator (✔ FIXED EXPORT)
+// PATCH user validator is_active and is_deleted
 export const patchUserValidator = {
   type: 'object',
   properties: {
-    email: { type: 'string', format: 'email' },
     first_name: { type: 'string', minLength: 1 },
     last_name: { type: 'string', minLength: 1 },
     phone: { type: 'string', pattern: '^\\d{10}$' },

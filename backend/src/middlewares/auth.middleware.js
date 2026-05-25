@@ -1,71 +1,67 @@
 import { verifyToken } from '../services/jwt.service.js';
 import logger from '../services/logger.service.js';
 
-/*
-  Purpose:
-    Verify JWT token and authenticate user
-
-  Parameters:
-    - req: Contains request data and headers
-    - res: Contains response methods
-    - next: Pass control to next middleware
-
-  Returns:
-    - Authenticated user data or error response
-*/
+// verify jwt middleware
 export const verifyJWT = (req, res, next) => {
   try {
-    // Get Authorization header from request
+    // get authorization header
     const authHeader = req.headers.authorization;
 
-    // Check if authorization header exists
+    // check auth header exists
     if (!authHeader) {
+      // log warning
       logger.warn('AUTH HEADER MISSING');
 
+      // return response
       return res.status(401).json({
         success_flag: false,
         message: 'AUTHORIZATION_TOKEN_REQUIRED',
       });
     }
 
-    // Validate Bearer token format
+    // validate bearer format
     if (!authHeader.startsWith('Bearer ')) {
+      // log warning
       logger.warn('INVALID AUTH TOKEN FORMAT');
 
+      // return response
       return res.status(401).json({
         success_flag: false,
         message: 'INVALID_TOKEN_FORMAT',
       });
     }
 
-    // Extract token from authorization header
+    // extract token
     const token = authHeader.split(' ')[1];
 
-    // Check if token exists
+    // check token exists
     if (!token) {
+      // log warning
       logger.warn('TOKEN NOT FOUND');
 
+      // return response
       return res.status(401).json({
         success_flag: false,
         message: 'TOKEN_REQUIRED',
       });
     }
 
-    // Verify and decode JWT token
+    // verify token
     const decoded = verifyToken(token);
 
-    // Attach decoded user data into request object
+    // attach user data
     req.user = decoded;
 
-    // Log authenticated user ID
+    // log authenticated user
     logger.info(`USER AUTHENTICATED: ${decoded.id}`);
 
-    // Pass request to next middleware
+    // continue request
     next();
   } catch (error) {
-    // Log JWT verification error
+    // log error
     logger.error('JWT VERIFICATION FAILED', error);
 
+    // return error response
     return res.status(401).json({
       success_flag: false,
       message: 'INVALID_OR_EXPIRED_TOKEN',
@@ -73,47 +69,42 @@ export const verifyJWT = (req, res, next) => {
   }
 };
 
-/*
-  Purpose:
-    Restrict route access based on allowed user roles
-
-  Parameters:
-    - roles: Allowed role IDs
-
-  Returns:
-    - Authorization middleware function
-*/
+// role authorization middleware
 export const authorizeRoles = (...roles) => {
+  // return middleware
   return (req, res, next) => {
     try {
-      // Get logged-in user role from decoded token
+      // get user role
       const userRole = Number(req.user?.role_id);
 
-      // Log current user role
+      // log user role
       logger.info(`USER ROLE: ${userRole}`);
 
-      // Log allowed roles for route
+      // log allowed roles
       logger.info(`ALLOWED ROLES: ${roles}`);
 
-      // Check if user role is authorized
+      // validate role access
       if (!roles.includes(userRole)) {
+        // log denied access
         logger.warn(`ACCESS DENIED - ROLE ${userRole}`);
 
+        // return response
         return res.status(403).json({
           success_flag: false,
           message: 'ACCESS_DENIED',
         });
       }
 
-      // Log successful authorization
+      // log authorization success
       logger.info('USER AUTHORIZED SUCCESSFULLY');
 
-      // Pass request to next middleware
+      // continue request
       next();
     } catch (error) {
-      // Log authorization errors
+      // log error
       logger.error('ROLE AUTHORIZATION ERROR', error);
 
+      // return error response
       return res.status(500).json({
         success_flag: false,
         message: 'INTERNAL_SERVER_ERROR',

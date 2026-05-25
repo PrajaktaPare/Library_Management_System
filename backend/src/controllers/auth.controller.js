@@ -2,18 +2,21 @@ import bcrypt from 'bcrypt';
 import db from '../config/db.js';
 import logger from '../services/logger.service.js';
 import { generateToken } from '../services/jwt.service.js';
-import { sendVerificationEmail } from '../services/email.service.js';
+import { sendEmail } from '../services/email.service.js';
 import { generateVerificationToken } from '../services/verfication.token.service.js';
 
-/*
-function info:login user and generate jwt token
-function parameter purpose:req.body contains email,password
-function return:returns user data with jwt token
-*/
+/**
+ * Login user and generate JWT token.
+ * @param {Request} req - Express request object containing email and password.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} User data with JWT token cookie.
+ * @throws Error if user validation fails.
+ */
+
+// cookie first_name last_name both, userid
 export const login = async (req, res) => {
   try {
-    logger.info('LOGIN REQUEST RECEIVED');
-
+    // extract request body
     const { email, password } = req.body;
 
     //fetch user with role
@@ -22,7 +25,7 @@ export const login = async (req, res) => {
       users.password_hash,users.role_id,users.is_active,users.is_verified,roles.role_name
       FROM users
       LEFT JOIN roles ON users.role_id=roles.id
-      WHERE users.email=?`,
+      WHERE users.email=? AND users.is_deleted=0`,
       [email]
     );
 
@@ -50,8 +53,10 @@ export const login = async (req, res) => {
       path: '/',
     });
 
+    // log success
     logger.info(`LOGIN SUCCESS:${user.email}`);
 
+    // return response
     return res.status(200).json({
       success_flag: true,
       message: 'LOGIN_SUCCESSFUL',
@@ -65,8 +70,10 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
+    // log error
     logger.error('LOGIN ERROR', error);
 
+    // return error response
     return res.status(401).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -74,46 +81,76 @@ export const login = async (req, res) => {
   }
 };
 
-/*
-function info:verify email using token
-function parameter purpose:req.query contains uid and token
-function return:returns email verification success response
-*/
+/**
+ * Verify email using verification token.
+ * @param {Request} req - Express request object containing uid and token.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Email verification response.
+ * @throws Error if token or user is invalid.
+ */
 export const verifyEmail = async (req, res) => {
   try {
-    logger.info('EMAIL VERIFY REQUEST');
-
+    // extract query params
     const { uid, token } = req.query;
 
-    //validate query params
-    if (!uid || !token) throw new Error('INVALID_VERIFICATION_LINK');
+    // validate input
+    if (!uid || !token) {
+      throw new Error('INVALID_VERIFICATION_LINK');
+    }
 
-    //fetch user data
-    const [rows] = await db.query(`SELECT id,is_verified,verification_token FROM users WHERE id=?`, [uid]);
+    logger.info('VERIFY EMAIL HIT', { uid, token });
+
+    // fetch user
+    const [rows] = await db.query(
+      `SELECT id, is_verified, verification_token 
+       FROM users 
+       WHERE id = ? AND is_deleted = 0`,
+      [uid]
+    );
 
     const user = rows[0];
 
-    //check user status
-    if (!user) throw new Error('USER_NOT_FOUND');
-    if (user.is_verified === 1) throw new Error('USER_ALREADY_VERIFIED');
+    // validate user
+    if (!user) {
+      throw new Error('USER_NOT_FOUND');
+    }
 
-    //validate token
-    const isValid = await bcrypt.compare(token, user.verification_token);
+    // check already verified
+    if (user.is_verified === 1) {
+      throw new Error('USER_ALREADY_VERIFIED');
+    }
 
-    if (!isValid) throw new Error('INVALID_VERIFICATION_LINK');
+    //bcrypt comparison
+    const isTokenValid = await bcrypt.compare(token, user.verification_token);
 
-    //update verification status
-    await db.query(`UPDATE users SET is_active=1,is_verified=1,verification_token=NULL WHERE id=?`, [uid]);
+    // validate token
+    if (!isTokenValid) {
+      throw new Error('INVALID_TOKEN');
+    }
 
-    logger.info(`EMAIL VERIFIED:${uid}`);
+    // update user verification
+    await db.query(
+      `UPDATE users 
+       SET is_active = 1,
+           is_verified = 1,
+           verification_token = NULL
+       WHERE id = ?`,
+      [uid]
+    );
 
+    // log success
+    logger.info(`EMAIL VERIFIED SUCCESS: ${uid}`);
+
+    // return response
     return res.status(200).json({
       success_flag: true,
       message: 'EMAIL_VERIFIED_SUCCESSFULLY',
     });
   } catch (error) {
+    // log error
     logger.error('VERIFY EMAIL ERROR', error);
 
+    // return error response
     return res.status(400).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -121,11 +158,12 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-/*
-function info:logout user
-function parameter purpose:clear access token cookie
-function return:returns logout success response
-*/
+/**
+ * Logout authenticated user.
+ * @param {Request} req - Express request object.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Logout success response.
+ */
 export const logout = async (req, res) => {
   try {
     //clear auth cookie
@@ -136,18 +174,210 @@ export const logout = async (req, res) => {
       path: '/',
     });
 
+    // log success
     logger.info('USER LOGOUT SUCCESS');
 
+    // return response
     return res.status(200).json({
       success_flag: true,
       message: 'LOGOUT_SUCCESSFUL',
     });
   } catch (error) {
+    // log error
     logger.error('LOGOUT ERROR', error);
 
+    // return error response
     return res.status(500).json({
       success_flag: false,
       message: 'INTERNAL_SERVER_ERROR',
+    });
+  }
+};
+
+/**
+ * Send forgot password reset email.
+ * @param {Request} req - Express request object containing email.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Reset password email response.
+ * @throws Error if user not found or email invalid.
+ */
+
+// forgot password
+export const forgotPassword = async (req, res) => {
+  try {
+    // extract email from body
+    const { email } = req.body;
+
+    // fetch user from database
+    const [rows] = await db.query(
+      `
+      SELECT id, email, first_name, is_verified
+      FROM users
+      WHERE email=? AND is_deleted=0
+      `,
+      [email]
+    );
+
+    // get first user
+    const user = rows[0];
+
+    // check user exists or not
+    if (!user) {
+      throw new Error('USER_NOT_FOUND');
+    }
+
+    // check user verified or not
+    if (!user.is_verified) {
+      throw new Error('USER_NOT_VERIFIED');
+    }
+
+    // generate raw token + hashed token
+    const { rawToken, hashedToken } = await generateVerificationToken();
+
+    // store hashed token in is_verified column
+    await db.query(
+      `
+      UPDATE users
+      SET verification_token=?
+      WHERE id=?
+      `,
+      [hashedToken, user.id]
+    );
+
+    // create reset password link
+    const link = `${process.env.FRONTEND_BASE_URL}/auth/reset-password?uid=${user.id}&token=${rawToken}`;
+
+    // send forgot password email
+    await sendEmail({
+      to: user.email,
+      first_name: user.first_name,
+      link,
+      type: 'forgot_password',
+    });
+
+    // success log
+    logger.info(`RESET EMAIL SENT : ${user.email}`);
+
+    // success response
+    return res.status(200).json({
+      success_flag: true,
+      message: 'RESET_PASSWORD_EMAIL_SENT',
+      token: rawToken,
+    });
+  } catch (error) {
+    // error log
+    logger.error('FORGOT PASSWORD ERROR', error);
+
+    // error response
+    return res.status(400).json({
+      success_flag: false,
+      message: error.message,
+    });
+  }
+};
+
+/**
+ * Reset user password using reset token.
+ * @param {Request} req - Express request object containing email, token and password.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Password reset response.
+ * @throws Error if token validation fails.
+ */
+
+// reset password
+export const resetPassword = async (req, res) => {
+  try {
+    // extract request body
+    const { email, token, password } = req.body;
+
+    // fetch user
+    const [rows] = await db.query(
+      `
+      SELECT 
+        id,
+        email,
+        first_name,
+        password_hash,
+        is_verified,
+        verification_token
+      FROM users
+      WHERE email=? AND is_deleted=0
+      `,
+      [email]
+    );
+
+    // get user
+    const user = rows[0];
+
+    // validate user
+    if (!user) {
+      throw new Error('USER_NOT_FOUND');
+    }
+
+    // validate verification status
+    if (!user.is_verified) {
+      throw new Error('USER_NOT_VERIFIED');
+    }
+
+    // validate token exists
+    if (!token || !user.verification_token) {
+      throw new Error('INVALID_TOKEN');
+    }
+
+    // compare token
+    const isTokenValid = await bcrypt.compare(token, user.verification_token);
+
+    // validate token
+    if (!isTokenValid) {
+      throw new Error('INVALID_TOKEN');
+    }
+
+    // compare old password
+    const samePassword = await bcrypt.compare(password, user.password_hash);
+
+    // validate new password
+    if (samePassword) {
+      throw new Error('NEW_PASSWORD_MUST_BE_DIFFERENT');
+    }
+
+    // hash new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // update password and clear token
+    await db.query(
+      `
+      UPDATE users
+      SET 
+        password_hash=?,
+        verification_token=NULL
+      WHERE email=?
+      `,
+      [hashedPassword, email]
+    );
+
+    // send success email
+    await sendEmail({
+      to: user.email,
+      first_name: user.first_name,
+      type: 'password_success',
+    });
+
+    // success log
+    logger.info(`PASSWORD RESET SUCCESS : ${email}`);
+
+    // success response
+    return res.status(200).json({
+      success_flag: true,
+      message: 'PASSWORD_RESET_SUCCESS',
+    });
+  } catch (error) {
+    // error log
+    logger.error('RESET PASSWORD ERROR', error);
+
+    // error response
+    return res.status(400).json({
+      success_flag: false,
+      message: error.message,
     });
   }
 };

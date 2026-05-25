@@ -2,88 +2,61 @@ import bcrypt from 'bcrypt';
 import db from '../config/db.js';
 import logger from '../services/logger.service.js';
 import { generateVerificationToken } from '../services/verfication.token.service.js';
-import { sendVerificationEmail } from '../services/email.service.js';
-import { USER_COLUMNS } from '../validators/user.validator.js';
+import { sendEmail } from '../services/email.service.js';
+import { buildFilterQuery } from '../utils/query.filter.js';
 
-// allowed columns whitelist
-const ALLOWED_COLUMNS = new Set(USER_COLUMNS);
-
-// get all users
-export const getAllUsers = async (req, res) => {
+/**
+ * Returns total users count and total pages.
+ * @param {Request} req - Express request object containing filters and limit.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Total users count response.
+ */
+export const getUsersCount = async (req, res) => {
   try {
-    let filter = {};
+    // extract limit
+    const limit = Number(req.query.limit) || 10;
 
-    // parse filter safely
-    if (req.query.filter) {
-      try {
-        filter = JSON.parse(req.query.filter);
-      } catch {
-        return res.status(400).json({
-          success_flag: false,
-          message: 'INVALID_FILTER_FORMAT',
-        });
-      }
-    }
+    // build count query
+    const { sql, values } = buildFilterQuery({
+      query: req.query,
 
-    const { limit = 10, offset = 0, order = {}, where = {} } = filter;
+      // count users
+      baseSql: `
+        SELECT COUNT(*) AS total_records
 
-    let sql = `
-      SELECT u.id, u.email, u.first_name, u.last_name, u.phone,
-             u.role_id, r.role_name,
-             u.is_active, u.is_verified,
-             u.created_at, u.updated_at
-      FROM users u
-      LEFT JOIN roles r ON u.role_id = r.id
-    `;
+        FROM users u
 
-    const values = [];
-    const conditions = [];
+        LEFT JOIN roles r
+          ON u.role_id = r.id
+      `,
 
-    // WHERE builder (AND only)
-    for (const [key, condition] of Object.entries(where)) {
-      if (!ALLOWED_COLUMNS.has(key)) continue;
+      // alias for filtering
+      tableAlias: 'u',
+    });
 
-      if (typeof condition !== 'object' || condition === null) {
-        conditions.push(`u.${key} = ?`);
-        values.push(condition);
-        continue;
-      }
-
-      if (condition.like !== undefined) {
-        conditions.push(`u.${key} LIKE ?`);
-        values.push(`%${condition.like}%`);
-        continue;
-      }
-    }
-
-    if (conditions.length) {
-      sql += ` WHERE ${conditions.join(' AND ')}`;
-    }
-
-    const orderColumn =
-      order?.column && ALLOWED_COLUMNS.has(order.column)
-        ? `u.${order.column}`
-        : 'u.id';
-
-    const orderDirection =
-      order?.direction?.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-
-    sql += ` ORDER BY ${orderColumn} ${orderDirection}`;
-
-    // pagination
-    sql += ` LIMIT ? OFFSET ?`;
-    values.push(Number(limit) || 10, Number(offset) || 0);
-
+    // execute query
     const [rows] = await db.query(sql, values);
 
+    // extract count
+    const totalRecords = rows[0]?.total_records || 0;
+
+    // return response
     return res.status(200).json({
       success_flag: true,
-      message: 'USERS_FETCHED_SUCCESSFULLY',
-      data: rows,
+
+      data: {
+        total_records: totalRecords,
+        limit,
+
+        // calculate pages
+        total_pages: Math.ceil(totalRecords / limit),
+      },
     });
   } catch (error) {
-    logger.error(error);
+    // log error
+    logger.error('GET USERS COUNT ERROR', error);
 
+    // return error
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -91,14 +64,80 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// get user by id
+/**
+ * Fetches all users with optional filters, joins role data, and returns paginated results.
+ * @param {Request} req - Express request object containing query filters.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} List of users.
+ * @throws Error when no users are found or database query fails.
+ */
+export const getAllUsers = async (req, res) => {
+  try {
+    // base sql query
+    const baseSql = `
+      SELECT 
+        u.id,
+        u.email,
+        u.first_name,
+        u.last_name,
+        u.phone,
+        u.role_id,
+        r.role_name,
+        u.is_active,
+        u.is_verified,
+        u.created_at,
+        u.updated_at
+      FROM users u
+      LEFT JOIN roles r
+      ON u.role_id = r.id
+    `;
+
+    // build filter query
+    const { sql, values } = buildFilterQuery({
+      query: req.query,
+      baseSql,
+      tableAlias: 'u',
+    });
+
+    // fetch users
+    const [rows] = await db.query(sql, values);
+
+    // check records
+    if (rows.length === 0) {
+      throw new Error('NO_USERS_FOUND');
+    }
+
+    // return response
+    return res.status(200).json({
+      success_flag: true,
+      message: 'USERS_FETCHED_SUCCESSFULLY',
+      data: rows,
+    });
+  } catch (error) {
+    // log error
+    logger.error(error);
+
+    // return error response
+    return res.status(error.message?.includes('NOT_FOUND') ? 404 : 500).json({
+      success_flag: false,
+      message: error.message || 'INTERNAL_SERVER_ERROR',
+    });
+  }
+};
+
+/**
+ * Fetch a single user by ID.
+ * @param {Request} req - Express request object containing user ID.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} User object if found.
+ * @throws Error if user not found or query fails.
+ */
 export const getUserByID = async (req, res) => {
   try {
-    const [rows] = await db.execute(
-      `SELECT * FROM users WHERE id=?`,
-      [req.params.id]
-    );
+    // fetch user
+    const [rows] = await db.execute(`SELECT * FROM users WHERE id=?`, [req.params.id]);
 
+    // validate user
     if (!rows.length) {
       return res.status(404).json({
         success_flag: false,
@@ -106,101 +145,178 @@ export const getUserByID = async (req, res) => {
       });
     }
 
+    // return response
     return res.json({
       success_flag: true,
       data: rows[0],
     });
   } catch (error) {
+    // log error
     logger.error(error);
-    return res.status(500).json({ message: 'ERROR' });
+
+    // return error response
+    return res.status(500).json({
+      success_flag: false,
+      message: error.message || 'INTERNAL_SERVER_ERROR',
+    });
   }
 };
 
-// create user
+/**
+ * Creates a new user and sends verification email.
+ * @param {Request} req - Express request object containing user data.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Created user ID and success message.
+ * @throws Error if email or phone already exists.
+ */
 export const postUser = async (req, res) => {
   try {
+    // log request
+    logger.info('CREATE USER REQUEST');
+
+    // extract request body
     const { email, password, first_name, last_name, phone, role_id } = req.body;
 
+    // hash password
     const password_hash = await bcrypt.hash(password, 10);
 
+    // generate verification token
     const { rawToken, hashedToken } = await generateVerificationToken();
 
+    // create user
     const [result] = await db.execute(
       `INSERT INTO users(email,password_hash,first_name,last_name,phone,role_id,is_active,is_verified,is_deleted,verification_token)
-       VALUES (?,?,?,?,?,?,?,?,?,?)`,
+       VALUES(?,?,?,?,?,?,?,?,?,?)`,
       [email, password_hash, first_name, last_name, phone, role_id, 0, 0, 0, hashedToken]
     );
 
-    const link = `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawToken}`;
+    // generate verification link
+    const verificationLink = `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawToken}`;
 
-    await sendVerificationEmail(email, link, first_name);
+    // send verification email
+    await sendEmail({
+      to: email,
+      first_name,
+      link: verificationLink,
+      type: 'verification',
+    });
 
+    // log success
+    logger.info(`USER REGISTERED : ${email}`);
+
+    // return response
     return res.status(201).json({
       success_flag: true,
-      message:"USER_REGISTERED_SUCCESSFULLY_VERIFY_EMAIL_TO_ACTIVATE_ACCOUNT",
-      user_id: result.insertId,
+      message: 'USER_REGISTERED_SUCCESSFULLY_VERIFY_EMAIL_TO_ACTIVATE_ACCOUNT',
+      data: { user_id: result.insertId, email },
     });
   } catch (error) {
+    // log error
+    logger.error('CREATE USER ERROR', error);
 
-  if (error.code === 'ER_DUP_ENTRY') {
-    return res.status(409).json({
-      success_flag: false,
-      message: error.sqlMessage.includes('email')
-        ? 'EMAIL_ALREADY_EXISTS'
-        : 'PHONE_ALREADY_EXISTS',
-    });
-  }
-
-  logger.error(error);
-
-  return res.status(500).json({
-    success_flag: false,
-    message: 'INTERNAL_SERVER_ERROR',
-  });
-}
-};
-
-// update user
-export const patchUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!Object.keys(req.body).length) {
-      return res.status(400).json({ message: 'NO_DATA' });
+    // handle duplicate entry
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({
+        success_flag: false,
+        message: error.sqlMessage?.includes('email') ? 'EMAIL_ALREADY_EXISTS' : 'PHONE_ALREADY_EXISTS',
+      });
     }
 
+    // return error response
+    return res.status(500).json({
+      success_flag: false,
+      message: error.message || 'INTERNAL_SERVER_ERROR',
+    });
+  }
+};
+
+/**
+ * Updates user data based on provided fields.
+ * @param {Request} req - Express request object containing update data.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Success message.
+ */
+export const patchUser = async (req, res) => {
+  try {
+    // extract id
+    const { id } = req.params;
+
+    // allowed fields for admin update
+    const ALLOWED_FIELDS = [
+      'email',
+      'first_name',
+      'last_name',
+      'phone',
+      'role_id',
+      'is_active',
+      'is_verified',
+    ];
+
+    // validate request body
+    if (!Object.keys(req.body).length) {
+      return res.status(400).json({
+        success_flag: false,
+        message: 'NO_DATA_TO_UPDATE',
+      });
+    }
+
+    // initialize arrays
     const fields = [];
     const values = [];
 
+    // build dynamic query with whitelisted fields only
     for (const [key, value] of Object.entries(req.body)) {
+      if (!ALLOWED_FIELDS.includes(key)) continue;
       fields.push(`${key}=?`);
       values.push(value);
     }
 
+    // validate filtered fields
+    if (!fields.length) {
+      return res.status(400).json({
+        success_flag: false,
+        message: 'NO_VALID_FIELDS_TO_UPDATE',
+      });
+    }
+
+    // append id
     values.push(id);
 
-    await db.execute(
-      `UPDATE users SET ${fields.join(',')} WHERE id=?`,
-      values
-    );
+    // update user
+    await db.execute(`UPDATE users SET ${fields.join(',')} WHERE id=?`, values);
 
-    return res.json({ message: 'UPDATED' });
+    // return response
+    return res.status(200).json({
+      success_flag: true,
+      message: 'USER_UPDATED',
+    });
   } catch (error) {
-    logger.error(error);
-    return res.status(500).json({ message: 'ERROR' });
+    // log error
+    logger.error('PATCH USER ERROR', error);
+
+    // return error response
+    return res.status(500).json({
+      success_flag: false,
+      message: error.message || 'INTERNAL_SERVER_ERROR',
+    });
   }
 };
 
-// ❗ FIXED: deleteUser (THIS WAS MISSING)
+/**
+ * Deletes a user (soft delete if active + verified, otherwise hard delete).
+ * @param {Request} req - Express request object containing user ID.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Deletion status.
+ */
 export const deleteUser = async (req, res) => {
   try {
+    // extract id
     const { id } = req.params;
 
-    const [rows] = await db.execute(
-      `SELECT is_active, is_verified FROM users WHERE id=?`,
-      [id]
-    );
+    // fetch user
+    const [rows] = await db.execute(`SELECT is_active, is_verified FROM users WHERE id=?`, [id]);
 
+    // validate user
     if (!rows.length) {
       return res.status(404).json({
         success_flag: false,
@@ -208,54 +324,92 @@ export const deleteUser = async (req, res) => {
       });
     }
 
+    // extract user
     const user = rows[0];
 
-    // soft delete
+    // soft delete user
     if (user.is_active && user.is_verified) {
-      await db.execute(
-        `UPDATE users SET is_deleted=1, is_active=0 WHERE id=?`,
-        [id]
-      );
+      await db.execute(`UPDATE users SET is_deleted=1, is_active=0 WHERE id=?`, [id]);
     } else {
-      // hard delete
+      // hard delete user
       await db.execute(`DELETE FROM users WHERE id=?`, [id]);
     }
 
+    // return response
     return res.json({
       success_flag: true,
       message: 'USER_DELETED',
     });
   } catch (error) {
+    // log error
     logger.error(error);
-    return res.status(500).json({ message: 'ERROR' });
+
+    // return error response
+    return res.status(500).json({
+      success_flag: false,
+      message: error.message || 'INTERNAL_SERVER_ERROR',
+    });
   }
 };
 
-// profile
+/**
+ * Fetches logged-in user's profile.
+ * @param {Request} req - Express request object with authenticated user.
+ * @param {Response} res - Express response object.
+ */
 export const getProfile = async (req, res) => {
   try {
-    const [rows] = await db.execute(
-      `SELECT * FROM users WHERE id=?`,
-      [req.user.id]
-    );
+    // fetch profile
+    const [rows] = await db.execute(`SELECT * FROM users WHERE id=?`, [req.user.id]);
 
-    return res.json({ data: rows[0] });
+    // return response
+    return res.json({
+      success_flag: true,
+      data: rows[0],
+    });
   } catch (error) {
+    // log error
     logger.error(error);
-    return res.status(500).json({ message: 'ERROR' });
+
+    // return error response
+    return res.status(500).json({
+      success_flag: false,
+      message: error.message || 'INTERNAL_SERVER_ERROR',
+    });
   }
 };
 
-// update profile
+/**
+ * Updates logged-in user's profile (including password hashing if provided).
+ * @param {Request} req - Express request object.
+ * @param {Response} res - Express response object.
+ */
 export const updateProfile = async (req, res) => {
   try {
+    // extract user id
     const userId = req.user.id;
 
+    // allowed fields for self-update
+    const ALLOWED_FIELDS = ['first_name', 'last_name', 'phone', 'password'];
+
+    // validate request body
+    if (!Object.keys(req.body).length) {
+      return res.status(400).json({
+        success_flag: false,
+        message: 'NO_DATA_TO_UPDATE',
+      });
+    }
+
+    // initialize arrays
     const fields = [];
     const values = [];
 
+    // build dynamic query with whitelisted fields only
     for (const [key, value] of Object.entries(req.body)) {
+      if (!ALLOWED_FIELDS.includes(key)) continue;
+
       if (key === 'password') {
+        // hash password
         const hash = await bcrypt.hash(value, 10);
         fields.push('password_hash=?');
         values.push(hash);
@@ -265,16 +419,33 @@ export const updateProfile = async (req, res) => {
       }
     }
 
+    // validate filtered fields
+    if (!fields.length) {
+      return res.status(400).json({
+        success_flag: false,
+        message: 'NO_VALID_FIELDS_TO_UPDATE',
+      });
+    }
+
+    // append user id
     values.push(userId);
 
-    await db.execute(
-      `UPDATE users SET ${fields.join(',')} WHERE id=?`,
-      values
-    );
+    // update profile
+    await db.execute(`UPDATE users SET ${fields.join(',')} WHERE id=?`, values);
 
-    return res.json({ message: 'PROFILE_UPDATED' });
+    // return response
+    return res.status(200).json({
+      success_flag: true,
+      message: 'PROFILE_UPDATED',
+    });
   } catch (error) {
-    logger.error(error);
-    return res.status(500).json({ message: 'ERROR' });
+    // log error
+    logger.error('UPDATE PROFILE ERROR', error);
+
+    // return error response
+    return res.status(500).json({
+      success_flag: false,
+      message: error.message || 'INTERNAL_SERVER_ERROR',
+    });
   }
 };
