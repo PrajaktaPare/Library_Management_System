@@ -8,7 +8,7 @@ A secure and centralized web-based application for managing library operations, 
 
 ---
 
-## 📖 Overview
+## Overview
 
 The Smart Library Management System (SLMS) is a backend application developed using Node.js, Express.js, and MySQL to digitize library operations.
 
@@ -16,7 +16,7 @@ The system enables administrators to manage books, users, requests, and issued b
 
 ---
 
-## 🚀 Features
+## Features
 
 - JWT Authentication & Authorization
 - Role-Based Access Control (Admin & Student)
@@ -33,7 +33,7 @@ The system enables administrators to manage books, users, requests, and issued b
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Category | Technology |
 |----------|------------|
@@ -47,13 +47,13 @@ The system enables administrators to manage books, users, requests, and issued b
 
 ---
 
-## 📦 Installation
+## Installation
 
 Clone the repository:
 
 ```bash
 git clone <repository-url>
-cd backend
+cd Backend_Project/backend
 ```
 
 Install dependencies:
@@ -70,7 +70,7 @@ npm install --omit=dev
 
 ---
 
-## ▶️ Running the Application
+## Running the Application
 
 Start the server:
 
@@ -86,7 +86,7 @@ npm run dev
 
 ---
 
-## 🔧 Available Scripts
+## Available Scripts
 
 Run development server:
 
@@ -114,7 +114,7 @@ npm run format
 
 ---
 
-## 📚 NPM Packages Used
+## NPM Packages Used
 
 ### Production Dependencies
 
@@ -146,7 +146,7 @@ npm run format
 
 ---
 
-## 📡 Base URL
+## Base URL
 
 ```http
 http://localhost:3000
