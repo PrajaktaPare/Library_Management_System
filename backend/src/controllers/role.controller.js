@@ -1,18 +1,19 @@
 import pool from '../config/db.config.js';
 import logger from '../services/logger.service.js';
 import { buildFilterQuery } from '../utils/query.filter.js';
+
 /**
- * Creates new role.
- * @param {Request} req
- * @param {Response} res
+ * Creates a new role.
+ *
+ * @param {Request} req - Express request object containing role details.
+ * @param {Response} res - Express response object used to return the created role.
  * @returns {Promise<Response>}
  */
 export const createRole = async (req, res) => {
   try {
-    // extract body
     const { role_name } = req.body;
 
-    // check duplicate
+    // Check if the role already exists
     const [existingRows] = await pool.execute(
       `
       SELECT id
@@ -22,12 +23,12 @@ export const createRole = async (req, res) => {
       [role_name]
     );
 
-    // validate duplicate
+    // check duplicate role
     if (existingRows.length > 0) {
       throw new Error('ROLE_ALREADY_EXISTS');
     }
 
-    // insert role
+    // Insert new role record
     const [result] = await pool.execute(
       `
       INSERT INTO roles (role_name)
@@ -36,24 +37,15 @@ export const createRole = async (req, res) => {
       [role_name]
     );
 
-    // fetch created role
-    const [rows] = await pool.execute(
-      `
-      SELECT *
-      FROM roles
-      WHERE id = ?
-      `,
-      [result.insertId]
-    );
-
+    // Return success response
     return res.status(201).json({
       success_flag: true,
       message: 'ROLE_CREATED',
-      data: rows[0],
     });
   } catch (error) {
     logger.error('CREATE ROLE ERROR', error);
 
+    // Return error response
     return res.status(400).json({
       success_flag: false,
       message: error.message,
@@ -62,25 +54,31 @@ export const createRole = async (req, res) => {
 };
 
 /**
- * Fetches all roles.
- * @param {Request} req
- * @param {Response} res
+ * Retrieves all roles with support for filtering,
+ * sorting, and pagination.
+ *
+ * @param {Request} req - Express request object containing query parameters.
+ * @param {Response} res - Express response object used to return role records.
  * @returns {Promise<Response>}
  */
 export const getAllRoles = async (req, res) => {
   try {
+    // Base query to fetch role records
     const baseSql = `
       SELECT *
       FROM roles
     `;
 
+    // Generate dynamic query with filtering, sorting, and pagination
     const { sql, values } = buildFilterQuery({
       query: req.query,
       baseSql,
     });
 
+    // Execute query
     const [rows] = await pool.query(sql, values);
 
+    // Return role records
     return res.status(200).json({
       success_flag: true,
       count: rows.length,
@@ -89,6 +87,7 @@ export const getAllRoles = async (req, res) => {
   } catch (error) {
     logger.error('GET ALL ROLES ERROR', error);
 
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message,
@@ -97,17 +96,18 @@ export const getAllRoles = async (req, res) => {
 };
 
 /**
- * Fetches role by id.
- * @param {Request} req
- * @param {Response} res
+ * Retrieves role details by role ID.
+ *
+ * @param {Request} req - Express request object containing the role ID in route parameters.
+ * @param {Response} res - Express response object used to return role details.
  * @returns {Promise<Response>}
  */
 export const getRoleById = async (req, res) => {
   try {
-    // extract id
+    // Extract role ID from route parameters
     const { id } = req.params;
 
-    // fetch role
+    // Fetch role details
     const [rows] = await pool.execute(
       `
       SELECT *
@@ -117,11 +117,12 @@ export const getRoleById = async (req, res) => {
       [id]
     );
 
-    // validate role
+    // check that the role exists
     if (rows.length === 0) {
       throw new Error('ROLE_NOT_FOUND');
     }
 
+    // Return role details
     return res.status(200).json({
       success_flag: true,
       data: rows[0],
@@ -129,6 +130,7 @@ export const getRoleById = async (req, res) => {
   } catch (error) {
     logger.error('GET ROLE BY ID ERROR', error);
 
+    // Return not found response
     return res.status(404).json({
       success_flag: false,
       message: error.message,
@@ -137,19 +139,21 @@ export const getRoleById = async (req, res) => {
 };
 
 /**
- * Updates role.
- * @param {Request} req
- * @param {Response} res
+ * Updates role details by role ID.
+ *
+ * @param {Request} req - Express request object containing the role ID and updated role data.
+ * @param {Response} res - Express response object used to return the updated role details.
  * @returns {Promise<Response>}
  */
 export const updateRole = async (req, res) => {
   try {
-    // extract params
+    // Extract role ID from route parameters
     const { id } = req.params;
 
+    // Extract updated role name from request body
     const { role_name } = req.body;
 
-    // check role exists
+    // Check whether the role exists
     const [existingRows] = await pool.execute(
       `
       SELECT *
@@ -159,12 +163,12 @@ export const updateRole = async (req, res) => {
       [id]
     );
 
-    // validate role
+    // check that the role exists
     if (existingRows.length === 0) {
       throw new Error('ROLE_NOT_FOUND');
     }
 
-    // check duplicate
+    // Check for duplicate role name
     const [duplicateRows] = await pool.execute(
       `
       SELECT id
@@ -175,12 +179,12 @@ export const updateRole = async (req, res) => {
       [role_name, id]
     );
 
-    // validate duplicate
+    // check duplicate role
     if (duplicateRows.length > 0) {
       throw new Error('ROLE_ALREADY_EXISTS');
     }
 
-    // update role
+    // Update role details
     await pool.execute(
       `
       UPDATE roles
@@ -190,7 +194,7 @@ export const updateRole = async (req, res) => {
       [role_name, id]
     );
 
-    // fetch updated role
+    // Fetch updated role details
     const [rows] = await pool.execute(
       `
       SELECT *
@@ -200,6 +204,7 @@ export const updateRole = async (req, res) => {
       [id]
     );
 
+    // Return success response
     return res.status(200).json({
       success_flag: true,
       message: 'ROLE_UPDATED',
@@ -208,6 +213,7 @@ export const updateRole = async (req, res) => {
   } catch (error) {
     logger.error('UPDATE ROLE ERROR', error);
 
+    // Return error response
     return res.status(400).json({
       success_flag: false,
       message: error.message,
@@ -216,17 +222,17 @@ export const updateRole = async (req, res) => {
 };
 
 /**
- * Deletes role.
- * @param {Request} req
- * @param {Response} res
+ * Deletes a role by role ID.
+ *
+ * @param {Request} req - Express request object containing the role ID in route parameters.
+ * @param {Response} res - Express response object used to return the deletion status.
  * @returns {Promise<Response>}
  */
 export const deleteRole = async (req, res) => {
   try {
-    // extract id
     const { id } = req.params;
 
-    // check role exists
+    // Check whether the role exists
     const [rows] = await pool.execute(
       `
       SELECT *
@@ -236,12 +242,12 @@ export const deleteRole = async (req, res) => {
       [id]
     );
 
-    // validate role
+    // check that the role exists
     if (rows.length === 0) {
       throw new Error('ROLE_NOT_FOUND');
     }
 
-    // delete role
+    // Delete role record
     await pool.execute(
       `
       DELETE FROM roles
@@ -250,6 +256,7 @@ export const deleteRole = async (req, res) => {
       [id]
     );
 
+    // Return success response
     return res.status(200).json({
       success_flag: true,
       message: 'ROLE_DELETED',
@@ -257,6 +264,7 @@ export const deleteRole = async (req, res) => {
   } catch (error) {
     logger.error('DELETE ROLE ERROR', error);
 
+    // Return error response
     return res.status(400).json({
       success_flag: false,
       message: error.message,

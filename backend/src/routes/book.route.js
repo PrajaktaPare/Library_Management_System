@@ -5,23 +5,28 @@ import {
   getBookById,
   patchBook,
   deleteBook,
+  getBooksCount,
 } from '../controllers/book.controller.js';
 
-import { createBookValidator, patchBookValidator, bookIdValidator } from '../validators/book.validator.js';
+import {
+  getBooksValidator,
+  createBookValidator,
+  patchBookValidator,
+  bookIdValidator,
+} from '../validators/book.validator.js';
 
 import { validateSchema } from '../middlewares/schema_validator.middleware.js';
 import { verifyJWT, authorizeRoles } from '../middlewares/auth.middleware.js';
-import { getBooksCount } from '../controllers/book.controller.js';
 
 const router = express.Router();
 
-const admin = [verifyJWT, authorizeRoles("admin")];
+const admin = [verifyJWT, authorizeRoles('admin')];
 
 // GET books count
 router.get('/count', getBooksCount);
 
 // GET all books (filter enabled)
-router.get('/', verifyJWT, getAllBooks);
+router.get('/', verifyJWT, validateSchema(getBooksValidator, 'query'), getAllBooks);
 
 // GET book by id
 router.get('/:id', verifyJWT, validateSchema(bookIdValidator, 'params'), getBookById);

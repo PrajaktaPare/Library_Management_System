@@ -1,59 +1,45 @@
 import pool from '../config/db.config.js';
 import logger from '../services/logger.service.js';
-
-import { sendEmail } from '../services/email.service.js';
-
+import { sendBookIssuedEmail, sendBookRejectedEmail } from '../services/email.service.js';
 import { buildFilterQuery } from '../utils/query.filter.js';
-
-// issue duration
-const ISSUE_DURATION_DAYS = Number(process.env.ISSUE_DURATION_DAYS) || 7;
-
-// fine amount
-const FINE_PER_DAY = Number(process.env.FINE_PER_DAY) || 5;
-
-// format date helper
-const formatDate = date =>
-  new Date(date).toLocaleDateString('en-IN', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  });
-
+import { formatDate } from '../services/format_date.service.js';
 /**
- * Returns total request count and total pages.
- * @param {Request} req - Express request object containing filters and limit.
+ * Returns total book request count
+ * @param {Request} req - Express request object containing Where condition.
  * @param {Response} res - Express response object.
- * @returns {Promise<Response>} Total request count response.
+ * @returns {Promise<Response>} Total book request count response.
  */
 export const getRequestsCount = async (req, res) => {
   try {
-    const limit = Number(req.query.limit) || 10;
-
+    // build count query
     const { sql, values } = buildFilterQuery({
       query: req.query,
       baseSql: `
         SELECT COUNT(*) AS total_records
         FROM book_requests br
-        JOIN users u ON br.student_id = u.id
-        JOIN books b ON br.book_id = b.id
+        JOIN users u
+        ON br.student_id = u.id
+        JOIN books b
+        ON br.book_id = b.id
       `,
       tableAlias: 'br',
+      includePagination: false,
     });
 
+    // execute built query
     const [rows] = await pool.query(sql, values);
 
+    // extract total count
     const totalRecords = rows[0]?.total_records || 0;
 
     return res.status(200).json({
       success_flag: true,
       data: {
-        total_records: totalRecords,
-        limit,
-        total_pages: Math.ceil(totalRecords / limit),
+        count: totalRecords,
       },
     });
   } catch (error) {
-    logger.error('GET REQUEST COUNT ERROR', error);
+    logger.error('GET BOOK REQUEST COUNT ERROR', error);
 
     return res.status(500).json({
       success_flag: false,
@@ -66,16 +52,13 @@ export const getRequestsCount = async (req, res) => {
  * Creates a new book request.
  * @param {Request} req - Express request object containing request data.
  * @param {Response} res - Express response object.
- * @returns {Promise<Response>} Created request response.
- * @throws Error if book unavailable or duplicate request exists.
+ * @returns {Promise<Response>} Created book request response.
+ * @throws Error if book unavailable or duplicate book request exists.
  */
 export const requestBook = async (req, res) => {
   try {
-    // extract student id
     const studentId = req.user.id;
-
-    // extract book id
-    const { book_id } = req.body;
+    const { bookId } = req.body;
 
     // fetch book
     const [bookRows] = await pool.execute(
@@ -88,22 +71,22 @@ export const requestBook = async (req, res) => {
       FROM books
       WHERE id = ?
       `,
-      [book_id]
+      [bookId]
     );
 
     const book = bookRows[0];
 
-    // validate book
+    // Check if the book exists in the database
     if (!book) {
       throw new Error('BOOK_NOT_FOUND');
     }
 
-    // validate availability
+    // Ensure the book has available copies and can be issued
     if (book.available_copies < 1 || book.status === 'unavailable') {
       throw new Error('BOOK_NOT_AVAILABLE');
     }
 
-    // check pending request
+    // Check whether the student already has a pending request for this book
     const [pendingRows] = await pool.execute(
       `
       SELECT id
@@ -112,16 +95,16 @@ export const requestBook = async (req, res) => {
       AND book_id = ?
       AND request_status = 'pending'
       `,
-      [studentId, book_id]
+      [studentId, bookId]
     );
 
-    // validate pending request
+    // Prevent duplicate pending requests
     if (pendingRows.length > 0) {
-      throw new Error('REQUEST_ALREADY_PENDING');
+      throw new Error('BOOK_REQUEST_ALREADY_PENDING');
     }
 
-    // check active issue
-    const [issueRows] = await pool.execute(
+    // check active issued book
+    const [issuedRows] = await pool.execute(
       `
       SELECT id
       FROM book_issued
@@ -129,15 +112,15 @@ export const requestBook = async (req, res) => {
       AND book_id = ?
       AND status = 'active'
       `,
-      [studentId, book_id]
+      [studentId, bookId]
     );
 
-    // validate active issue
-    if (issueRows.length > 0) {
+    // Prevent requesting a book that is already issued to the student
+    if (issuedRows.length > 0) {
       throw new Error('BOOK_ALREADY_ISSUED');
     }
 
-    // create request
+    // Create a new book request record
     const [result] = await pool.execute(
       `
       INSERT INTO book_requests
@@ -147,54 +130,18 @@ export const requestBook = async (req, res) => {
       )
       VALUES (?, ?)
       `,
-      [studentId, book_id]
+      [studentId, bookId]
     );
 
-    // fetch request
-    const [requestRows] = await pool.execute(
-      `
-      SELECT
-        br.id,
-        br.request_status,
-        br.requested_at,
-        br.created_at,
-
-        u.id AS student_id,
-        CONCAT(
-          u.first_name,
-          ' ',
-          u.last_name
-        ) AS student_name,
-        u.email,
-
-        b.id AS book_id,
-        b.title,
-        b.author,
-        b.book_num,
-        b.category
-
-      FROM book_requests br
-
-      JOIN users u
-        ON br.student_id = u.id
-
-      JOIN books b
-        ON br.book_id = b.id
-
-      WHERE br.id = ?
-      `,
-      [result.insertId]
-    );
-
+    // Return success response after book request creation
     return res.status(201).json({
       success_flag: true,
       message: 'BOOK_REQUEST_CREATED',
-      data: requestRows[0],
     });
   } catch (error) {
-    // log error
-    logger.error('REQUEST BOOK ERROR', error);
+    logger.error('BOOK REQUEST ERROR', error);
 
+    // Return error response to client
     return res.status(400).json({
       success_flag: false,
       message: error.message,
@@ -206,11 +153,11 @@ export const requestBook = async (req, res) => {
  * Fetches all book requests.
  * @param {Request} req - Express request object containing filters.
  * @param {Response} res - Express response object.
- * @returns {Promise<Response>} List of requests.
+ * @returns {Promise<Response>} List of book requests.
  */
 export const getRequests = async (req, res) => {
   try {
-    // base sql
+    // Base query to fetch book request details along with student and book information
     const baseSql = `
       SELECT
         br.id,
@@ -244,41 +191,43 @@ export const getRequests = async (req, res) => {
         ON br.book_id = b.id
     `;
 
-    // create filter object
+    // Parse filter object from query parameters
     const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
 
-    // ensure where exists
+    // Initialize where clause if not provided
     filter.where = filter.where || {};
 
-    // student -> own requests only
+    // Restrict students to viewing only their own book  requests
     if (req.user.role === 'student') {
       filter.where.student_id = req.user.id;
     }
 
-    // create modified query
+    // Update query parameters with modified filters
     const modifiedQuery = {
       ...req.query,
       filter: JSON.stringify(filter),
     };
 
-    // build query
+    // Generate dynamic SQL query with filters
     const { sql, values } = buildFilterQuery({
       query: modifiedQuery,
       baseSql,
       tableAlias: 'br',
     });
 
-    // execute query
+    // Execute generated query
     const [rows] = await pool.query(sql, values);
 
+    // Return book request records
     return res.status(200).json({
       success_flag: true,
       count: rows.length,
       data: rows,
     });
   } catch (error) {
-    logger.error('GET REQUESTS ERROR', error);
+    logger.error('GET BOOK REQUESTS ERROR', error);
 
+    // Return error response
     return res.status(500).json({
       success_flag: false,
       message: error.message,
@@ -287,18 +236,17 @@ export const getRequests = async (req, res) => {
 };
 
 /**
- * Fetches request details by id.
+ * Fetches book request details by id.
  * @param {Request} req - Express request object containing request id.
  * @param {Response} res - Express response object.
- * @returns {Promise<Response>} Request details response.
- * @throws Error if request not found.
+ * @returns {Promise<Response>} Book Request details response.
+ * @throws Error if book request not found.
  */
 export const getRequestById = async (req, res) => {
   try {
-    // extract id
     const { id } = req.params;
 
-    // fetch request
+    // Fetch book request details along with associated student and book information
     const [rows] = await pool.execute(
       `
       SELECT
@@ -335,20 +283,30 @@ export const getRequestById = async (req, res) => {
       [id]
     );
 
-    // validate request
+    // Check that the requested book exists
     if (rows.length === 0) {
-      throw new Error('REQUEST_NOT_FOUND');
+      throw new Error('BOOK_REQUEST_NOT_FOUND');
     }
 
+    // Return book request details
     return res.status(200).json({
       success_flag: true,
       data: rows[0],
     });
   } catch (error) {
     // log error
-    logger.error('GET REQUEST BY ID ERROR', error);
+    logger.error('GET BOOK REQUEST BY ID ERROR', error);
 
-    return res.status(404).json({
+    // Return not found response for missing book request
+    if (error.message === 'BOOK_REQUEST_NOT_FOUND') {
+      return res.status(404).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+
+    // Return internal server error response for unexpected errors
+    return res.status(500).json({
       success_flag: false,
       message: error.message,
     });
@@ -356,23 +314,24 @@ export const getRequestById = async (req, res) => {
 };
 
 /**
- * Approves and issues a requested book.
+ * Approve a requested book.
  * @param {Request} req - Express request object containing request id.
  * @param {Response} res - Express response object.
- * @returns {Promise<Response>} Approved request response.
- * @throws Error if request invalid or book unavailable.
+ * @returns {Promise<Response>} Approved book request response.
+ * @throws Error if book request invalid or book unavailable.
  */
 export const approveRequest = async (req, res) => {
+  const issueDurationDays = Number(process.env.ISSUE_DURATION_DAYS) || 7;
+  const finePerDay = Number(process.env.FINE_PER_DAY) || 5;
+
   const connection = await pool.getConnection();
 
   try {
-    // extract request id
     const { id } = req.params;
 
     // start transaction
     await connection.beginTransaction();
-
-    // fetch request with row lock
+    // Retrieve book request details along with associated student and book information
     const [rows] = await connection.execute(
       `
       SELECT
@@ -406,31 +365,29 @@ export const approveRequest = async (req, res) => {
         ON br.book_id = b.id
 
       WHERE br.id = ?
-
-      FOR UPDATE
       `,
       [id]
     );
 
-    // extract request
-    const request = rows[0];
+    // Extract book request details
+    const bookRequest = rows[0];
 
-    // validate request exists
-    if (!request) {
-      throw new Error('REQUEST_NOT_FOUND');
+    // check that the book request exists
+    if (!bookRequest) {
+      throw new Error('BOOK_REQUEST_NOT_FOUND');
     }
 
-    // validate request status
-    if (request.request_status !== 'pending') {
-      throw new Error('REQUEST_NOT_PENDING');
+    // Ensure only pending book requests can be approved
+    if (bookRequest.request_status !== 'pending') {
+      throw new Error('BOOK_REQUEST_NOT_FOUND');
     }
 
-    // validate availability
-    if (request.available_copies < 1 || request.status === 'unavailable') {
+    // Verify that the requested book is available for issue
+    if (bookRequest.available_copies < 1 || bookRequest.status === 'unavailable') {
       throw new Error('BOOK_NOT_AVAILABLE');
     }
 
-    // decrease available copies
+    // Reduce available book copies
     const [updateBook] = await connection.execute(
       `
       UPDATE books
@@ -439,15 +396,15 @@ export const approveRequest = async (req, res) => {
       WHERE id = ?
       AND available_copies > 0
       `,
-      [request.book_id]
+      [bookRequest.book_id]
     );
 
-    // validate update success
+    // Ensure book stock was updated successfully
     if (updateBook.affectedRows === 0) {
       throw new Error('BOOK_NOT_AVAILABLE');
     }
 
-    // update book status
+    // Update book status based on remaining available copies
     await connection.execute(
       `
       UPDATE books
@@ -458,24 +415,18 @@ export const approveRequest = async (req, res) => {
       END
       WHERE id = ?
       `,
-      [request.book_id]
+      [bookRequest.book_id]
     );
 
-    // create dates
-    const now = new Date();
+    // Generate issuedate and duedate
+    const bookissuedDate = new Date();
 
     const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + issueDurationDays);
 
-    dueDate.setDate(dueDate.getDate() + ISSUE_DURATION_DAYS);
+    const issuedAt = new Date();
 
-    // formatted dates
-    const issueDateStr = now.toISOString().split('T')[0];
-
-    const dueDateStr = dueDate.toISOString().split('T')[0];
-
-    const issuedAt = now.toISOString().slice(0, 19).replace('T', ' ');
-
-    // create issue entry
+    // Create issued book record
     await connection.execute(
       `
       INSERT INTO book_issued
@@ -489,10 +440,10 @@ export const approveRequest = async (req, res) => {
       )
       VALUES (?, ?, ?, ?, ?, 'active')
       `,
-      [id, request.student_id, request.book_id, issueDateStr, dueDateStr]
+      [id, bookRequest.student_id, bookRequest.book_id, bookissuedDate, dueDate]
     );
 
-    // update request status
+    // Mark book request as issued and store timestamp
     await connection.execute(
       `
       UPDATE book_requests
@@ -504,43 +455,56 @@ export const approveRequest = async (req, res) => {
       [issuedAt, id]
     );
 
-    // commit transaction
+    // Commit transaction after all database operations succeed
     await connection.commit();
 
-    // send issue email
-      await sendEmail({
-        type: 'book_issued',
-        to: request.email,
-        variables: {
-          student_name: request.student_name,
-          book_title: request.title,
-          book_author: request.author,
-          book_isbn: request.book_num,
-          book_category: request.category,
-          issue_date: formatDate(now),
-          due_date: formatDate(dueDate),
-          fine_per_day: FINE_PER_DAY,
-        },
-      });
+    // Send book issued notification email to the student
+    await sendBookIssuedEmail({
+      email: bookRequest.email,
+      studentName: bookRequest.student_name,
+      bookTitle: bookRequest.title,
+      bookAuthor: bookRequest.author,
+      bookIsbn: bookRequest.book_num,
+      bookCategory: bookRequest.category,
+      issueDate: formatDate(bookissuedDate),
+      dueDate: formatDate(dueDate),
+      finePerDay: finePerDay,
+    });
+
+    // Return successful approval response
     return res.status(200).json({
       success_flag: true,
       message: 'BOOK_REQUEST_APPROVED',
       data: {
         request_id: id,
-        student_name: request.student_name,
-        book_title: request.title,
+        student_name: bookRequest.student_name,
+        book_title: bookRequest.title,
         issued_at: issuedAt,
-        due_date: dueDateStr,
+        due_date: dueDate,
       },
     });
   } catch (error) {
-    // rollback transaction
+    // Roll back all database changes if any operation fails
     await connection.rollback();
 
-    // log error
-    logger.error('APPROVE REQUEST ERROR', error);
+    logger.error('APPROVE BOOK REQUEST ERROR', error);
 
-    return res.status(400).json({
+    if (error.message === 'BOOK_REQUEST_NOT_FOUND' || error.message === 'BOOK_REQUEST_ALREADY_PROCESSED') {
+      return res.status(404).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+
+    if (error.message === 'BOOK_NOT_AVAILABLE') {
+      return res.status(400).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+
+    // Return internal server error response for unexpected errors
+    return res.status(500).json({
       success_flag: false,
       message: error.message,
     });
@@ -552,19 +516,17 @@ export const approveRequest = async (req, res) => {
 
 /**
  * Rejects a pending book request.
- * @param {Request} req - Express request object containing request id.
+ * @param {Request} req - Express request object containing book request id.
  * @param {Response} res - Express response object.
- * @returns {Promise<Response>} Rejected request response.
- * @throws Error if request invalid.
+ * @returns {Promise<Response>} Rejected book request response.
+ * @throws Error if book request invalid.
  */
 export const rejectRequest = async (req, res) => {
   try {
-    // extract params
     const { id } = req.params;
-
     const { reason = 'No reason provided' } = req.body;
 
-    // fetch request
+    // Fetch book request details along with student and book information
     const [rows] = await pool.execute(
       `
       SELECT
@@ -598,19 +560,20 @@ export const rejectRequest = async (req, res) => {
       [id]
     );
 
-    const request = rows[0];
+    // Extract book request details
+    const bookRequest = rows[0];
 
-    // validate request
-    if (!request) {
+    // check that the book request exists
+    if (!bookRequest) {
       throw new Error('REQUEST_NOT_FOUND');
     }
 
-    // validate status
-    if (request.request_status !== 'pending') {
+    // Ensure only pending book requests can be rejected
+    if (bookRequest.request_status !== 'pending') {
       throw new Error('REQUEST_NOT_PENDING');
     }
 
-    // update request
+    // Update book request status to rejected
     await pool.execute(
       `
       UPDATE book_requests
@@ -620,32 +583,46 @@ export const rejectRequest = async (req, res) => {
       `,
       [id]
     );
+    logger.info('BOOK REJECTED');
 
-    // send email
-    await sendEmail({
-  type: 'book_rejected',
-  to: request.email,
-  variables: {
-    student_name: request.student_name,
-    book_title: request.title,
-    book_author: request.author,
-    book_isbn: request.book_num,
-    book_category: request.category,
-    requested_at: formatDate(request.requested_at),
-    rejected_at: formatDate(new Date()),
-    reason,
-  },
-});
+    // Send rejection notification email to the student
+    await sendBookRejectedEmail({
+      email: bookRequest.email,
+      studentName: bookRequest.student_name,
+      bookTitle: bookRequest.title,
+      bookAuthor: bookRequest.author,
+      bookIsbn: bookRequest.book_num,
+      bookCategory: bookRequest.category,
+      requestedAt: formatDate(bookRequest.requested_at),
+      rejectedAt: formatDate(new Date()),
+      reason,
+    });
 
+    // Return success response
     return res.status(200).json({
       success_flag: true,
       message: 'BOOK_REQUEST_REJECTED',
     });
   } catch (error) {
     // log error
-    logger.error('REJECT REQUEST ERROR', error);
+    logger.error('REJECT BOOK REQUEST ERROR', error);
 
-    return res.status(400).json({
+    if (error.message === 'BOOK_REQUEST_NOT_FOUND') {
+      return res.status(404).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+
+    if (error.message === 'BOOK_REQUEST_NOT_PENDING') {
+      return res.status(400).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+
+    // Return internal server error response
+    return res.status(500).json({
       success_flag: false,
       message: error.message,
     });
@@ -653,21 +630,18 @@ export const rejectRequest = async (req, res) => {
 };
 
 /**
- * Cancels a pending request.
- * @param {Request} req - Express request object containing request id.
+ * Cancel a pending  book request.
+ * @param {Request} req - Express request object containing book request id.
  * @param {Response} res - Express response object.
- * @returns {Promise<Response>} Cancelled request response.
- * @throws Error if unauthorized or request invalid.
+ * @returns {Promise<Response>} Cancelled book request response.
+ * @throws Error if unauthorized or book request invalid.
  */
 export const cancelRequest = async (req, res) => {
   try {
-    // extract student id
     const studentId = req.user.id;
-
-    // extract request id
     const { id } = req.params;
 
-    // fetch request
+    // Fetch book request details
     const [rows] = await pool.execute(
       `
       SELECT *
@@ -677,19 +651,23 @@ export const cancelRequest = async (req, res) => {
       [id]
     );
 
-    const request = rows[0];
+    const bookRequest = rows[0];
 
-    // validate request
-    if (!request) {
-      throw new Error('REQUEST_NOT_FOUND');
+    // check that the book request exists
+    if (!bookRequest) {
+      throw new Error(' BOOK_REQUEST_NOT_FOUND');
     }
 
-    // validate status
-    if (request.request_status !== 'pending') {
-      throw new Error('REQUEST_NOT_PENDING');
+    // Ensure only pending book requests can be cancelled
+    if (bookRequest.request_status !== 'pending') {
+      throw new Error('BOOK_REQUEST_NOT_PENDING');
     }
 
-    // delete request
+    // Ensure students can cancel only their own book requests
+    if (bookRequest.student_id !== studentId) {
+      throw new Error('UNAUTHORIZED_BOOK_REQUEST_ACCESS');
+    }
+    // Delete the pending book request
     await pool.execute(
       `
       DELETE FROM book_requests
@@ -698,15 +676,37 @@ export const cancelRequest = async (req, res) => {
       [id]
     );
 
+    // Return success response
     return res.status(200).json({
       success_flag: true,
-      message: 'REQUEST_CANCELLED',
+      message: 'BOOK_REQUEST_CANCELLED',
     });
   } catch (error) {
     // log error
-    logger.error('CANCEL REQUEST ERROR', error);
+    logger.error('CANCEL BOOK REQUEST ERROR', error);
 
-    return res.status(400).json({
+    if (error.message === 'BOOK_REQUEST_NOT_FOUND') {
+      return res.status(404).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+
+    if (error.message === 'BOOK_REQUEST_NOT_PENDING') {
+      return res.status(400).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+
+    if (error.message === 'UNAUTHORIZED_BOOK_REQUEST_ACCESS') {
+      return res.status(403).json({
+        success_flag: false,
+        message: error.message,
+      });
+    }
+    // Return internal server error response
+    return res.status(500).json({
       success_flag: false,
       message: error.message,
     });

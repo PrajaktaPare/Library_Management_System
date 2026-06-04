@@ -8,7 +8,6 @@ import {
 } from '../validators/auth.validator.js';
 
 import { validateSchema } from '../middlewares/schema_validator.middleware.js';
-import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
@@ -25,6 +24,6 @@ router.post('/forgot-password', validateSchema(forgotPasswordValidator), forgotP
 router.post('/reset-password', validateSchema(resetPasswordValidator), resetPassword);
 
 // logout user
-router.post('/logout', verifyJWT, logout);
+router.post('/logout', logout);
 
 export default router;

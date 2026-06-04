@@ -22,25 +22,43 @@ import {
 const router = express.Router();
 
 // create role
-router.post('/', verifyJWT, authorizeRoles("admin"), validateSchema(createRoleValidator), createRole);
+router.post('/', verifyJWT, authorizeRoles('admin'), validateSchema(createRoleValidator), createRole);
 
 // get all roles
-router.get('/', verifyJWT, authorizeRoles("admin"), validateSchema(getRolesQueryValidator, 'query'), getAllRoles);
+router.get(
+  '/',
+  verifyJWT,
+  authorizeRoles('admin'),
+  validateSchema(getRolesQueryValidator, 'query'),
+  getAllRoles
+);
 
 // get role by id
-router.get('/:id', verifyJWT, authorizeRoles("admin"), validateSchema(roleIdValidator, 'params'), getRoleById);
+router.get(
+  '/:id',
+  verifyJWT,
+  authorizeRoles('admin'),
+  validateSchema(roleIdValidator, 'params'),
+  getRoleById
+);
 
 // update role
 router.patch(
   '/:id',
   verifyJWT,
-  authorizeRoles("admin"),
+  authorizeRoles('admin'),
   validateSchema(roleIdValidator, 'params'),
   validateSchema(patchRoleValidator),
   updateRole
 );
 
 // delete role
-router.delete('/:id', verifyJWT, authorizeRoles("admin"), validateSchema(roleIdValidator, 'params'), deleteRole);
+router.delete(
+  '/:id',
+  verifyJWT,
+  authorizeRoles('admin'),
+  validateSchema(roleIdValidator, 'params'),
+  deleteRole
+);
 
 export default router;

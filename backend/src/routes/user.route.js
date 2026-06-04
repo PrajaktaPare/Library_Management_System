@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  getUsersCount,
   getAllUsers,
   getUserByID,
   postUser,
@@ -19,11 +20,11 @@ import {
 
 import { validateSchema } from '../middlewares/schema_validator.middleware.js';
 import { verifyJWT, authorizeRoles } from '../middlewares/auth.middleware.js';
-import { getUsersCount } from '../controllers/user.controller.js';
+
 const router = express.Router();
 
 // admin middleware
-const admin = [verifyJWT, authorizeRoles("admin")];
+const admin = [verifyJWT, authorizeRoles('admin')];
 
 router.get('/count', getUsersCount);
 

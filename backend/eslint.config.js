@@ -1,12 +1,9 @@
 // ESLint base recommended rules
 import js from '@eslint/js';
-
 // Runs Prettier as ESLint rule
 import prettier from 'eslint-plugin-prettier';
-
 // Disables ESLint rules conflicting with Prettier
 import prettierConfig from 'eslint-config-prettier';
-
 // Import-related linting rules
 import importPlugin from 'eslint-plugin-import';
 

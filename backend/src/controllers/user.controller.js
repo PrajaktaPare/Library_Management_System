@@ -2,61 +2,45 @@ import bcrypt from 'bcrypt';
 import db from '../config/db.config.js';
 import logger from '../services/logger.service.js';
 import { generateVerificationToken } from '../services/verfication_token.service.js';
-import { sendEmail } from '../services/email.service.js';
+import { sendVerificationEmail } from '../services/email.service.js';
 import { buildFilterQuery } from '../utils/query.filter.js';
-
 /**
- * Returns total users count and total pages.
- * @param {Request} req - Express request object containing filters and limit.
- * @param {Response} res - Express response object.
- * @returns {Promise<Response>} Total users count response.
+ * Retrieves the total count of user records.
+ *
+ * @param {Request} req - Express request object containing where condition.
+ * @param {Response} res - Express response object used to return the user count.
+ * @returns {Promise<Response>}
  */
 export const getUsersCount = async (req, res) => {
   try {
-    // extract limit
-    const limit = Number(req.query.limit) || 10;
-
-    // build count query
+    // Generate count query with where condition
     const { sql, values } = buildFilterQuery({
       query: req.query,
-
-      // count users
       baseSql: `
         SELECT COUNT(*) AS total_records
-
         FROM users u
-
-        LEFT JOIN roles r
-          ON u.role_id = r.id
       `,
-
-      // alias for filtering
       tableAlias: 'u',
+      includePagination: false,
     });
 
-    // execute query
+    // Execute count query
     const [rows] = await db.query(sql, values);
 
-    // extract count
+    // Extract total user count
     const totalRecords = rows[0]?.total_records || 0;
 
-    // return response
+    // Return user count
     return res.status(200).json({
       success_flag: true,
-
       data: {
         total_records: totalRecords,
-        limit,
-
-        // calculate pages
-        total_pages: Math.ceil(totalRecords / limit),
       },
     });
   } catch (error) {
-    // log error
     logger.error('GET USERS COUNT ERROR', error);
 
-    // return error
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -73,7 +57,7 @@ export const getUsersCount = async (req, res) => {
  */
 export const getAllUsers = async (req, res) => {
   try {
-    // base sql query
+    // Base query to fetch user details along with role information
     const baseSql = `
       SELECT 
         u.id,
@@ -92,32 +76,31 @@ export const getAllUsers = async (req, res) => {
       ON u.role_id = r.id
     `;
 
-    // build filter query
+    // Generate dynamic query with filtering, sorting, and pagination
     const { sql, values } = buildFilterQuery({
       query: req.query,
       baseSql,
       tableAlias: 'u',
     });
 
-    // fetch users
+    // Execute query
     const [rows] = await db.query(sql, values);
 
-    // check records
+    // check that user records exist
     if (rows.length === 0) {
-      throw new Error('NO_USERS_FOUND');
+      throw new Error('USER_NOT_FOUND');
     }
 
-    // return response
+    // Return user records
     return res.status(200).json({
       success_flag: true,
       message: 'USERS_FETCHED_SUCCESSFULLY',
       data: rows,
     });
   } catch (error) {
-    // log error
     logger.error(error);
 
-    // return error response
+    // Return appropriate error response
     return res.status(error.message?.includes('NOT_FOUND') ? 404 : 500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -134,10 +117,10 @@ export const getAllUsers = async (req, res) => {
  */
 export const getUserByID = async (req, res) => {
   try {
-    // fetch user
+    // Fetch user details by ID
     const [rows] = await db.execute(`SELECT * FROM users WHERE id=?`, [req.params.id]);
 
-    // validate user
+    // Validate that the user exists
     if (!rows.length) {
       return res.status(404).json({
         success_flag: false,
@@ -145,16 +128,16 @@ export const getUserByID = async (req, res) => {
       });
     }
 
-    // return response
+    // Return user details
     return res.json({
       success_flag: true,
       data: rows[0],
     });
   } catch (error) {
-    // log error
+    // Log error for debugging and monitoring
     logger.error(error);
 
-    // return error response
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -171,48 +154,43 @@ export const getUserByID = async (req, res) => {
  */
 export const postUser = async (req, res) => {
   try {
-    // extract request body
     const { email, password, first_name, last_name, phone, role_id } = req.body;
 
-    // hash password
+    // Hash password before storing it in the database
     const password_hash = await bcrypt.hash(password, 10);
 
-    // generate verification token
+    // Generate email verification token
     const { rawToken, hashedToken } = await generateVerificationToken();
 
-    // create user
+    // Create new user record
     const [result] = await db.execute(
       `INSERT INTO users(email,password_hash,first_name,last_name,phone,role_id,is_active,is_verified,is_deleted,verification_token)
        VALUES(?,?,?,?,?,?,?,?,?,?)`,
       [email, password_hash, first_name, last_name, phone, role_id, 0, 0, 0, hashedToken]
     );
 
-    // generate verification link
+    // Generate email verification URL
     const verificationLink = `${process.env.FRONTEND_BASE_URL}/auth/verify-email?uid=${result.insertId}&token=${rawToken}`;
 
-    // send verification email
-    await sendEmail({
-      type: 'verification',
-      to: email,
-      variables: {
-        first_name,
-        link: verificationLink,
-      },
+    // Send verification email to the registered user
+    await sendVerificationEmail({
+      email,
+      firstName: first_name,
+      verificationLink,
     });
-    // log success
+
     logger.info(`USER REGISTERED : ${email}`);
 
-    // return response
+    // Return successful registration response
     return res.status(201).json({
       success_flag: true,
       message: 'USER_REGISTERED_SUCCESSFULLY_VERIFY_EMAIL_TO_ACTIVATE_ACCOUNT',
       data: { user_id: result.insertId, email },
     });
   } catch (error) {
-    // log error
     logger.error('CREATE USER ERROR', error);
 
-    // handle duplicate entry
+    // Handle duplicate email or phone number
     if (error.code === 'ER_DUP_ENTRY') {
       return res.status(409).json({
         success_flag: false,
@@ -220,7 +198,7 @@ export const postUser = async (req, res) => {
       });
     }
 
-    // return error response
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -236,10 +214,9 @@ export const postUser = async (req, res) => {
  */
 export const patchUser = async (req, res) => {
   try {
-    // extract id
     const { id } = req.params;
 
-    // validate request body
+    // Validate that update data is provided
     if (!Object.keys(req.body).length) {
       return res.status(400).json({
         success_flag: false,
@@ -247,16 +224,17 @@ export const patchUser = async (req, res) => {
       });
     }
 
-    // initialize arrays
+    // Initialize arrays for dynamic update query
     const fields = [];
     const values = [];
 
+    // Build dynamic update fields from request body
     for (const [key, value] of Object.entries(req.body)) {
       fields.push(`${key}=?`);
       values.push(value);
     }
 
-    // validate filtered fields
+    // check that at least one field is available for update
     if (!fields.length) {
       return res.status(400).json({
         success_flag: false,
@@ -264,22 +242,21 @@ export const patchUser = async (req, res) => {
       });
     }
 
-    // append id
+    // Append user ID for WHERE condition
     values.push(id);
 
-    // update user
+    // Update user record
     await db.execute(`UPDATE users SET ${fields.join(',')} WHERE id=?`, values);
 
-    // return response
+    // Return successful update response
     return res.status(200).json({
       success_flag: true,
       message: 'USER_UPDATED',
     });
   } catch (error) {
-    // log error
     logger.error('PATCH USER ERROR', error);
 
-    // return error response
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -295,40 +272,43 @@ export const patchUser = async (req, res) => {
  */
 export const deleteUser = async (req, res) => {
   try {
-    // extract id
     const { id } = req.params;
 
-    // fetch user
+    // Fetch user status before deletion
     const [rows] = await db.execute(`SELECT is_active, is_verified FROM users WHERE id=?`, [id]);
 
-    // validate user
+    // CHECK that the user exists
     if (!rows.length) {
       return res.status(404).json({
         success_flag: false,
         message: 'USER_NOT_FOUND',
       });
     }
-    // extract user
+
+    // Extract user details
     const user = rows[0];
 
-    // soft delete user
+    // Perform soft delete for active and verified users
     if (user.is_active && user.is_verified) {
       await db.execute(`UPDATE users SET is_deleted=1, is_active=0 WHERE id=?`, [id]);
+
+      logger.info(`User soft deleted successfully. User ID: ${id}`);
     } else {
-      // hard delete user
+      // Permanently delete inactive or unverified users
       await db.execute(`DELETE FROM users WHERE id=?`, [id]);
+
+      logger.info(`User hard deleted successfully. User ID: ${id}`);
     }
 
-    // return response
+    // Return successful deletion response
     return res.json({
       success_flag: true,
       message: 'USER_DELETED',
     });
   } catch (error) {
-    // log error
     logger.error(error);
 
-    // return error response
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -343,19 +323,19 @@ export const deleteUser = async (req, res) => {
  */
 export const getProfile = async (req, res) => {
   try {
-    // fetch profile
+    // Fetch authenticated user's profile details
     const [rows] = await db.execute(`SELECT * FROM users WHERE id=?`, [req.user.id]);
 
-    // return response
+    // Return profile details
     return res.json({
       success_flag: true,
       data: rows[0],
     });
   } catch (error) {
-    // log error
+    // Log error for debugging and monitoring
     logger.error(error);
 
-    // return error response
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -370,9 +350,9 @@ export const getProfile = async (req, res) => {
  */
 export const updateProfile = async (req, res) => {
   try {
-    // extract user id
     const userId = req.user.id;
-    // validate request body
+
+    // Check that update data is provided
     if (!Object.keys(req.body).length) {
       return res.status(400).json({
         success_flag: false,
@@ -380,25 +360,26 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    // initialize arrays
+    // Initialize arrays for dynamic update query
     const fields = [];
     const values = [];
 
-    // build dynamic query with whitelisted fields only
+    // Build dynamic update query from request data
     for (const [key, value] of Object.entries(req.body)) {
-
       if (key === 'password') {
-        // hash password
+        // Hash password before storing it
         const hash = await bcrypt.hash(value, 10);
+
         fields.push('password_hash=?');
         values.push(hash);
       } else {
+        // Add profile field to update query
         fields.push(`${key}=?`);
         values.push(value);
       }
     }
 
-    // validate filtered fields
+    // Validate that at least one field is available for update
     if (!fields.length) {
       return res.status(400).json({
         success_flag: false,
@@ -406,22 +387,21 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    // append user id
+    // Append authenticated user ID for WHERE condition
     values.push(userId);
 
-    // update profile
+    // Update user profile
     await db.execute(`UPDATE users SET ${fields.join(',')} WHERE id=?`, values);
 
-    // return response
+    // Return successful update response
     return res.status(200).json({
       success_flag: true,
       message: 'PROFILE_UPDATED',
     });
   } catch (error) {
-    // log error
     logger.error('UPDATE PROFILE ERROR', error);
 
-    // return error response
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',

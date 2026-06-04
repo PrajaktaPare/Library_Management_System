@@ -1,4 +1,3 @@
-
 /* ---------------- ROLE ID VALIDATOR ---------------- */
 
 export const roleIdValidator = {

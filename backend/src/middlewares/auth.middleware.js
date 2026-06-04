@@ -48,10 +48,10 @@ export const verifyJWT = (req, res, next) => {
 
     // verify token
     const decoded = verifyToken(token);
-  
+
     // attach user data
     req.user = decoded;
-   // continue request
+    // continue request
     next();
   } catch (error) {
     // log error

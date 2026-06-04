@@ -1,80 +1,48 @@
 import pool from '../config/db.config.js';
 import logger from '../services/logger.service.js';
 import { buildFilterQuery } from '../utils/query.filter.js';
-// fine amount
-const FINE_PER_DAY = Number(process.env.FINE_PER_DAY) || 5;
-
-// calculate fine
-const calculateFine = dueDate => {
-  const today = new Date();
-
-  const due = new Date(dueDate);
-
-  const diffTime = today.getTime() - due.getTime();
-
-  const overdueDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-  if (overdueDays <= 0) {
-    return 0;
-  }
-
-  return overdueDays * FINE_PER_DAY;
-};
+import { calculateFine } from '../services/calculate_fine.service.js';
 
 /**
- * Returns total issues count and total pages.
- * @param {Request} req
- * @param {Response} res
- * @returns {Promise<Response>}
+ * Returns total count
+ * @param {Request} req - Express request object containing Where condition.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<Response>} Total count response.
  */
-export const getIssuesCount = async (req, res) => {
+export const getIssuedBooksCount = async (req, res) => {
   try {
-    // extract limit
-    const limit = Number(req.query.limit) || 10;
-
-    // build count query
+    // Generate count query with where condition
     const { sql, values } = buildFilterQuery({
       query: req.query,
-
-      // count total issues
       baseSql: `
         SELECT COUNT(*) AS total_records
-
         FROM book_issued i
-
         JOIN users u
-          ON i.student_id = u.id
-
+        ON i.student_id = u.id
         JOIN books b
-          ON i.book_id = b.id
+        ON i.book_id = b.id
       `,
-
-      // alias for filters
       tableAlias: 'i',
+      includePagination: false,
     });
 
-    // execute query
+    // Execute count query
     const [rows] = await pool.query(sql, values);
 
-    // extract total count
+    // Extract count of total records
     const totalRecords = rows[0]?.total_records || 0;
 
-    // return response
+    // Return total issued books count
     return res.status(200).json({
       success_flag: true,
-
       data: {
         total_records: totalRecords,
-        limit,
-
-        // calculate pages
-        total_pages: Math.ceil(totalRecords / limit),
       },
     });
   } catch (error) {
-    // log error
-    logger.error('GET ISSUES COUNT ERROR', error);
+    logger.error('GET ISSUED BOOK COUNT ERROR', error);
 
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -83,17 +51,16 @@ export const getIssuesCount = async (req, res) => {
 };
 
 /**
- * Fetches all issued books.
- * @param {Request} req
- * @param {Response} res
+ * Retrieves issued book records with support for
+ * filtering, sorting, pagination, and role-based access.
+ *
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
  * @returns {Promise<Response>}
  */
-export const getAllIssues = async (req, res) => {
+export const getAllIssuedBooks = async (req, res) => {
   try {
-    // log api
-    logger.info('GET ALL ISSUES API');
-
-    // base sql
+    // Base query to fetch issued book details
     const baseSql = `
       SELECT
         i.id,
@@ -129,55 +96,56 @@ export const getAllIssues = async (req, res) => {
         ON i.book_id = b.id
     `;
 
-    // create filter object
+    // Parse filter object from query parameters
     const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
 
-    // ensure where exists
+    // Ensure where clause exists
     filter.where = filter.where || {};
 
-    // student -> only own issues
+    // Restrict students to viewing only their own issued books
     if (req.user.role === 'student') {
       filter.where.student_id = req.user.id;
     }
-    // create modified query
+
+    // Create modified query with role-based filters
     const modifiedQuery = {
       ...req.query,
       filter: JSON.stringify(filter),
     };
 
-    // build query
+    // Generate query with filters
     const { sql, values } = buildFilterQuery({
       query: modifiedQuery,
       baseSql,
       tableAlias: 'i',
     });
 
-    // execute query
+    // Execute query
     const [rows] = await pool.query(sql, values);
 
-    // add realtime fine
-    const updatedRows = rows.map(issue => {
-      let currentFine = issue.fine_amount;
-
-      if (issue.status !== 'returned' && new Date() > new Date(issue.due_date)) {
-        currentFine = calculateFine(issue.due_date);
+    // Calculate fine for overdue books
+    const updatedRows = rows.map(issuedBook => {
+      let fine = 0;
+      if (issuedBook.status !== 'returned') {
+        fine = calculateFine(issuedBook.due_date);
       }
-
       return {
-        ...issue,
-        current_fine: currentFine,
+        ...issuedBook,
+        fine_amount: fine,
       };
     });
 
+    // Return issued book records
     return res.status(200).json({
       success_flag: true,
       count: updatedRows.length,
       data: updatedRows,
     });
   } catch (error) {
-    // log error
-    logger.error('GET ALL ISSUES ERROR', error);
+    // Log error for debugging and monitoring
+    logger.error('GET ALL ISSUED BOOK ERROR', error);
 
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: error.message,
@@ -186,17 +154,17 @@ export const getAllIssues = async (req, res) => {
 };
 
 /**
- * Fetches issue details by id.
- * @param {Request} req
- * @param {Response} res
+ * Fetches issued book details by issued book ID.
+ *
+ * @param {Request} req - Express request object containing the issued book ID in route parameters.
+ * @param {Response} res - Express response object used to return the issued book details.
  * @returns {Promise<Response>}
  */
-export const getIssueById = async (req, res) => {
+export const getIssuedBookDataById = async (req, res) => {
   try {
-    // extract issue id
-    const { issue_id } = req.params;
+    const { issueId } = req.params;
 
-    // fetch issue
+    // Fetch issued book details along with student and book information
     const [rows] = await pool.execute(
       `
       SELECT
@@ -229,84 +197,87 @@ export const getIssueById = async (req, res) => {
 
       WHERE i.id = ?
       `,
-      [issue_id]
+      [issueId]
     );
 
-    const issue = rows[0];
+    const issuedBook = rows[0];
 
-    // validate issue
-    if (!issue) {
-      throw new Error('ISSUE_NOT_FOUND');
+    // check that the issued book record exists
+    if (!issuedBook) {
+      throw new Error('ISSUED_BOOK_DATA_NOT_FOUND');
     }
 
-    // calculate realtime fine
-    let currentFine = issue.fine_amount;
+    // Use stored fine amount by default
+    let currentFine = issuedBook.fine_amount;
 
-    if (issue.status !== 'returned' && new Date() > new Date(issue.due_date)) {
-      currentFine = calculateFine(issue.due_date);
+    // Calculate fine if the book is overdue and not returned
+    if (issuedBook.status !== 'returned' && new Date() > new Date(issuedBook.due_date)) {
+      currentFine = calculateFine(issuedBook.due_date);
     }
 
+    // Return issued book details with current fine
     return res.status(200).json({
       success_flag: true,
       data: {
-        ...issue,
+        ...issuedBook,
         current_fine: currentFine,
       },
     });
   } catch (error) {
-    logger.error('GET ISSUE BY ID ERROR', error);
+    logger.error('GET ISSUED BOOK BY ID ERROR', error);
 
-    return res.status(404).json({
+    // Return appropriate error response
+    return res.status(error.message === 'ISSUED_BOOK_DATA_NOT_FOUND' ? 404 : 500).json({
       success_flag: false,
-      message: error.message,
+      message: error.message === 'ISSUED_BOOK_DATA_NOT_FOUND' ? error.message : 'INTERNAL_SERVER_ERROR',
     });
   }
 };
 
 /**
- * Returns issued book.
- * @param {Request} req
- * @param {Response} res
+ * Returns an issued book and updates the issued book record.
+ * @param {Request} req - Express request object containing the issued book ID in route parameters.
+ * @param {Response} res - Express response object used to return the book return status and fine details.
  * @returns {Promise<Response>}
  */
-export const returnIssue = async (req, res) => {
+export const returnIssuedBook = async (req, res) => {
+  // Get database connection for transaction handling
   const connection = await pool.getConnection();
 
   try {
-    // extract issue id
-    const { issue_id } = req.params;
+    const { issueId } = req.params;
 
-    // begin transaction
+    // Start database transaction
     await connection.beginTransaction();
 
-    // fetch issue
+    // Fetch issued book record
     const [rows] = await connection.execute(
       `
       SELECT *
       FROM book_issued
       WHERE id = ?
       `,
-      [issue_id]
+      [issueId]
     );
 
-    const issue = rows[0];
-
-    // validate issue
-    if (!issue) {
-      throw new Error('ISSUE_NOT_FOUND');
+    const issuedBook = rows[0];
+    // check that the issued book record exists
+    if (!issuedBook) {
+      throw new Error('ISSUED_BOOK_DATA_NOT_FOUND');
     }
 
-    if (issue.status === 'returned') {
+    // Prevent returning an already returned book
+    if (issuedBook.status === 'returned') {
       throw new Error('BOOK_ALREADY_RETURNED');
     }
 
-    // calculate fine
-    const fineAmount = calculateFine(issue.due_date);
+    // Calculate overdue fine amount
+    const fineAmount = calculateFine(issuedBook.due_date);
 
-    // return date
+    // Generate return date
     const returnDate = new Date().toISOString().split('T')[0];
 
-    // update issue
+    // Update issued book record with return details
     await connection.execute(
       `
       UPDATE book_issued
@@ -316,10 +287,10 @@ export const returnIssue = async (req, res) => {
         status = 'returned'
       WHERE id = ?
       `,
-      [returnDate, fineAmount, issue_id]
+      [returnDate, fineAmount, issueId]
     );
 
-    // increase stock
+    // increase available copies of book
     await connection.execute(
       `
       UPDATE books
@@ -327,7 +298,7 @@ export const returnIssue = async (req, res) => {
       available_copies + 1
       WHERE id = ?
       `,
-      [issue.book_id]
+      [issuedBook.book_id]
     );
 
     // update book status
@@ -341,7 +312,7 @@ export const returnIssue = async (req, res) => {
       END
       WHERE id = ?
       `,
-      [issue.book_id]
+      [issuedBook.book_id]
     );
 
     // commit transaction
@@ -351,7 +322,7 @@ export const returnIssue = async (req, res) => {
       success_flag: true,
       message: 'BOOK_RETURNED_SUCCESSFULLY',
       data: {
-        issue_id,
+        issueId,
         fine_amount: fineAmount,
         return_date: returnDate,
       },
@@ -360,7 +331,7 @@ export const returnIssue = async (req, res) => {
     // rollback transaction
     await connection.rollback();
 
-    logger.error('RETURN ISSUE ERROR', error);
+    logger.error('RETURN ISSUED BOOK ERROR', error);
 
     return res.status(400).json({
       success_flag: false,

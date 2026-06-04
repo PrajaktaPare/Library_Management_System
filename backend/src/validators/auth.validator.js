@@ -1,4 +1,3 @@
-
 //login validator
 export const loginValidator = {
   type: 'object',

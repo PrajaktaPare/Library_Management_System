@@ -20,7 +20,7 @@ export const getUsersValidator = {
 
   properties: {
     filter: {
-      type: 'object',
+      type: 'string',
 
       properties: {
         limit: {

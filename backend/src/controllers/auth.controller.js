@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import db from '../config/db.config.js';
 import logger from '../services/logger.service.js';
 import { generateToken } from '../services/jwt.service.js';
-import { sendEmail } from '../services/email.service.js';
+import { sendForgotPasswordEmail, sendPasswordUpdatedEmail } from '../services/email.service.js';
 import { generateVerificationToken } from '../services/verfication_token.service.js';
 
 /**
@@ -12,50 +12,46 @@ import { generateVerificationToken } from '../services/verfication_token.service
  * @returns {Promise<Response>} User data with JWT token cookie.
  * @throws Error if user validation fails.
  */
-
-// cookie first_name last_name both, userid
 export const login = async (req, res) => {
   try {
-    // extract request body
     const { email, password } = req.body;
 
-    //fetch user with role
+    // Fetch user with role details
     const [rows] = await db.query(
-      `SELECT users.id,users.first_name,users.last_name,users.email,
-      users.password_hash,users.role_id,users.is_active,users.is_verified,roles.role_name
-      FROM users
-      LEFT JOIN roles ON users.role_id=roles.id
-      WHERE users.email=? AND users.is_deleted=0`,
+      `SELECT users.id, users.first_name, users.last_name, users.email,
+              users.password_hash, users.role_id, users.is_active, users.is_verified, roles.role_name
+       FROM users
+       LEFT JOIN roles ON users.role_id = roles.id
+       WHERE users.email=? AND users.is_deleted=0`,
       [email]
     );
 
     const user = rows[0];
 
-    //validate user status
+    // Validate user existence
     if (!user) throw new Error('USER_NOT_FOUND');
+
+    // Check account status
     if (user.is_active !== 1) throw new Error('ACCOUNT_NOT_ACTIVE');
+
+    // Check email verification status
     if (user.is_verified !== 1) throw new Error('EMAIL_NOT_VERIFIED');
 
-    //check password
+    // Compare password
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
+    // Validate password
     if (!isMatch) throw new Error('INVALID_PASSWORD');
 
-    //generate token
+    // Generate JWT token
     const token = generateToken({ id: user.id, role: user.role_name });
 
-    //set cookie
-    res.cookie('access_token', token, {
-      httpOnly: true, // Prevent JavaScript cookie access
-      secure: false, // Allow HTTP and HTTPS
-      sameSite: 'lax', //Restricts cookie sharing across sites
-      maxAge: 24 * 60 * 60 * 1000, // Cookie expires after 24 hours
-      path: '/', // Accessible across all routes
-    });
-    // log success
+    // Set token in cookie
+    res.cookie('access_token', token);
+
     logger.info(`LOGIN SUCCESS:${user.email}`);
 
-    // return response
+    // Send response
     return res.status(200).json({
       success_flag: true,
       message: 'LOGIN_SUCCESSFUL',
@@ -69,10 +65,8 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    // log error
     logger.error('LOGIN ERROR', error);
 
-    // return error response
     return res.status(401).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -89,15 +83,12 @@ export const login = async (req, res) => {
  */
 export const verifyEmail = async (req, res) => {
   try {
-    // extract query params
     const { uid, token } = req.query;
 
-    // validate input
-    if (!uid || !token) {
-      throw new Error('INVALID_VERIFICATION_LINK');
-    }
+    // Validate query params
+    if (!uid || !token) throw new Error('INVALID_VERIFICATION_LINK');
 
-    // fetch user
+    // Fetch user verification data
     const [rows] = await db.query(
       `SELECT id, is_verified, verification_token 
        FROM users 
@@ -107,25 +98,18 @@ export const verifyEmail = async (req, res) => {
 
     const user = rows[0];
 
-    // validate user
-    if (!user) {
-      throw new Error('USER_NOT_FOUND');
-    }
+    // Check user existence
+    if (!user) throw new Error('USER_NOT_FOUND');
 
-    // check already verified
-    if (user.is_verified === 1) {
-      throw new Error('USER_ALREADY_VERIFIED');
-    }
+    // Check already verified
+    if (user.is_verified === 1) throw new Error('USER_ALREADY_VERIFIED');
 
-    //bcrypt comparison
+    // Validate token
     const isTokenValid = await bcrypt.compare(token, user.verification_token);
 
-    // validate token
-    if (!isTokenValid) {
-      throw new Error('INVALID_TOKEN');
-    }
+    if (!isTokenValid) throw new Error('INVALID_TOKEN');
 
-    // update user verification
+    // Activate user account
     await db.query(
       `UPDATE users 
        SET is_active = 1,
@@ -135,16 +119,15 @@ export const verifyEmail = async (req, res) => {
       [uid]
     );
 
-    // return response
+    logger.info('VERIFY EMAIL SUCCESS');
+
     return res.status(200).json({
       success_flag: true,
       message: 'EMAIL_VERIFIED_SUCCESSFULLY',
     });
   } catch (error) {
-    // log error
     logger.error('VERIFY EMAIL ERROR', error);
 
-    // return error response
     return res.status(400).json({
       success_flag: false,
       message: error.message || 'INTERNAL_SERVER_ERROR',
@@ -160,14 +143,10 @@ export const verifyEmail = async (req, res) => {
  */
 export const logout = async (req, res) => {
   try {
-    //clear auth cookie
-    res.clearCookie('access_token', {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-      path: '/',
-    });
-    // return response
+    // Clear authentication cookie
+    res.clearCookie('access_token');
+
+    // Return logout success response
     return res.status(200).json({
       success_flag: true,
       message: 'LOGOUT_SUCCESSFUL',
@@ -176,7 +155,7 @@ export const logout = async (req, res) => {
     // log error
     logger.error('LOGOUT ERROR', error);
 
-    // return error response
+    // Return internal server error response
     return res.status(500).json({
       success_flag: false,
       message: 'INTERNAL_SERVER_ERROR',
@@ -191,14 +170,12 @@ export const logout = async (req, res) => {
  * @returns {Promise<Response>} Reset password email response.
  * @throws Error if user not found or email invalid.
  */
-
-// forgot password
 export const forgotPassword = async (req, res) => {
   try {
     // extract email from body
     const { email } = req.body;
 
-    // fetch user from database
+    // Fetch user details
     const [rows] = await db.query(
       `
       SELECT id, email, first_name, is_verified
@@ -208,10 +185,10 @@ export const forgotPassword = async (req, res) => {
       [email]
     );
 
-    // get first user
+    // Extract user record
     const user = rows[0];
 
-    // check user exists or not
+    // Check user existence
     if (!user) {
       throw new Error('USER_NOT_FOUND');
     }
@@ -221,10 +198,10 @@ export const forgotPassword = async (req, res) => {
       throw new Error('USER_NOT_VERIFIED');
     }
 
-    // generate raw token + hashed token
+    // Generate password reset token
     const { rawToken, hashedToken } = await generateVerificationToken();
 
-    // store hashed token in is_verified column
+    // Store hashed reset token
     await db.query(
       `
       UPDATE users
@@ -238,29 +215,23 @@ export const forgotPassword = async (req, res) => {
     const link = `${process.env.FRONTEND_BASE_URL}/auth/reset-password?uid=${user.id}&token=${rawToken}`;
 
     // send forgot password email
-    await sendEmail({
-      type: 'forgot_password',
-      to: user.email,
-      variables: {
-        first_name: user.first_name,
-        link,
-      },
+    await sendForgotPasswordEmail({
+      email: user.email,
+      firstName: user.first_name,
+      resetLink: link,
     });
-
-    // success log
     logger.info(`RESET EMAIL SENT : ${user.email}`);
 
-    // success response
+    // Return success response
     return res.status(200).json({
       success_flag: true,
       message: 'RESET_PASSWORD_EMAIL_SENT',
       token: rawToken,
     });
   } catch (error) {
-    // error log
     logger.error('FORGOT PASSWORD ERROR', error);
 
-    // error response
+    // Return password reset request failure response
     return res.status(400).json({
       success_flag: false,
       message: error.message,
@@ -275,11 +246,8 @@ export const forgotPassword = async (req, res) => {
  * @returns {Promise<Response>} Password reset response.
  * @throws Error if token validation fails.
  */
-
-// reset password
 export const resetPassword = async (req, res) => {
   try {
-    // extract request body
     const { email, token, password } = req.body;
 
     // fetch user
@@ -311,24 +279,16 @@ export const resetPassword = async (req, res) => {
       throw new Error('USER_NOT_VERIFIED');
     }
 
-    // validate token exists
-    if (!token || !user.verification_token) {
-      throw new Error('INVALID_TOKEN');
-    }
-
-    // compare token
-    const isTokenValid = await bcrypt.compare(token, user.verification_token);
-
-    // validate token
-    if (!isTokenValid) {
+    //check token is present and valid
+    if (!user.verification_token || !(await bcrypt.compare(token, user.verification_token))) {
       throw new Error('INVALID_TOKEN');
     }
 
     // compare old password
-    const samePassword = await bcrypt.compare(password, user.password_hash);
+    const isSamePassword = await bcrypt.compare(password, user.password_hash);
 
     // validate new password
-    if (samePassword) {
+    if (isSamePassword) {
       throw new Error('NEW_PASSWORD_MUST_BE_DIFFERENT');
     }
 
@@ -346,18 +306,14 @@ export const resetPassword = async (req, res) => {
       `,
       [hashedPassword, email]
     );
-
-    // send success email
-    await sendEmail({
-      type: 'password_updated',
-      to: user.email,
-      variables: {
-        first_name: user.first_name,
-      },
-    });
-
     // success log
     logger.info(`PASSWORD RESET SUCCESS : ${email}`);
+
+    // send success email
+    await sendPasswordUpdatedEmail({
+      email: user.email,
+      firstName: user.first_name,
+    });
 
     // success response
     return res.status(200).json({
@@ -365,7 +321,6 @@ export const resetPassword = async (req, res) => {
       message: 'PASSWORD_RESET_SUCCESS',
     });
   } catch (error) {
-    // error log
     logger.error('RESET PASSWORD ERROR', error);
 
     // error response

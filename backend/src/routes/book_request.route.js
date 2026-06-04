@@ -23,7 +23,13 @@ import {
 
 const router = express.Router();
 
-router.post('/', verifyJWT, authorizeRoles("student"), validateSchema(createRequestValidator, 'body'), requestBook);
+router.post(
+  '/',
+  verifyJWT,
+  authorizeRoles('student'),
+  validateSchema(createRequestValidator, 'body'),
+  requestBook
+);
 
 router.get('/count', getRequestsCount);
 
@@ -32,7 +38,7 @@ router.get('/', verifyJWT, validateSchema(getRequestsQueryValidator, 'query'), g
 router.get(
   '/:id',
   verifyJWT,
-  authorizeRoles("admin"),
+  authorizeRoles('admin'),
   validateSchema(requestIdValidator, 'params'),
   getRequestById
 );
@@ -40,7 +46,7 @@ router.get(
 router.patch(
   '/:id/approve',
   verifyJWT,
-  authorizeRoles("admin"),
+  authorizeRoles('admin'),
   validateSchema(requestIdValidator, 'params'),
   approveRequest
 );
@@ -48,7 +54,7 @@ router.patch(
 router.patch(
   '/:id/reject',
   verifyJWT,
-  authorizeRoles("admin"),
+  authorizeRoles('admin'),
   validateSchema(requestIdValidator, 'params'),
   validateSchema(rejectRequestValidator, 'body'),
   rejectRequest
@@ -57,7 +63,7 @@ router.patch(
 router.delete(
   '/:id/cancel',
   verifyJWT,
-  authorizeRoles("student"),
+  authorizeRoles('student'),
   validateSchema(requestIdValidator, 'params'),
   cancelRequest
 );

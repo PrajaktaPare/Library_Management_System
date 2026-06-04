@@ -64,7 +64,7 @@ CREATE TABLE books (
     status ENUM(
         'available',
         'unavailable'
-    ) NOT NULL DEFAULT 'available',
+    ) NOT NULL DEFAULT 'unavailable',
 
     created_at TIMESTAMP
     DEFAULT CURRENT_TIMESTAMP,
