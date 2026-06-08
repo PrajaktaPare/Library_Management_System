@@ -29,9 +29,9 @@ export const getUsersValidator = {
           maximum: 100,
 
           errorMessage: {
-            type: 'LIMIT_MUST_BE_INTEGER',
-            minimum: 'LIMIT_MINIMUM_1',
-            maximum: 'LIMIT_MAXIMUM_100',
+            type: 'Limit must be a number.',
+            minimum: 'Limit must be at least 1.',
+            maximum: 'Limit must not exceed 100.',
           },
         },
 
@@ -40,8 +40,8 @@ export const getUsersValidator = {
           minimum: 0,
 
           errorMessage: {
-            type: 'OFFSET_MUST_BE_INTEGER',
-            minimum: 'OFFSET_CANNOT_BE_NEGATIVE',
+            type: 'Offset must be a number.',
+            minimum: 'Offset cannot be negative.',
           },
         },
 
@@ -53,7 +53,7 @@ export const getUsersValidator = {
               type: 'string',
 
               errorMessage: {
-                type: 'COLUMN_MUST_BE_STRING',
+                type: 'Column must be a string.',
               },
             },
 
@@ -62,8 +62,8 @@ export const getUsersValidator = {
               enum: ['ASC', 'DESC'],
 
               errorMessage: {
-                type: 'ORDER_DIRECTION_MUST_BE_STRING',
-                enum: 'ORDER_DIRECTION_MUST_BE_ASC_OR_DESC',
+                type: 'Direction must be a string.',
+                enum: 'Direction must be ASC or DESC.',
               },
             },
           },
@@ -71,7 +71,7 @@ export const getUsersValidator = {
           additionalProperties: false,
 
           errorMessage: {
-            additionalProperties: 'INVALID_ORDER_FIELD',
+            additionalProperties: 'Invalid order field provided.',
           },
         },
 
@@ -90,7 +90,7 @@ export const getUsersValidator = {
                     type: 'string',
 
                     errorMessage: {
-                      type: 'LIKE_MUST_BE_STRING',
+                      type: 'Like value must be a string.',
                     },
                   },
                 },
@@ -98,14 +98,14 @@ export const getUsersValidator = {
                 additionalProperties: false,
 
                 errorMessage: {
-                  additionalProperties: 'INVALID_WHERE_OPERATOR',
+                  additionalProperties: 'Invalid where condition provided.',
                 },
               },
             ],
           },
 
           errorMessage: {
-            type: 'WHERE_MUST_BE_OBJECT',
+            type: 'Where filter must be an object.',
           },
         },
       },
@@ -113,7 +113,7 @@ export const getUsersValidator = {
       additionalProperties: false,
 
       errorMessage: {
-        additionalProperties: 'INVALID_FILTER_FIELD',
+        additionalProperties: 'Invalid filter field provided.',
       },
     },
   },
@@ -134,8 +134,8 @@ export const userIdValidator = {
       minimum: 1,
 
       errorMessage: {
-        type: 'USER_ID_MUST_BE_INTEGER',
-        minimum: 'INVALID_USER_ID',
+        type: 'User ID must be a number.',
+        minimum: 'Invalid user ID.',
       },
     },
   },
@@ -144,10 +144,10 @@ export const userIdValidator = {
 
   errorMessage: {
     required: {
-      id: 'USER_ID_REQUIRED',
+      id: 'User ID is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -164,8 +164,8 @@ export const createUserValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'FIRST_NAME_MUST_BE_STRING',
-        minLength: 'FIRST_NAME_REQUIRED',
+        type: 'First name must be a string.',
+        minLength: 'First name is required.',
       },
     },
 
@@ -174,8 +174,8 @@ export const createUserValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'LAST_NAME_MUST_BE_STRING',
-        minLength: 'LAST_NAME_REQUIRED',
+        type: 'Last name must be a string.',
+        minLength: 'Last name is required.',
       },
     },
 
@@ -184,8 +184,8 @@ export const createUserValidator = {
       format: 'email',
 
       errorMessage: {
-        type: 'EMAIL_MUST_BE_STRING',
-        format: 'INVALID_EMAIL_FORMAT',
+        type: 'Email must be a string.',
+        format: 'Invalid email format.',
       },
     },
 
@@ -194,8 +194,9 @@ export const createUserValidator = {
       pattern: '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$',
 
       errorMessage: {
-        type: 'PASSWORD_MUST_BE_STRING',
-        pattern: 'PASSWORD_MUST_HAVE_UPPERCASE_NUMBER_SPECIALCHAR_6_TO_10_LENGTH',
+        type: 'Password must be a string.',
+        pattern:
+          'Password must contain at least one uppercase letter, one number, one special character, and be 6 to 10 characters long.',
       },
     },
 
@@ -204,8 +205,8 @@ export const createUserValidator = {
       pattern: '^\\d{10}$',
 
       errorMessage: {
-        type: 'PHONE_MUST_BE_STRING',
-        pattern: 'PHONE_MUST_BE_10_DIGITS',
+        type: 'Phone must be a string.',
+        pattern: 'Phone number must be exactly 10 digits.',
       },
     },
 
@@ -214,8 +215,8 @@ export const createUserValidator = {
       enum: [1, 2],
 
       errorMessage: {
-        type: 'ROLE_ID_MUST_BE_INTEGER',
-        enum: 'INVALID_ROLE_ID',
+        type: 'Role ID must be a number.',
+        enum: 'Invalid role ID.',
       },
     },
   },
@@ -224,15 +225,15 @@ export const createUserValidator = {
 
   errorMessage: {
     required: {
-      first_name: 'FIRST_NAME_REQUIRED',
-      last_name: 'LAST_NAME_REQUIRED',
-      email: 'EMAIL_REQUIRED',
-      password: 'PASSWORD_REQUIRED',
-      phone: 'PHONE_REQUIRED',
-      role_id: 'ROLE_REQUIRED',
+      first_name: 'First name is required.',
+      last_name: 'Last name is required.',
+      email: 'Email is required.',
+      password: 'Password is required.',
+      phone: 'Phone is required.',
+      role_id: 'Role is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -247,8 +248,8 @@ export const patchUserValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'FIRST_NAME_MUST_BE_STRING',
-        minLength: 'FIRST_NAME_CANNOT_BE_EMPTY',
+        type: 'First name must be a string.',
+        minLength: 'First name cannot be empty.',
       },
     },
 
@@ -257,8 +258,8 @@ export const patchUserValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'LAST_NAME_MUST_BE_STRING',
-        minLength: 'LAST_NAME_CANNOT_BE_EMPTY',
+        type: 'Last name must be a string.',
+        minLength: 'Last name cannot be empty.',
       },
     },
 
@@ -267,8 +268,8 @@ export const patchUserValidator = {
       pattern: '^\\d{10}$',
 
       errorMessage: {
-        type: 'PHONE_MUST_BE_STRING',
-        pattern: 'PHONE_MUST_BE_10_DIGITS',
+        type: 'Phone must be a string.',
+        pattern: 'Phone number must be exactly 10 digits.',
       },
     },
   },
@@ -276,7 +277,7 @@ export const patchUserValidator = {
   additionalProperties: false,
 
   errorMessage: {
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -291,8 +292,8 @@ export const updateProfileValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'FIRST_NAME_MUST_BE_STRING',
-        minLength: 'FIRST_NAME_REQUIRED',
+        type: 'First name must be a string.',
+        minLength: 'First name is required.',
       },
     },
 
@@ -301,8 +302,8 @@ export const updateProfileValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'LAST_NAME_MUST_BE_STRING',
-        minLength: 'LAST_NAME_REQUIRED',
+        type: 'Last name must be a string.',
+        minLength: 'Last name is required.',
       },
     },
 
@@ -311,8 +312,8 @@ export const updateProfileValidator = {
       pattern: '^\\d{10}$',
 
       errorMessage: {
-        type: 'PHONE_MUST_BE_STRING',
-        pattern: 'PHONE_MUST_BE_10_DIGITS',
+        type: 'Phone must be a string.',
+        pattern: 'Phone number must be exactly 10 digits.',
       },
     },
 
@@ -321,8 +322,9 @@ export const updateProfileValidator = {
       pattern: '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$',
 
       errorMessage: {
-        type: 'PASSWORD_MUST_BE_STRING',
-        pattern: 'PASSWORD_MUST_HAVE_UPPERCASE_NUMBER_SPECIALCHAR_6_TO_10_LENGTH',
+        type: 'Password must be a string.',
+        pattern:
+          'Password must contain at least one uppercase letter, one number, one special character, and be 6 to 10 characters long.',
       },
     },
   },
@@ -330,6 +332,6 @@ export const updateProfileValidator = {
   additionalProperties: false,
 
   errorMessage: {
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };

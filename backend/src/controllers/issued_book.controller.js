@@ -45,7 +45,7 @@ export const getIssuedBooksCount = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -142,7 +142,6 @@ export const getAllIssuedBooks = async (req, res) => {
       data: updatedRows,
     });
   } catch (error) {
-    // Log error for debugging and monitoring
     logger.error('GET ALL ISSUED BOOK ERROR', error);
 
     // Return internal server error response
@@ -204,7 +203,7 @@ export const getIssuedBookDataById = async (req, res) => {
 
     // check that the issued book record exists
     if (!issuedBook) {
-      throw new Error('ISSUED_BOOK_DATA_NOT_FOUND');
+      throw new Error('Issued book data not found.');
     }
 
     // Use stored fine amount by default
@@ -227,9 +226,12 @@ export const getIssuedBookDataById = async (req, res) => {
     logger.error('GET ISSUED BOOK BY ID ERROR', error);
 
     // Return appropriate error response
-    return res.status(error.message === 'ISSUED_BOOK_DATA_NOT_FOUND' ? 404 : 500).json({
+    return res.status(error.message === 'Issued book data not found.' ? 404 : 500).json({
       success_flag: false,
-      message: error.message === 'ISSUED_BOOK_DATA_NOT_FOUND' ? error.message : 'INTERNAL_SERVER_ERROR',
+      message:
+        error.message === 'Issued book data not found.'
+          ? error.message
+          : 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -245,7 +247,7 @@ export const returnIssuedBook = async (req, res) => {
   const connection = await pool.getConnection();
 
   try {
-    const { issueId } = req.params;
+    const { issue_id: issueId } = req.params;
 
     // Start database transaction
     await connection.beginTransaction();
@@ -263,12 +265,12 @@ export const returnIssuedBook = async (req, res) => {
     const issuedBook = rows[0];
     // check that the issued book record exists
     if (!issuedBook) {
-      throw new Error('ISSUED_BOOK_DATA_NOT_FOUND');
+      throw new Error('Issued book data not found.');
     }
 
     // Prevent returning an already returned book
     if (issuedBook.status === 'returned') {
-      throw new Error('BOOK_ALREADY_RETURNED');
+      throw new Error('Book has already been returned.');
     }
 
     // Calculate overdue fine amount
@@ -320,7 +322,7 @@ export const returnIssuedBook = async (req, res) => {
 
     return res.status(200).json({
       success_flag: true,
-      message: 'BOOK_RETURNED_SUCCESSFULLY',
+      message: 'Book returned successfully.',
       data: {
         issueId,
         fine_amount: fineAmount,

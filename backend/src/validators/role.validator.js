@@ -11,8 +11,8 @@ export const roleIdValidator = {
       minimum: 1,
 
       errorMessage: {
-        type: 'ROLE_ID_MUST_BE_INTEGER',
-        minimum: 'INVALID_ROLE_ID',
+        type: 'Role ID must be a number.',
+        minimum: 'Invalid role ID.',
       },
     },
   },
@@ -21,10 +21,10 @@ export const roleIdValidator = {
 
   errorMessage: {
     required: {
-      id: 'ROLE_ID_REQUIRED',
+      id: 'Role ID is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -42,9 +42,9 @@ export const createRoleValidator = {
       maxLength: 50,
 
       errorMessage: {
-        type: 'ROLE_NAME_MUST_BE_STRING',
-        minLength: 'ROLE_NAME_REQUIRED',
-        maxLength: 'ROLE_NAME_MAX_LENGTH_50',
+        type: 'Role name must be a string.',
+        minLength: 'Role name is required.',
+        maxLength: 'Role name must not exceed 50 characters.',
       },
     },
   },
@@ -53,10 +53,10 @@ export const createRoleValidator = {
 
   errorMessage: {
     required: {
-      role_name: 'ROLE_NAME_REQUIRED',
+      role_name: 'Role name is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -74,9 +74,9 @@ export const patchRoleValidator = {
       maxLength: 50,
 
       errorMessage: {
-        type: 'ROLE_NAME_MUST_BE_STRING',
-        minLength: 'ROLE_NAME_CANNOT_BE_EMPTY',
-        maxLength: 'ROLE_NAME_MAX_LENGTH_50',
+        type: 'Role name must be a string.',
+        minLength: 'Role name cannot be empty.',
+        maxLength: 'Role name must not exceed 50 characters.',
       },
     },
   },
@@ -84,9 +84,8 @@ export const patchRoleValidator = {
   additionalProperties: false,
 
   errorMessage: {
-    minProperties: 'AT_LEAST_ONE_FIELD_REQUIRED',
-
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    minProperties: 'At least one field is required.',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -101,8 +100,8 @@ export const getRolesQueryValidator = {
       minimum: 1,
 
       errorMessage: {
-        type: 'LIMIT_MUST_BE_INTEGER',
-        minimum: 'LIMIT_MINIMUM_1',
+        type: 'Limit must be a number.',
+        minimum: 'Limit must be at least 1.',
       },
     },
 
@@ -111,8 +110,8 @@ export const getRolesQueryValidator = {
       minimum: 0,
 
       errorMessage: {
-        type: 'OFFSET_MUST_BE_INTEGER',
-        minimum: 'OFFSET_CANNOT_BE_NEGATIVE',
+        type: 'Offset must be a number.',
+        minimum: 'Offset cannot be negative.',
       },
     },
   },
@@ -120,6 +119,6 @@ export const getRolesQueryValidator = {
   additionalProperties: false,
 
   errorMessage: {
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };

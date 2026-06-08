@@ -43,7 +43,7 @@ export const getUsersCount = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -88,22 +88,22 @@ export const getAllUsers = async (req, res) => {
 
     // check that user records exist
     if (rows.length === 0) {
-      throw new Error('USER_NOT_FOUND');
+      throw new Error('User not found.');
     }
 
     // Return user records
     return res.status(200).json({
       success_flag: true,
-      message: 'USERS_FETCHED_SUCCESSFULLY',
+      message: 'Users fetched successfully.',
       data: rows,
     });
   } catch (error) {
     logger.error(error);
 
     // Return appropriate error response
-    return res.status(error.message?.includes('NOT_FOUND') ? 404 : 500).json({
+    return res.status(error.message?.includes('not found') ? 404 : 500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -118,13 +118,28 @@ export const getAllUsers = async (req, res) => {
 export const getUserByID = async (req, res) => {
   try {
     // Fetch user details by ID
-    const [rows] = await db.execute(`SELECT * FROM users WHERE id=?`, [req.params.id]);
+    const [rows] = await db.execute(
+      `SELECT 
+          id,
+          email,
+          first_name,
+          last_name,
+          phone,
+          role_id,
+          is_active,
+          is_verified,
+          created_at,
+          updated_at
+        FROM users 
+        WHERE id = ?`,
+      [req.params.id]
+    );
 
     // Validate that the user exists
     if (!rows.length) {
       return res.status(404).json({
         success_flag: false,
-        message: 'USER_NOT_FOUND',
+        message: 'User not found.',
       });
     }
 
@@ -140,7 +155,7 @@ export const getUserByID = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -184,7 +199,7 @@ export const postUser = async (req, res) => {
     // Return successful registration response
     return res.status(201).json({
       success_flag: true,
-      message: 'USER_REGISTERED_SUCCESSFULLY_VERIFY_EMAIL_TO_ACTIVATE_ACCOUNT',
+      message: 'User registered successfully. Please verify your email to activate your account.',
       data: { user_id: result.insertId, email },
     });
   } catch (error) {
@@ -201,7 +216,7 @@ export const postUser = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -220,7 +235,7 @@ export const patchUser = async (req, res) => {
     if (!Object.keys(req.body).length) {
       return res.status(400).json({
         success_flag: false,
-        message: 'NO_DATA_TO_UPDATE',
+        message: 'No data provided to update.',
       });
     }
 
@@ -238,7 +253,7 @@ export const patchUser = async (req, res) => {
     if (!fields.length) {
       return res.status(400).json({
         success_flag: false,
-        message: 'NO_VALID_FIELDS_TO_UPDATE',
+        message: 'No valid fields provided to update.',
       });
     }
 
@@ -251,7 +266,7 @@ export const patchUser = async (req, res) => {
     // Return successful update response
     return res.status(200).json({
       success_flag: true,
-      message: 'USER_UPDATED',
+      message: 'User updated successfully.',
     });
   } catch (error) {
     logger.error('PATCH USER ERROR', error);
@@ -259,7 +274,7 @@ export const patchUser = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -281,7 +296,7 @@ export const deleteUser = async (req, res) => {
     if (!rows.length) {
       return res.status(404).json({
         success_flag: false,
-        message: 'USER_NOT_FOUND',
+        message: 'User not found.',
       });
     }
 
@@ -303,7 +318,7 @@ export const deleteUser = async (req, res) => {
     // Return successful deletion response
     return res.json({
       success_flag: true,
-      message: 'USER_DELETED',
+      message: 'User deleted successfully.',
     });
   } catch (error) {
     logger.error(error);
@@ -311,7 +326,7 @@ export const deleteUser = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -338,7 +353,7 @@ export const getProfile = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -356,7 +371,7 @@ export const updateProfile = async (req, res) => {
     if (!Object.keys(req.body).length) {
       return res.status(400).json({
         success_flag: false,
-        message: 'NO_DATA_TO_UPDATE',
+        message: 'Nothing to update.',
       });
     }
 
@@ -383,7 +398,7 @@ export const updateProfile = async (req, res) => {
     if (!fields.length) {
       return res.status(400).json({
         success_flag: false,
-        message: 'NO_VALID_FIELDS_TO_UPDATE',
+        message: 'No valid fields provided to update.',
       });
     }
 
@@ -396,7 +411,7 @@ export const updateProfile = async (req, res) => {
     // Return successful update response
     return res.status(200).json({
       success_flag: true,
-      message: 'PROFILE_UPDATED',
+      message: 'Profile updated successfully.',
     });
   } catch (error) {
     logger.error('UPDATE PROFILE ERROR', error);
@@ -404,7 +419,7 @@ export const updateProfile = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };

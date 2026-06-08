@@ -29,12 +29,14 @@
               border: 1px solid #d7e3ea;
             "
           >
+            <!-- Header -->
             <tr>
               <td align="center" style="background: #33627a; padding: 25px 20px">
                 <h1 style="margin: 0; color: #ffffff; font-size: 28px">📚 Library Management System</h1>
               </td>
             </tr>
 
+            <!-- Content -->
             <tr>
               <td style="padding: 30px 25px; color: #333333">
                 <h3
@@ -46,13 +48,14 @@
                     text-align: center;
                   "
                 >
-                  Book Rejected Email
+                  Book Request Rejected
                 </h3>
+
                 <h4 style="margin-top: 0; margin-bottom: 15px; font-size: 18px; color: #222222">
                   Hello {{student_name}},
                 </h4>
 
-                <p style="font-size: 16px; line-height: 1.8; color: #555555">
+                <p style="font-size: 16px; line-height: 1.8; color: #555555; margin-bottom: 20px">
                   We regret to inform you that your book request has been rejected.
                 </p>
 
@@ -61,46 +64,81 @@
                   cellpadding="8"
                   cellspacing="0"
                   border="0"
-                  style="margin-top: 20px; border-collapse: collapse"
+                  style="margin-top: 20px; border-collapse: collapse; table-layout: fixed"
                 >
                   <tr>
-                    <td><strong>Book Title</strong></td>
-                    <td>{{book_title}}</td>
+                    <td
+                      width="35%"
+                      style="font-weight: bold; word-wrap: break-word; overflow-wrap: break-word"
+                    >
+                      Book Title
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{book_title}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Author</strong></td>
-                    <td>{{book_author}}</td>
+                    <td
+                      width="35%"
+                      style="font-weight: bold; word-wrap: break-word; overflow-wrap: break-word"
+                    >
+                      Author
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{book_author}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Book Number</strong></td>
-                    <td>{{book_isbn}}</td>
+                    <td
+                      width="35%"
+                      style="font-weight: bold; word-wrap: break-word; overflow-wrap: break-word"
+                    >
+                      Book Number
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{book_isbn}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Category</strong></td>
-                    <td>{{book_category}}</td>
+                    <td
+                      width="35%"
+                      style="font-weight: bold; word-wrap: break-word; overflow-wrap: break-word"
+                    >
+                      Category
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{book_category}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Requested At</strong></td>
+                    <td width="35%" style="font-weight: bold">Requested At</td>
                     <td>{{requested_at}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Rejected At</strong></td>
+                    <td width="35%" style="font-weight: bold">Rejected At</td>
                     <td>{{rejected_at}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Reason</strong></td>
-                    <td>{{reason}}</td>
+                    <td
+                      width="35%"
+                      style="
+                        font-weight: bold;
+                        word-wrap: break-word;
+                        overflow-wrap: break-word;
+                        vertical-align: top;
+                      "
+                    >
+                      Reason
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{reason}}</td>
                   </tr>
                 </table>
+
+                <p style="font-size: 14px; line-height: 1.7; color: #777777; margin-top: 25px">
+                  You may submit a new request for another available book from the library catalog.
+                </p>
               </td>
             </tr>
 
+            <!-- Footer -->
             <tr>
               <td align="center" style="background: #f7f7f7; padding: 18px; font-size: 13px; color: #888888">
                 © 2026 Library Management System

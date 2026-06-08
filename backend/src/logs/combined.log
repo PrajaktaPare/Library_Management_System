@@ -35,7 +35,7 @@
 {"body":"\n   \r\n\n\n\r\n\n\r\n{\r\n    \"email\": \"student@yopmail.com\",\r\n\n}","expose":true,"level":"error","message":"GLOBAL ERROR Expected double-quoted property name in JSON at position 54 (line 11 column 1)","stack":"SyntaxError: Expected double-quoted property name in JSON at position 54 (line 11 column 1)\n    at JSON.parse (<anonymous>)\n    at parse (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\types\\json.js:72:19)\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\read.js:162:18\n    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)\n    at invokeCallback (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:238:16)\n    at done (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:227:7)\n    at IncomingMessage.onEnd (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:287:7)\n    at IncomingMessage.emit (node:events:519:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)","status":400,"statusCode":400,"timestamp":"2026-05-20T08:58:15.138Z","type":"entity.parse.failed"}
 {"0":{"instancePath":"","keyword":"errorMessage","message":"PASSWORD_REQUIRED","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"required","message":"must have required property 'password'","params":{"missingProperty":"password"},"schemaPath":"#/required"}]},"schemaPath":"#/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-05-20T08:58:19.377Z"}
 {"level":"info","message":"LOGIN REQUEST RECEIVED","timestamp":"2026-05-20T08:58:28.783Z"}
-{"level":"error","message":"LOGIN ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:88:22)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-20T08:58:28.807Z"}
+{"level":"error","message":"LOGIN ERROR User not found.","stack":"Error: User not found.\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:88:22)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-20T08:58:28.807Z"}
 {"level":"info","message":"LOGIN REQUEST RECEIVED","timestamp":"2026-05-20T08:58:36.163Z"}
 {"level":"error","message":"LOGIN ERROR INVALID_PASSWORD","stack":"Error: INVALID_PASSWORD\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:95:25)","timestamp":"2026-05-20T08:58:36.273Z"}
 {"0":{"instancePath":"","keyword":"errorMessage","message":"EXTRA_FIELDS_NOT_ALLOWED","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"additionalProperties","message":"must NOT have additional properties","params":{"additionalProperty":"role_id"},"schemaPath":"#/additionalProperties"}]},"schemaPath":"#/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-05-20T08:58:53.334Z"}
@@ -138,7 +138,7 @@
 {"level":"info","message":"USER ROLE: 1","timestamp":"2026-05-20T09:15:27.163Z"}
 {"level":"info","message":"ALLOWED ROLES: 1","timestamp":"2026-05-20T09:15:27.164Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-20T09:15:27.164Z"}
-{"level":"error","message":"PATCH USER ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at patchUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user.controller.js:221:21)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","statusCode":404,"timestamp":"2026-05-20T09:15:27.192Z"}
+{"level":"error","message":"PATCH USER ERROR User not found.","stack":"Error: User not found.\n    at patchUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user.controller.js:221:21)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","statusCode":404,"timestamp":"2026-05-20T09:15:27.192Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-20T09:15:39.394Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 2","timestamp":"2026-05-20T09:15:39.395Z"}
 {"level":"info","message":"USER AUTHENTICATED: 2","timestamp":"2026-05-20T09:15:39.396Z"}
@@ -896,7 +896,7 @@
 {"level":"info","message":"USER ROLE: 1","timestamp":"2026-05-21T13:18:32.672Z"}
 {"level":"info","message":"ALLOWED ROLES: 1","timestamp":"2026-05-21T13:18:32.673Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-21T13:18:32.674Z"}
-{"level":"error","message":"BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at deleteBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.controller.js:216:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-21T13:18:32.685Z"}
+{"level":"error","message":"Book not found.","stack":"Error: Book not found.\n    at deleteBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.controller.js:216:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-21T13:18:32.685Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-21T13:19:59.506Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-21T13:46:13.226Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-21T14:15:15.970Z"}
@@ -1090,7 +1090,7 @@
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-22T05:46:15.229Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 2","timestamp":"2026-05-22T05:46:15.230Z"}
 {"level":"info","message":"USER AUTHENTICATED: 2","timestamp":"2026-05-22T05:46:15.230Z"}
-{"level":"error","message":"BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at getBookById (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.controller.js:101:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T05:46:15.249Z"}
+{"level":"error","message":"Book not found.","stack":"Error: Book not found.\n    at getBookById (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.controller.js:101:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T05:46:15.249Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-22T05:46:36.435Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 2","timestamp":"2026-05-22T05:46:36.436Z"}
 {"level":"info","message":"USER AUTHENTICATED: 2","timestamp":"2026-05-22T05:46:36.436Z"}
@@ -1109,7 +1109,7 @@
 {"level":"info","message":"USER ROLE: 1","timestamp":"2026-05-22T05:47:20.709Z"}
 {"level":"info","message":"ALLOWED ROLES: 1","timestamp":"2026-05-22T05:47:20.709Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-22T05:47:20.710Z"}
-{"level":"error","message":"BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at deleteBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.controller.js:181:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T05:47:20.712Z"}
+{"level":"error","message":"Book not found.","stack":"Error: Book not found.\n    at deleteBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.controller.js:181:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T05:47:20.712Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-22T05:47:29.220Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 2","timestamp":"2026-05-22T05:47:29.223Z"}
 {"level":"info","message":"USER AUTHENTICATED: 2","timestamp":"2026-05-22T05:47:29.223Z"}
@@ -1208,12 +1208,12 @@
 {"0":{"instancePath":"","keyword":"errorMessage","message":"EXTRA_FIELDS_NOT_ALLOWED","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"additionalProperties","message":"must NOT have additional properties","params":{"additionalProperty":"newPassword"},"schemaPath":"#/additionalProperties"}]},"schemaPath":"#/errorMessage"},"1":{"instancePath":"","keyword":"errorMessage","message":"EMAIL_REQUIRED","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"required","message":"must have required property 'email'","params":{"missingProperty":"email"},"schemaPath":"#/required"}]},"schemaPath":"#/errorMessage"},"2":{"instancePath":"","keyword":"errorMessage","message":"PASSWORD_REQUIRED","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"required","message":"must have required property 'password'","params":{"missingProperty":"password"},"schemaPath":"#/required"}]},"schemaPath":"#/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-05-22T07:39:49.753Z"}
 {"0":{"instancePath":"/password","keyword":"errorMessage","message":"PASSWORD_MUST_HAVE_UPPERCASE_NUMBER_SPECIALCHAR_6_TO_10_LENGTH","params":{"errors":[{"emUsed":true,"instancePath":"/password","keyword":"pattern","message":"must match pattern \"^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$\"","params":{"pattern":"^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$"},"schemaPath":"#/properties/password/pattern"}]},"schemaPath":"#/properties/password/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-05-22T07:40:24.906Z"}
 {"level":"info","message":"RESET PASSWORD REQUEST","timestamp":"2026-05-22T07:40:35.408Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:285:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:40:35.418Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:285:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:40:35.418Z"}
 {"level":"info","message":"FORGOT PASSWORD REQUEST","timestamp":"2026-05-22T07:40:55.293Z"}
 {"level":"info","message":"EMAIL SENT : <4d8d0e16-5d3b-e9a1-32b0-0496f9aa1455@gmail.com>","timestamp":"2026-05-22T07:41:05.415Z"}
 {"level":"info","message":"RESET EMAIL SENT : riyaaaa@yopmail.com","timestamp":"2026-05-22T07:41:05.415Z"}
 {"level":"info","message":"RESET PASSWORD REQUEST","timestamp":"2026-05-22T07:41:17.950Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:285:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:41:17.952Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:285:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:41:17.952Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:44:53.269Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:45:04.351Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:45:15.782Z"}
@@ -1223,12 +1223,12 @@
 {"level":"info","message":"EMAIL SENT : <a5dfba47-5118-2a94-2414-b0de4045bc5e@gmail.com>","timestamp":"2026-05-22T07:45:42.740Z"}
 {"level":"info","message":"RESET EMAIL SENT : riyaaaa@yopmail.com","timestamp":"2026-05-22T07:45:42.741Z"}
 {"level":"info","message":"RESET PASSWORD REQUEST","timestamp":"2026-05-22T07:45:53.221Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:285:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:45:53.224Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:285:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:45:53.224Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:46:26.917Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:46:28.820Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:46:29.877Z"}
 {"level":"info","message":"RESET PASSWORD REQUEST","timestamp":"2026-05-22T07:46:33.169Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:286:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:46:33.197Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:286:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:46:33.197Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:46:46.366Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:46:54.093Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:46:57.483Z"}
@@ -1236,7 +1236,7 @@
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:47:12.187Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:47:18.974Z"}
 {"level":"info","message":"RESET PASSWORD REQUEST","timestamp":"2026-05-22T07:47:20.201Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:286:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:47:20.208Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:286:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T07:47:20.208Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:49:34.008Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:49:39.068Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T07:49:43.183Z"}
@@ -1470,7 +1470,7 @@
 {"level":"info","message":"EMAIL SENT : <9de11db7-4af9-01fe-3dfd-1dbd88325b9d@gmail.com>","timestamp":"2026-05-22T10:40:06.106Z"}
 {"level":"info","message":"RESET EMAIL SENT : rkk@yopmail.com","timestamp":"2026-05-22T10:40:06.107Z"}
 {"level":"info","message":"RESET PASSWORD REQUEST","timestamp":"2026-05-22T10:43:56.897Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:339:13)","timestamp":"2026-05-22T10:43:56.985Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:339:13)","timestamp":"2026-05-22T10:43:56.985Z"}
 {"level":"info","message":"RESET PASSWORD REQUEST","timestamp":"2026-05-22T10:44:05.795Z"}
 {"level":"error","message":"RESET PASSWORD ERROR NEW_PASSWORD_MUST_BE_DIFFERENT","stack":"Error: NEW_PASSWORD_MUST_BE_DIFFERENT\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:350:13)","timestamp":"2026-05-22T10:44:05.972Z"}
 {"level":"info","message":"RESET PASSWORD REQUEST","timestamp":"2026-05-22T10:44:17.310Z"}
@@ -1503,10 +1503,10 @@
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T11:29:40.668Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T11:30:01.670Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T11:30:14.050Z"}
-{"level":"error","message":"RESET PASSWORD ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:329:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:50:48.245Z"}
-{"level":"error","message":"FORGOT PASSWORD ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at forgotPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:244:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:50:57.268Z"}
-{"level":"error","message":"FORGOT PASSWORD ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at forgotPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:244:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:51:06.459Z"}
-{"level":"error","message":"FORGOT PASSWORD ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at forgotPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:244:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:51:12.166Z"}
+{"level":"error","message":"RESET PASSWORD ERROR User not found.","stack":"Error: User not found.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:329:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:50:48.245Z"}
+{"level":"error","message":"FORGOT PASSWORD ERROR User not found.","stack":"Error: User not found.\n    at forgotPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:244:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:50:57.268Z"}
+{"level":"error","message":"FORGOT PASSWORD ERROR User not found.","stack":"Error: User not found.\n    at forgotPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:244:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:51:06.459Z"}
+{"level":"error","message":"FORGOT PASSWORD ERROR User not found.","stack":"Error: User not found.\n    at forgotPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:244:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:51:12.166Z"}
 {"level":"error","message":"FORGOT PASSWORD ERROR USER_NOT_VERIFIED","stack":"Error: USER_NOT_VERIFIED\n    at forgotPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:249:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-22T12:51:57.920Z"}
 {"code":"ER_TRUNCATED_WRONG_VALUE_FOR_FIELD","errno":1366,"level":"error","message":"FORGOT PASSWORD ERROR Incorrect integer value: '$2b$10$dcZkMurXqxmJgrTcmXYRmezCz48kLuhRBvUOKzhVqYkM0N6xOcyci' for column 'is_verified' at row 1","sql":"\n      UPDATE users\n      SET is_verified='$2b$10$dcZkMurXqxmJgrTcmXYRmezCz48kLuhRBvUOKzhVqYkM0N6xOcyci'\n      WHERE id=32\n      ","sqlMessage":"Incorrect integer value: '$2b$10$dcZkMurXqxmJgrTcmXYRmezCz48kLuhRBvUOKzhVqYkM0N6xOcyci' for column 'is_verified' at row 1","sqlState":"HY000","stack":"Error: Incorrect integer value: '$2b$10$dcZkMurXqxmJgrTcmXYRmezCz48kLuhRBvUOKzhVqYkM0N6xOcyci' for column 'is_verified' at row 1\n    at forgotPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:256:14)","timestamp":"2026-05-22T12:52:19.077Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-22T12:53:54.499Z"}
@@ -1561,7 +1561,7 @@
 {"level":"info","message":"ALLOWED ROLES: 2","timestamp":"2026-05-24T15:42:02.528Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-24T15:42:02.528Z"}
 {"level":"info","message":"REQUEST BOOK API","timestamp":"2026-05-24T15:42:02.528Z"}
-{"level":"error","message":"REQUEST BOOK ERROR BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:56:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-24T15:42:02.531Z"}
+{"level":"error","message":"REQUEST BOOK ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:56:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-24T15:42:02.531Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-24T15:42:11.092Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 61","timestamp":"2026-05-24T15:42:11.093Z"}
 {"level":"info","message":"USER AUTHENTICATED: 61","timestamp":"2026-05-24T15:42:11.093Z"}
@@ -1708,7 +1708,7 @@
 {"level":"info","message":"ALLOWED ROLES: 2","timestamp":"2026-05-24T18:04:50.751Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-24T18:04:50.752Z"}
 {"level":"info","message":"REQUEST BOOK API","timestamp":"2026-05-24T18:04:50.753Z"}
-{"level":"error","message":"REQUEST BOOK ERROR BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:58:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-24T18:04:50.798Z"}
+{"level":"error","message":"REQUEST BOOK ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:58:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-24T18:04:50.798Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-24T18:04:56.465Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 61","timestamp":"2026-05-24T18:04:56.466Z"}
 {"level":"info","message":"USER AUTHENTICATED: 61","timestamp":"2026-05-24T18:04:56.467Z"}
@@ -1716,7 +1716,7 @@
 {"level":"info","message":"ALLOWED ROLES: 2","timestamp":"2026-05-24T18:04:56.470Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-24T18:04:56.471Z"}
 {"level":"info","message":"REQUEST BOOK API","timestamp":"2026-05-24T18:04:56.473Z"}
-{"level":"error","message":"REQUEST BOOK ERROR BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:58:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-24T18:04:56.476Z"}
+{"level":"error","message":"REQUEST BOOK ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:58:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-24T18:04:56.476Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-24T18:05:14.883Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 61","timestamp":"2026-05-24T18:05:14.885Z"}
 {"level":"info","message":"USER AUTHENTICATED: 61","timestamp":"2026-05-24T18:05:14.885Z"}
@@ -2125,28 +2125,28 @@
 {"level":"info","message":"USER ROLE: 2","timestamp":"2026-05-25T10:54:51.622Z"}
 {"level":"info","message":"ALLOWED ROLES: 2","timestamp":"2026-05-25T10:54:51.622Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-25T10:54:51.622Z"}
-{"level":"error","message":"REQUEST BOOK ERROR BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:98:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-25T10:54:51.627Z"}
+{"level":"error","message":"REQUEST BOOK ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:98:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-25T10:54:51.627Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-25T10:55:11.484Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 61","timestamp":"2026-05-25T10:55:11.486Z"}
 {"level":"info","message":"USER AUTHENTICATED: 61","timestamp":"2026-05-25T10:55:11.486Z"}
 {"level":"info","message":"USER ROLE: 2","timestamp":"2026-05-25T10:55:11.486Z"}
 {"level":"info","message":"ALLOWED ROLES: 2","timestamp":"2026-05-25T10:55:11.486Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-25T10:55:11.486Z"}
-{"level":"error","message":"REQUEST BOOK ERROR BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:98:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-25T10:55:11.488Z"}
+{"level":"error","message":"REQUEST BOOK ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:98:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-25T10:55:11.488Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-25T10:55:28.937Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 61","timestamp":"2026-05-25T10:55:28.938Z"}
 {"level":"info","message":"USER AUTHENTICATED: 61","timestamp":"2026-05-25T10:55:28.938Z"}
 {"level":"info","message":"USER ROLE: 2","timestamp":"2026-05-25T10:55:28.938Z"}
 {"level":"info","message":"ALLOWED ROLES: 2","timestamp":"2026-05-25T10:55:28.939Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-25T10:55:28.939Z"}
-{"level":"error","message":"REQUEST BOOK ERROR BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:98:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-25T10:55:28.940Z"}
+{"level":"error","message":"REQUEST BOOK ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:98:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-25T10:55:28.940Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-25T10:55:39.052Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 61","timestamp":"2026-05-25T10:55:39.053Z"}
 {"level":"info","message":"USER AUTHENTICATED: 61","timestamp":"2026-05-25T10:55:39.053Z"}
 {"level":"info","message":"USER ROLE: 2","timestamp":"2026-05-25T10:55:39.053Z"}
 {"level":"info","message":"ALLOWED ROLES: 2","timestamp":"2026-05-25T10:55:39.053Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-25T10:55:39.054Z"}
-{"level":"error","message":"REQUEST BOOK ERROR BOOK_NOT_FOUND","stack":"Error: BOOK_NOT_FOUND\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:98:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-25T10:55:39.056Z"}
+{"level":"error","message":"REQUEST BOOK ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.request.controller.js:98:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-25T10:55:39.056Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-25T10:55:46.607Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 61","timestamp":"2026-05-25T10:55:46.608Z"}
 {"level":"info","message":"USER AUTHENTICATED: 61","timestamp":"2026-05-25T10:55:46.608Z"}
@@ -2330,7 +2330,7 @@
 {"level":"info","message":"USER ROLE: 1","timestamp":"2026-05-27T11:55:02.999Z"}
 {"level":"info","message":"ALLOWED ROLES: 1","timestamp":"2026-05-27T11:55:03.000Z"}
 {"level":"info","message":"USER AUTHORIZED SUCCESSFULLY","timestamp":"2026-05-27T11:55:03.000Z"}
-{"level":"error","message":"LOGIN ERROR USER_NOT_FOUND","stack":"Error: USER_NOT_FOUND\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:35:22)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-27T12:03:15.029Z"}
+{"level":"error","message":"LOGIN ERROR User not found.","stack":"Error: User not found.\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:35:22)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-27T12:03:15.029Z"}
 {"level":"info","message":"GENERATING JWT TOKEN FOR USER ID 1","timestamp":"2026-05-27T12:03:28.194Z"}
 {"level":"info","message":"JWT TOKEN GENERATED FOR USER ID 1","timestamp":"2026-05-27T12:03:28.197Z"}
 {"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-05-27T12:03:28.199Z"}
@@ -2655,7 +2655,7 @@
 {"level":"info","message":"EMAIL SENT : <be216b73-5046-f45f-23fa-24ca621a9916@gmail.com>","timestamp":"2026-05-27T12:50:14.716Z"}
 {"level":"info","message":"RESET EMAIL SENT : sarita@yopmail.com","timestamp":"2026-05-27T12:50:14.717Z"}
 {"level":"error","message":"RESET PASSWORD ERROR NEW_PASSWORD_MUST_BE_DIFFERENT","stack":"Error: NEW_PASSWORD_MUST_BE_DIFFERENT\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:339:13)","timestamp":"2026-05-27T12:50:26.884Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:331:13)","timestamp":"2026-05-27T12:50:36.487Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:331:13)","timestamp":"2026-05-27T12:50:36.487Z"}
 {"level":"info","message":"VERIFYING JWT TOKEN","timestamp":"2026-05-27T12:57:41.603Z"}
 {"level":"info","message":"JWT TOKEN VERIFIED FOR USER ID 2","timestamp":"2026-05-27T12:57:41.606Z"}
 {"level":"info","message":"USER AUTHENTICATED: 2","timestamp":"2026-05-27T12:57:41.607Z"}
@@ -2872,7 +2872,7 @@
 {"level":"info","message":"EMAIL SENT : <245e8d8f-1759-b471-e02d-27395e28b832@gmail.com>","timestamp":"2026-05-28T09:46:07.818Z"}
 {"level":"info","message":"PASSWORD RESET SUCCESS : saurabh@yopmail.com","timestamp":"2026-05-28T09:46:07.818Z"}
 {"0":{"instancePath":"/password","keyword":"errorMessage","message":"PASSWORD_MUST_HAVE_UPPERCASE_NUMBER_SPECIALCHAR_6_TO_10_LENGTH","params":{"errors":[{"emUsed":true,"instancePath":"/password","keyword":"pattern","message":"must match pattern \"^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$\"","params":{"pattern":"^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$"},"schemaPath":"#/properties/password/pattern"}]},"schemaPath":"#/properties/password/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-05-28T09:46:17.796Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:323:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-28T09:46:30.503Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:323:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-28T09:46:30.503Z"}
 {"level":"info","message":"EMAIL SENT : <bace0a8f-552b-5453-b544-386e0f889e47@gmail.com>","timestamp":"2026-05-28T09:46:39.255Z"}
 {"level":"info","message":"RESET EMAIL SENT : saurabh@yopmail.com","timestamp":"2026-05-28T09:46:39.255Z"}
 {"level":"info","message":"EMAIL SENT : <182e56af-63f2-4429-c002-4532f10d4107@gmail.com>","timestamp":"2026-05-28T09:46:53.898Z"}
@@ -3240,7 +3240,7 @@
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-29T08:41:20.039Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-29T08:41:36.172Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-05-29T08:41:38.729Z"}
-{"level":"error","message":"RESET PASSWORD ERROR INVALID_TOKEN","stack":"Error: INVALID_TOKEN\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:325:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-29T08:41:41.687Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:325:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-05-29T08:41:41.687Z"}
 {"level":"info","message":"EMAIL SENT : <d36a621b-3295-b68c-af69-89d4f2f1309e@gmail.com>","timestamp":"2026-05-29T08:41:51.889Z"}
 {"level":"info","message":"RESET EMAIL SENT : yash2@yopmail.com","timestamp":"2026-05-29T08:41:51.890Z"}
 {"level":"error","message":"RESET PASSWORD ERROR NEW_PASSWORD_MUST_BE_DIFFERENT","stack":"Error: NEW_PASSWORD_MUST_BE_DIFFERENT\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:341:13)","timestamp":"2026-05-29T08:42:18.760Z"}
@@ -4059,7 +4059,7 @@
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-03T08:56:35.654Z"}
 {"level":"error","message":"APPROVE REQUEST ERROR now is not defined","stack":"ReferenceError: now is not defined\n    at approveRequest (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:471:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-03T08:56:36.832Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-03T08:57:35.751Z"}
-{"level":"error","message":"APPROVE REQUEST ERROR BOOK_REQUEST_NOT_FOUND","stack":"Error: BOOK_REQUEST_NOT_FOUND\n    at approveRequest (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:384:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-03T08:57:37.509Z"}
+{"level":"error","message":"APPROVE REQUEST ERROR Book request not found.","stack":"Error: Book request not found.\n    at approveRequest (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:384:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-03T08:57:37.509Z"}
 {"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-03T08:58:22.023Z"}
 {"level":"info","message":"BOOK REJECTED","timestamp":"2026-06-03T08:58:34.987Z"}
 {"level":"info","message":"BOOK REJECTED EMAIL SENT : jitendra@yopmail.com","timestamp":"2026-06-03T08:58:38.171Z"}
@@ -4102,8 +4102,8 @@
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-03T09:22:53.457Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-03T09:23:22.428Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-03T09:23:26.652Z"}
-{"level":"error","message":"REQUEST BOOK ERROR BOOK_REQUEST_ALREADY_PENDING","stack":"Error: BOOK_REQUEST_ALREADY_PENDING\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:103:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-03T10:21:43.029Z"}
-{"level":"error","message":"APPROVE REQUEST ERROR BOOK_REQUEST_NOT_FOUND","stack":"Error: BOOK_REQUEST_NOT_FOUND\n    at approveRequest (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:384:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-03T10:24:01.201Z"}
+{"level":"error","message":"REQUEST BOOK ERROR You already have a pending request for this book.","stack":"Error: You already have a pending request for this book.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:103:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-03T10:21:43.029Z"}
+{"level":"error","message":"APPROVE REQUEST ERROR Book request not found.","stack":"Error: Book request not found.\n    at approveRequest (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:384:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-03T10:24:01.201Z"}
 {"level":"info","message":"BOOK ISSUED EMAIL SENT : jitendra@yopmail.com","timestamp":"2026-06-03T10:24:27.869Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-03T10:29:16.370Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-03T10:29:42.645Z"}
@@ -4264,3 +4264,377 @@
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T07:34:12.788Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T07:34:26.039Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T07:34:27.038Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T07:39:22.632Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:14:22.810Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:17:31.044Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:17:32.255Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:17:36.191Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:29:39.634Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:30:54.119Z"}
+{"level":"error","message":"SERVER START ERROR logger is not defined","stack":"ReferenceError: logger is not defined\n    at connectDB (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/config/db.config.js:24:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async startServer (file:///D:/About_LexiconNetworks/Library_Management_System/backend/app.js:51:5)","timestamp":"2026-06-04T08:33:57.063Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T08:34:08.828Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:34:08.832Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T08:34:10.309Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:34:10.313Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T08:34:16.842Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T08:34:16.846Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T09:01:12.967Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T09:01:12.972Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T09:03:56.092Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T09:03:56.096Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T09:08:21.680Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T09:08:21.684Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T09:08:27.555Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T09:08:27.559Z"}
+{"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-04T10:21:24.048Z"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","message":"CREATE USER ERROR Duplicate entry 'jitendra@yopmail.com' for key 'users.email'","sql":"INSERT INTO users(email,password_hash,first_name,last_name,phone,role_id,is_active,is_verified,is_deleted,verification_token)\n       VALUES(?,?,?,?,?,?,?,?,?,?)","sqlMessage":"Duplicate entry 'jitendra@yopmail.com' for key 'users.email'","sqlState":"23000","stack":"Error: Duplicate entry 'jitendra@yopmail.com' for key 'users.email'\n    at postUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user.controller.js:166:31)","timestamp":"2026-06-04T10:22:31.976Z"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","message":"CREATE USER ERROR Duplicate entry '9999901000' for key 'users.phone'","sql":"INSERT INTO users(email,password_hash,first_name,last_name,phone,role_id,is_active,is_verified,is_deleted,verification_token)\n       VALUES(?,?,?,?,?,?,?,?,?,?)","sqlMessage":"Duplicate entry '9999901000' for key 'users.phone'","sqlState":"23000","stack":"Error: Duplicate entry '9999901000' for key 'users.phone'\n    at postUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user.controller.js:166:31)","timestamp":"2026-06-04T10:22:50.712Z"}
+{"level":"info","message":"VERIFICATION EMAIL SENT : practice@yopmail.com","timestamp":"2026-06-04T10:23:09.997Z"}
+{"level":"info","message":"USER REGISTERED : practice@yopmail.com","timestamp":"2026-06-04T10:23:09.999Z"}
+{"level":"info","message":"VERIFY EMAIL SUCCESS","timestamp":"2026-06-04T10:24:16.675Z"}
+{"level":"error","message":"VERIFY EMAIL ERROR USER_ALREADY_VERIFIED","stack":"Error: USER_ALREADY_VERIFIED\n    at verifyEmail (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:105:39)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-04T10:24:22.712Z"}
+{"expiredAt":"2026-06-04T08:28:34.000Z","level":"error","message":"JWT VERIFICATION FAILED jwt expired","name":"TokenExpiredError","stack":"TokenExpiredError: jwt expired\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:190:21\n    at getSecret (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:97:14)\n    at module.exports [as verify] (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:101:10)\n    at verifyToken (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/jwt.service.js:24:23)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:50:21)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)","timestamp":"2026-06-04T10:24:58.886Z"}
+{"level":"error","message":"JWT VERIFICATION FAILED jwt malformed","name":"JsonWebTokenError","stack":"JsonWebTokenError: jwt malformed\n    at module.exports [as verify] (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:70:17)\n    at verifyToken (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/jwt.service.js:24:23)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:50:21)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\index.js:295:15\n    at processParams (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\index.js:582:12)","timestamp":"2026-06-04T10:25:06.818Z"}
+{"0":{"instancePath":"","keyword":"errorMessage","message":"EXTRA_FIELDS_NOT_ALLOWED","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"additionalProperties","message":"must NOT have additional properties","params":{"additionalProperty":"status"},"schemaPath":"#/additionalProperties"}]},"schemaPath":"#/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-06-04T10:27:08.917Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T10:28:42.791Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T10:28:42.795Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T10:30:49.039Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T10:30:49.043Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T10:30:52.463Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T10:30:52.467Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T10:30:53.955Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T10:30:53.959Z"}
+{"level":"warn","message":"AUTH HEADER MISSING","timestamp":"2026-06-04T10:31:56.710Z"}
+{"level":"info","message":"LOGIN SUCCESS:practice@yopmail.com","timestamp":"2026-06-04T11:02:20.896Z"}
+{"level":"error","message":"BOOK REQUEST ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:81:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-04T11:03:08.225Z"}
+{"level":"error","message":"BOOK REQUEST ERROR You already have a pending request for this book.","stack":"Error: You already have a pending request for this book.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:103:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-04T11:03:21.948Z"}
+{"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-04T11:04:23.320Z"}
+{"level":"info","message":"BOOK ISSUED EMAIL SENT : practice@yopmail.com","timestamp":"2026-06-04T11:04:53.047Z"}
+{"level":"info","message":"BOOK REJECTED","timestamp":"2026-06-04T11:05:30.687Z"}
+{"level":"info","message":"BOOK REJECTED EMAIL SENT : practice@yopmail.com","timestamp":"2026-06-04T11:05:34.112Z"}
+{"level":"error","message":"RETURN ISSUED BOOK ERROR Bind parameters must not contain undefined. To pass SQL NULL specify JS null","stack":"TypeError: Bind parameters must not contain undefined. To pass SQL NULL specify JS null\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\mysql2\\lib\\base\\connection.js:787:17\n    at Array.forEach (<anonymous>)\n    at PoolConnection.execute (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\mysql2\\lib\\base\\connection.js:779:22)\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\mysql2\\lib\\promise\\connection.js:60:11\n    at new Promise (<anonymous>)\n    at PromisePoolConnection.execute (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\mysql2\\lib\\promise\\connection.js:57:12)\n    at returnIssuedBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/issued_book.controller.js:254:37)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-04T11:05:49.397Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T11:06:47.482Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T11:06:47.486Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T11:06:48.673Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T11:06:48.678Z"}
+{"level":"error","message":"RETURN ISSUED BOOK ERROR ISSUED_BOOK_DATA_NOT_FOUND","stack":"Error: ISSUED_BOOK_DATA_NOT_FOUND\n    at returnIssuedBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/issued_book.controller.js:266:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-04T11:06:52.672Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-04T11:47:42.909Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-04T11:47:42.913Z"}
+{"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-04T13:34:11.312Z"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","message":"CREATE USER ERROR Duplicate entry 'practice@yopmail.com' for key 'users.email'","sql":"INSERT INTO users(email,password_hash,first_name,last_name,phone,role_id,is_active,is_verified,is_deleted,verification_token)\n       VALUES(?,?,?,?,?,?,?,?,?,?)","sqlMessage":"Duplicate entry 'practice@yopmail.com' for key 'users.email'","sqlState":"23000","stack":"Error: Duplicate entry 'practice@yopmail.com' for key 'users.email'\n    at postUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user.controller.js:166:31)","timestamp":"2026-06-04T13:37:12.828Z"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","message":"CREATE USER ERROR Duplicate entry '9999801000' for key 'users.phone'","sql":"INSERT INTO users(email,password_hash,first_name,last_name,phone,role_id,is_active,is_verified,is_deleted,verification_token)\n       VALUES(?,?,?,?,?,?,?,?,?,?)","sqlMessage":"Duplicate entry '9999801000' for key 'users.phone'","sqlState":"23000","stack":"Error: Duplicate entry '9999801000' for key 'users.phone'\n    at postUser (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user.controller.js:166:31)","timestamp":"2026-06-04T13:38:36.798Z"}
+{"level":"info","message":"VERIFICATION EMAIL SENT : shital@yopmail.com","timestamp":"2026-06-04T13:39:16.310Z"}
+{"level":"info","message":"USER REGISTERED : shital@yopmail.com","timestamp":"2026-06-04T13:39:16.312Z"}
+{"level":"info","message":"VERIFY EMAIL SUCCESS","timestamp":"2026-06-04T13:41:08.291Z"}
+{"level":"info","message":"LOGIN SUCCESS:shital@yopmail.com","timestamp":"2026-06-04T13:45:36.142Z"}
+{"expiredAt":"2026-06-04T08:42:10.000Z","level":"error","message":"JWT VERIFICATION FAILED jwt expired","name":"TokenExpiredError","stack":"TokenExpiredError: jwt expired\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:190:21\n    at getSecret (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:97:14)\n    at module.exports [as verify] (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:101:10)\n    at verifyToken (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/jwt.service.js:24:23)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:50:21)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)","timestamp":"2026-06-04T13:53:30.935Z"}
+{"level":"info","message":"BOOK ISSUED EMAIL SENT : shital@yopmail.com","timestamp":"2026-06-04T13:54:25.437Z"}
+{"level":"error","message":"BOOK REQUEST ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:81:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-04T13:55:28.425Z"}
+{"level":"error","message":"CANCEL BOOK REQUEST ERROR UNAUTHORIZED_BOOK_REQUEST_ACCESS","stack":"Error: UNAUTHORIZED_BOOK_REQUEST_ACCESS\n    at cancelRequest (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:667:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-04T13:56:07.568Z"}
+{"level":"info","message":"BOOK REJECTED","timestamp":"2026-06-04T13:57:19.504Z"}
+{"level":"info","message":"BOOK REJECTED EMAIL SENT : shital@yopmail.com","timestamp":"2026-06-04T13:57:22.391Z"}
+{"level":"info","message":"FORGOT PASSWORD EMAIL SENT : shital@yopmail.com","timestamp":"2026-06-04T14:04:13.194Z"}
+{"level":"info","message":"RESET EMAIL SENT : shital@yopmail.com","timestamp":"2026-06-04T14:04:13.196Z"}
+{"level":"error","message":"RESET PASSWORD ERROR NEW_PASSWORD_MUST_BE_DIFFERENT","stack":"Error: NEW_PASSWORD_MUST_BE_DIFFERENT\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:292:13)","timestamp":"2026-06-04T14:05:10.913Z"}
+{"level":"info","message":"PASSWORD RESET SUCCESS : shital@yopmail.com","timestamp":"2026-06-04T14:05:22.948Z"}
+{"level":"info","message":"PASSWORD UPDATED EMAIL SENT : shital@yopmail.com","timestamp":"2026-06-04T14:05:25.570Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T07:25:29.945Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T07:25:29.956Z"}
+{"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-05T07:25:32.492Z"}
+{"level":"error","message":"LOGIN ERROR INVALID_PASSWORD","stack":"Error: INVALID_PASSWORD\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:44:25)","timestamp":"2026-06-05T07:25:59.369Z"}
+{"level":"info","message":"LOGIN SUCCESS:shital@yopmail.com","timestamp":"2026-06-05T07:26:09.599Z"}
+{"level":"error","message":"CANCEL BOOK REQUEST ERROR This book request is no longer pending.","stack":"Error: This book request is no longer pending.\n    at cancelRequest (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:662:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T07:26:24.178Z"}
+{"level":"error","message":"CANCEL BOOK REQUEST ERROR This book request is no longer pending.","stack":"Error: This book request is no longer pending.\n    at cancelRequest (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:662:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T07:26:45.576Z"}
+{"level":"info","message":"VERIFICATION EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:32:23.201Z"}
+{"level":"info","message":"USER REGISTERED : check@yopmail.com","timestamp":"2026-06-05T07:32:23.201Z"}
+{"level":"info","message":"VERIFY EMAIL SUCCESS","timestamp":"2026-06-05T07:33:33.393Z"}
+{"level":"info","message":"FORGOT PASSWORD EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:34:00.390Z"}
+{"level":"info","message":"RESET EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:34:00.390Z"}
+{"level":"info","message":"FORGOT PASSWORD EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:37:53.830Z"}
+{"level":"info","message":"RESET EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:37:53.830Z"}
+{"level":"info","message":"FORGOT PASSWORD EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:41:29.618Z"}
+{"level":"info","message":"RESET EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:41:29.619Z"}
+{"0":{"instancePath":"/password","keyword":"errorMessage","message":"PASSWORD_MUST_HAVE_UPPERCASE_NUMBER_SPECIALCHAR_6_TO_10_LENGTH","params":{"errors":[{"emUsed":true,"instancePath":"/password","keyword":"pattern","message":"must match pattern \"^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$\"","params":{"pattern":"^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$"},"schemaPath":"#/properties/password/pattern"}]},"schemaPath":"#/properties/password/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-06-05T07:42:08.378Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:284:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T07:42:20.525Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:284:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T07:42:35.137Z"}
+{"level":"info","message":"FORGOT PASSWORD EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:42:49.181Z"}
+{"level":"info","message":"RESET EMAIL SENT : check@yopmail.com","timestamp":"2026-06-05T07:42:49.181Z"}
+{"level":"error","message":"RESET PASSWORD ERROR Invalid token.","stack":"Error: Invalid token.\n    at resetPassword (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:284:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T07:42:58.184Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T07:45:13.193Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T07:45:13.198Z"}
+{"level":"info","message":"FORGOT PASSWORD EMAIL SENT : jitendra@yopmail.com","timestamp":"2026-06-05T07:45:23.295Z"}
+{"level":"info","message":"RESET EMAIL SENT : jitendra@yopmail.com","timestamp":"2026-06-05T07:45:23.296Z"}
+{"0":{"instancePath":"/email","keyword":"errorMessage","message":"INVALID_EMAIL_FORMAT","params":{"errors":[{"emUsed":true,"instancePath":"/email","keyword":"format","message":"must match format \"email\"","params":{"format":"email"},"schemaPath":"#/properties/email/format"}]},"schemaPath":"#/properties/email/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-06-05T07:46:00.677Z"}
+{"level":"info","message":"PASSWORD RESET SUCCESS : jitendra@yopmail.com","timestamp":"2026-06-05T07:46:07.213Z"}
+{"level":"info","message":"PASSWORD UPDATED EMAIL SENT : jitendra@yopmail.com","timestamp":"2026-06-05T07:46:10.297Z"}
+{"level":"info","message":"VERIFICATION EMAIL SENT : check1@yopmail.com","timestamp":"2026-06-05T08:37:50.243Z"}
+{"level":"info","message":"USER REGISTERED : check1@yopmail.com","timestamp":"2026-06-05T08:37:50.243Z"}
+{"level":"info","message":"VERIFY EMAIL SUCCESS","timestamp":"2026-06-05T08:38:47.764Z"}
+{"level":"info","message":"FORGOT PASSWORD EMAIL SENT : check1@yopmail.com","timestamp":"2026-06-05T08:41:12.380Z"}
+{"level":"info","message":"RESET EMAIL SENT : check1@yopmail.com","timestamp":"2026-06-05T08:41:12.381Z"}
+{"level":"info","message":"PASSWORD RESET SUCCESS : check1@yopmail.com","timestamp":"2026-06-05T08:42:11.408Z"}
+{"level":"info","message":"PASSWORD UPDATED EMAIL SENT : check1@yopmail.com","timestamp":"2026-06-05T08:42:14.945Z"}
+{"level":"info","message":"LOGIN SUCCESS:check1@yopmail.com","timestamp":"2026-06-05T08:43:50.339Z"}
+{"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-05T08:45:24.444Z"}
+{"level":"info","message":"BOOK ISSUED EMAIL SENT : shital@yopmail.com","timestamp":"2026-06-05T08:46:32.073Z"}
+{"level":"info","message":"LOGIN SUCCESS:check1@yopmail.com","timestamp":"2026-06-05T08:47:15.578Z"}
+{"level":"error","message":"BOOK REQUEST ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:81:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T08:47:43.781Z"}
+{"level":"error","message":"BOOK REQUEST ERROR Book not found.","stack":"Error: Book not found.\n    at requestBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book_request.controller.js:81:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T08:48:02.768Z"}
+{"level":"info","message":"BOOK ISSUED EMAIL SENT : check1@yopmail.com","timestamp":"2026-06-05T08:48:25.176Z"}
+{"level":"info","message":"BOOK REJECTED","timestamp":"2026-06-05T08:48:46.153Z"}
+{"level":"info","message":"BOOK REJECTED EMAIL SENT : check1@yopmail.com","timestamp":"2026-06-05T08:48:49.390Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:55:42.652Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:55:42.660Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:56:19.624Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:56:19.634Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:56:42.635Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:56:42.640Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:57:08.137Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:57:08.144Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:57:35.285Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:57:35.295Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:58:14.169Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:58:14.175Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:58:52.929Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:58:52.937Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:58:55.301Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:58:55.312Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:58:57.673Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:58:57.680Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:59:00.993Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:59:00.999Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:59:03.748Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:59:03.753Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T08:59:16.286Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T08:59:16.294Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:00:09.669Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:00:09.678Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:00:32.279Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:00:32.288Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:01:01.779Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:01:01.789Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:01:44.219Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:01:44.226Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:02:08.039Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:02:08.047Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:02:11.395Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:02:11.403Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:02:38.105Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:02:38.112Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:02:55.686Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:02:55.694Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:03:16.268Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:03:16.275Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:03:34.474Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:03:34.482Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:03:37.100Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:03:37.109Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:04:03.942Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:04:03.950Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:04:43.150Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:04:43.156Z"}
+{"0":{"instancePath":"/phone","keyword":"errorMessage","message":"PHONE_MUST_BE_10_DIGITS","params":{"errors":[{"emUsed":true,"instancePath":"/phone","keyword":"pattern","message":"must match pattern \"^\\d{10}$\"","params":{"pattern":"^\\d{10}$"},"schemaPath":"#/properties/phone/pattern"}]},"schemaPath":"#/properties/phone/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-06-05T09:05:03.761Z"}
+{"level":"info","message":"VERIFICATION EMAIL SENT : check2@yopmail.com","timestamp":"2026-06-05T09:05:12.632Z"}
+{"level":"info","message":"USER REGISTERED : check2@yopmail.com","timestamp":"2026-06-05T09:05:12.633Z"}
+{"level":"error","message":"LOGIN ERROR Your account is currently inactive","stack":"Error: Your account is currently inactive\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:35:37)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T09:05:22.262Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:06:27.923Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:06:27.932Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:06:29.687Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:06:29.693Z"}
+{"level":"error","message":"LOGIN ERROR Please verify your email address before continuing.","stack":"Error: Please verify your email address before continuing.\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:35:39)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T09:06:30.779Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:23:02.273Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:23:02.280Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:23:16.463Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:23:16.471Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:24:08.530Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:24:08.537Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:24:44.019Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:24:44.027Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:25:10.882Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:25:10.888Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:25:30.471Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:25:30.481Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:26:00.011Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:26:00.019Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:26:20.082Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:26:20.089Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:26:48.287Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:26:48.295Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:26:59.874Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:26:59.881Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:27:01.361Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:27:01.367Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:27:03.605Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:27:03.613Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:27:12.951Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:27:12.957Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:27:19.365Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:27:19.370Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:27:46.907Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:27:46.915Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:27:48.858Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:27:48.865Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:28:32.431Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:28:32.440Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:28:37.858Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:28:37.864Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:28:39.930Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:28:39.938Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:28:46.050Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:28:46.056Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:29:07.629Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:29:07.636Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:29:29.513Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:29:29.522Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:29:52.664Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:29:52.673Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:30:14.177Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:30:14.185Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:30:19.462Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:30:19.470Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:30:23.020Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:30:23.028Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:30:40.713Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:30:40.722Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:30:59.315Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:30:59.323Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:31:19.939Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:31:19.946Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:31:24.275Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:31:24.283Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:31:48.603Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:31:48.610Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:32:06.776Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:32:06.787Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:32:33.707Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:32:33.716Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:32:52.668Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:32:52.676Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:33:12.970Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:33:12.978Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:33:32.435Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:33:32.444Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:33:58.987Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:33:58.995Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:34:16.299Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:34:16.308Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:34:33.832Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:34:33.841Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:34:56.623Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:34:56.630Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:35:17.694Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:35:17.702Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:35:29.508Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:35:29.517Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:36:55.472Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:36:55.479Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:37:23.794Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:37:23.803Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:37:25.259Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:37:25.267Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:37:45.201Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:37:45.209Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:38:13.413Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:38:13.422Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:38:32.700Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:38:32.708Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:38:41.024Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:38:41.031Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:38:49.821Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:38:49.831Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:38:50.963Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:38:50.969Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:38:57.725Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:38:57.733Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:39:09.201Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:39:09.208Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:39:48.549Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:39:48.555Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:40:01.631Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:40:01.638Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:42:27.969Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:42:27.979Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:42:39.278Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:42:39.285Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:42:51.040Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:42:51.045Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:43:39.538Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:43:39.544Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:43:52.117Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:43:52.124Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:44:04.536Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:44:04.542Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:44:15.523Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:44:15.532Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:45:09.684Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:45:09.689Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:45:38.404Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:45:38.413Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:47:22.039Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:47:22.045Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T09:47:56.030Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T09:47:56.036Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T10:05:52.548Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T10:05:52.555Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T10:07:07.708Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T10:07:07.715Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T11:19:39.840Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T11:19:39.849Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T11:19:42.045Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T11:19:42.052Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T11:19:48.914Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T11:19:48.921Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T11:20:49.008Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T11:20:49.015Z"}
+{"level":"error","message":"LOGIN ERROR Please verify your email address before continuing.","stack":"Error: Please verify your email address before continuing.\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:35:39)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T11:20:52.762Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T11:21:14.561Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T11:21:14.567Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T11:21:18.514Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T11:21:18.521Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-05T11:21:20.642Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-05T11:21:20.650Z"}
+{"level":"error","message":"LOGIN ERROR Please verify your email address before logging in.","stack":"Error: Please verify your email address before logging in.\n    at login (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:35:39)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-05T11:21:23.172Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T17:21:53.078Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T17:21:53.097Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T17:22:24.719Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T17:22:24.724Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T17:30:44.554Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T17:30:44.558Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T17:43:14.887Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T17:43:14.899Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T17:59:12.386Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T17:59:12.390Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T18:01:15.322Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T18:01:15.326Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T18:01:26.791Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T18:01:26.796Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T18:01:30.450Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T18:01:30.454Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T18:01:55.370Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T18:01:55.374Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T18:09:13.184Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T18:09:13.188Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T18:18:43.426Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T18:18:43.430Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T18:34:02.800Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T18:34:02.805Z"}
+{"level":"info","message":"DB Connected","timestamp":"2026-06-07T18:36:18.130Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2026-06-07T18:36:18.134Z"}
+{"expiredAt":"2026-06-05T10:21:24.000Z","level":"error","message":"JWT VERIFICATION FAILED jwt expired","name":"TokenExpiredError","stack":"TokenExpiredError: jwt expired\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:190:21\n    at getSecret (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:97:14)\n    at module.exports [as verify] (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:101:10)\n    at verifyToken (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/jwt.service.js:24:23)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:48:21)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)","timestamp":"2026-06-07T18:48:26.921Z"}
+{"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-07T18:48:33.202Z"}
+{"expiredAt":"2026-06-05T10:21:24.000Z","level":"error","message":"JWT VERIFICATION FAILED jwt expired","name":"TokenExpiredError","stack":"TokenExpiredError: jwt expired\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:190:21\n    at getSecret (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:97:14)\n    at module.exports [as verify] (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:101:10)\n    at verifyToken (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/jwt.service.js:24:23)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:48:21)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)","timestamp":"2026-06-07T18:56:38.179Z"}
+{"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-07T18:56:46.299Z"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Unknown column 'u.cd_at' in 'order clause'","sql":"\n      SELECT \n        u.id,\n        u.email,\n        u.first_name,\n        u.last_name,\n        u.phone,\n        u.role_id,\n        r.role_name,\n        u.is_active,\n        u.is_verified,\n        u.created_at,\n        u.updated_at\n      FROM users u\n      LEFT JOIN roles r\n      ON u.role_id = r.id\n     ORDER BY u.cd_at desc LIMIT 10 OFFSET 0","sqlMessage":"Unknown column 'u.cd_at' in 'order clause'","sqlState":"42S22","stack":"Error: Unknown column 'u.cd_at' in 'order clause'\n    at getAllUsers (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user.controller.js:87:29)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/schema_validator.middleware.js:67:7\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:81:7\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:54:5)","timestamp":"2026-06-07T18:56:58.797Z"}
+{"level":"info","message":"VERIFICATION EMAIL SENT : Shital@yopmail.com","timestamp":"2026-06-08T02:39:34.541Z"}
+{"level":"info","message":"USER REGISTERED : Shital@yopmail.com","timestamp":"2026-06-08T02:39:34.542Z"}
+{"level":"info","message":"VERIFY EMAIL SUCCESS","timestamp":"2026-06-08T02:40:20.354Z"}
+{"level":"error","message":"VERIFY EMAIL ERROR User is already verified.","stack":"Error: User is already verified.\n    at verifyEmail (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/auth.controller.js:105:39)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","timestamp":"2026-06-08T02:40:51.372Z"}
+{"level":"info","message":"LOGIN SUCCESS:Shital@yopmail.com","timestamp":"2026-06-08T02:42:16.823Z"}
+{"0":{"instancePath":"","keyword":"errorMessage","message":"Extra fields are not allowed.","params":{"errors":[{"emUsed":true,"instancePath":"","keyword":"additionalProperties","message":"must NOT have additional properties","params":{"additionalProperty":"email"},"schemaPath":"#/additionalProperties"}]},"schemaPath":"#/errorMessage"},"level":"warn","message":"AJV VALIDATION FAILED","timestamp":"2026-06-08T02:43:01.531Z"}
+{"level":"error","message":"UPDATE PROFILE ERROR Cannot convert undefined or null to object","stack":"TypeError: Cannot convert undefined or null to object\n    at Function.keys (<anonymous>)\n    at updateProfile (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/user.controller.js:371:17)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/schema_validator.middleware.js:67:7\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:54:5)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)","timestamp":"2026-06-08T02:44:09.591Z"}
+{"body":"\n\n\n\n\n\r\n\n\n\n\n\n\r\n\n\n\n\n","expose":true,"level":"error","message":"GLOBAL ERROR Unexpected end of JSON input","stack":"SyntaxError: Unexpected end of JSON input\n    at JSON.parse (<anonymous>)\n    at createStrictSyntaxError (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\types\\json.js:109:10)\n    at parse (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\types\\json.js:66:15)\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\read.js:162:18\n    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)\n    at invokeCallback (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:238:16)\n    at done (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:227:7)\n    at IncomingMessage.onEnd (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:287:7)\n    at IncomingMessage.emit (node:events:519:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)","status":400,"statusCode":400,"timestamp":"2026-06-08T02:44:41.165Z","type":"entity.parse.failed"}
+{"body":"\n\n\n\n\n\r\n\n\n\n\n\n\r\n\n\n\n\n","expose":true,"level":"error","message":"GLOBAL ERROR Unexpected end of JSON input","stack":"SyntaxError: Unexpected end of JSON input\n    at JSON.parse (<anonymous>)\n    at createStrictSyntaxError (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\types\\json.js:109:10)\n    at parse (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\types\\json.js:66:15)\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\body-parser\\lib\\read.js:162:18\n    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)\n    at invokeCallback (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:238:16)\n    at done (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:227:7)\n    at IncomingMessage.onEnd (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\raw-body\\index.js:287:7)\n    at IncomingMessage.emit (node:events:519:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)","status":400,"statusCode":400,"timestamp":"2026-06-08T02:44:50.785Z","type":"entity.parse.failed"}
+{"level":"info","message":"LOGIN SUCCESS:admin@yopmail.com","timestamp":"2026-06-08T02:44:54.841Z"}
+{"level":"error","message":"Bind parameters must not contain undefined. To pass SQL NULL specify JS null","stack":"TypeError: Bind parameters must not contain undefined. To pass SQL NULL specify JS null\n    at createBook (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/controllers/book.controller.js:61:31)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/schema_validator.middleware.js:67:7\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:81:7\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:54:5)","timestamp":"2026-06-08T02:47:55.886Z"}
+{"level":"info","message":"LOGIN SUCCESS:Shital@yopmail.com","timestamp":"2026-06-08T02:49:58.848Z"}
+{"expiredAt":"2026-06-05T10:21:24.000Z","level":"error","message":"JWT VERIFICATION FAILED jwt expired","name":"TokenExpiredError","stack":"TokenExpiredError: jwt expired\n    at D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:190:21\n    at getSecret (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:97:14)\n    at module.exports [as verify] (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\jsonwebtoken\\verify.js:101:10)\n    at verifyToken (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/services/jwt.service.js:24:23)\n    at verifyJWT (file:///D:/About_LexiconNetworks/Library_Management_System/backend/src/middlewares/auth.middleware.js:48:21)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\About_LexiconNetworks\\Library_Management_System\\backend\\node_modules\\router\\lib\\layer.js:152:17)","timestamp":"2026-06-08T02:53:40.810Z"}

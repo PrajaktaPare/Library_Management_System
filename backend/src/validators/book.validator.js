@@ -12,9 +12,9 @@ export const getBooksValidator = {
           maximum: 100,
 
           errorMessage: {
-            type: 'LIMIT_MUST_BE_INTEGER',
-            minimum: 'LIMIT_MINIMUM_1',
-            maximum: 'LIMIT_MAXIMUM_100',
+            type: 'Limit must be a number.',
+            minimum: 'Limit must be at least 1.',
+            maximum: 'Limit must not exceed 100.',
           },
         },
 
@@ -23,8 +23,8 @@ export const getBooksValidator = {
           minimum: 0,
 
           errorMessage: {
-            type: 'OFFSET_MUST_BE_INTEGER',
-            minimum: 'OFFSET_CANNOT_BE_NEGATIVE',
+            type: 'Offset must be a number.',
+            minimum: 'Offset cannot be negative.',
           },
         },
 
@@ -36,7 +36,7 @@ export const getBooksValidator = {
               type: 'string',
 
               errorMessage: {
-                type: 'COLUMN_MUST_BE_STRING',
+                type: 'Column must be a string.',
               },
             },
 
@@ -45,8 +45,8 @@ export const getBooksValidator = {
               enum: ['ASC', 'DESC'],
 
               errorMessage: {
-                type: 'ORDER_DIRECTION_MUST_BE_STRING',
-                enum: 'ORDER_DIRECTION_MUST_BE_ASC_OR_DESC',
+                type: 'Direction must be a string.',
+                enum: 'Order direction must be ASC or DESC.',
               },
             },
           },
@@ -54,7 +54,7 @@ export const getBooksValidator = {
           additionalProperties: false,
 
           errorMessage: {
-            additionalProperties: 'INVALID_ORDER_FIELD',
+            additionalProperties: 'Invalid order field provided.',
           },
         },
 
@@ -73,7 +73,7 @@ export const getBooksValidator = {
                     type: 'string',
 
                     errorMessage: {
-                      type: 'LIKE_MUST_BE_STRING',
+                      type: 'Like value must be a string.',
                     },
                   },
                 },
@@ -81,14 +81,14 @@ export const getBooksValidator = {
                 additionalProperties: false,
 
                 errorMessage: {
-                  additionalProperties: 'INVALID_WHERE_OPERATOR',
+                  additionalProperties: 'Invalid where condition provided.',
                 },
               },
             ],
           },
 
           errorMessage: {
-            type: 'WHERE_MUST_BE_OBJECT',
+            type: 'Where filter must be an object.',
           },
         },
       },
@@ -96,7 +96,7 @@ export const getBooksValidator = {
       additionalProperties: false,
 
       errorMessage: {
-        additionalProperties: 'INVALID_FILTER_FIELD',
+        additionalProperties: 'Invalid filter field provided.',
       },
     },
   },
@@ -117,8 +117,8 @@ export const bookIdValidator = {
       minimum: 1,
 
       errorMessage: {
-        type: 'BOOK_ID_MUST_BE_INTEGER',
-        minimum: 'INVALID_BOOK_ID',
+        type: 'Book ID must be a number.',
+        minimum: 'Invalid book ID.',
       },
     },
   },
@@ -127,10 +127,10 @@ export const bookIdValidator = {
 
   errorMessage: {
     required: {
-      id: 'BOOK_ID_REQUIRED',
+      id: 'Book ID is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -147,8 +147,8 @@ export const createBookValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'TITLE_MUST_BE_STRING',
-        minLength: 'TITLE_REQUIRED',
+        type: 'Title must be a string.',
+        minLength: 'Title is required.',
       },
     },
 
@@ -157,8 +157,8 @@ export const createBookValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'AUTHOR_MUST_BE_STRING',
-        minLength: 'AUTHOR_REQUIRED',
+        type: 'Author must be a string.',
+        minLength: 'Author is required.',
       },
     },
 
@@ -167,8 +167,8 @@ export const createBookValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'BOOK_NUMBER_MUST_BE_STRING',
-        minLength: 'BOOK_NUMBER_REQUIRED',
+        type: 'Book number must be a string.',
+        minLength: 'Book number is required.',
       },
     },
 
@@ -177,8 +177,8 @@ export const createBookValidator = {
       minLength: 1,
 
       errorMessage: {
-        type: 'CATEGORY_MUST_BE_STRING',
-        minLength: 'CATEGORY_REQUIRED',
+        type: 'Category must be a string.',
+        minLength: 'Category is required.',
       },
     },
 
@@ -186,7 +186,7 @@ export const createBookValidator = {
       type: 'string',
 
       errorMessage: {
-        type: 'SUB_CATEGORY_MUST_BE_STRING',
+        type: 'Sub category must be a string.',
       },
     },
 
@@ -195,8 +195,8 @@ export const createBookValidator = {
       minimum: 0,
 
       errorMessage: {
-        type: 'TOTAL_COPIES_MUST_BE_INTEGER',
-        minimum: 'TOTAL_COPIES_CANNOT_BE_NEGATIVE',
+        type: 'Total copies must be a number.',
+        minimum: 'Total copies cannot be negative.',
       },
     },
 
@@ -205,8 +205,17 @@ export const createBookValidator = {
       minimum: 0,
 
       errorMessage: {
-        type: 'AVAILABLE_COPIES_MUST_BE_INTEGER',
-        minimum: 'AVAILABLE_COPIES_CANNOT_BE_NEGATIVE',
+        type: 'Available copies must be a number.',
+        minimum: 'Available copies cannot be negative.',
+      },
+    },
+    status: {
+      type: 'string',
+      enum: ['available', 'unavailable'],
+
+      errorMessage: {
+        type: 'Status must be a string.',
+        enum: 'Invalid status.',
       },
     },
   },
@@ -215,13 +224,13 @@ export const createBookValidator = {
 
   errorMessage: {
     required: {
-      title: 'TITLE_REQUIRED',
-      author: 'AUTHOR_REQUIRED',
-      book_num: 'BOOK_NUMBER_REQUIRED',
-      category: 'CATEGORY_REQUIRED',
+      title: 'Title is required.',
+      author: 'Author is required.',
+      book_num: 'Book number is required.',
+      category: 'Category is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -237,7 +246,7 @@ export const patchBookValidator = {
       type: 'string',
 
       errorMessage: {
-        type: 'TITLE_MUST_BE_STRING',
+        type: 'Title must be a string.',
       },
     },
 
@@ -245,7 +254,7 @@ export const patchBookValidator = {
       type: 'string',
 
       errorMessage: {
-        type: 'AUTHOR_MUST_BE_STRING',
+        type: 'Author must be a string.',
       },
     },
 
@@ -253,7 +262,7 @@ export const patchBookValidator = {
       type: 'string',
 
       errorMessage: {
-        type: 'BOOK_NUMBER_MUST_BE_STRING',
+        type: 'Book number must be a string.',
       },
     },
 
@@ -261,7 +270,7 @@ export const patchBookValidator = {
       type: 'string',
 
       errorMessage: {
-        type: 'CATEGORY_MUST_BE_STRING',
+        type: 'Category must be a string.',
       },
     },
 
@@ -269,7 +278,7 @@ export const patchBookValidator = {
       type: 'string',
 
       errorMessage: {
-        type: 'SUB_CATEGORY_MUST_BE_STRING',
+        type: 'Sub category must be a string.',
       },
     },
 
@@ -278,8 +287,8 @@ export const patchBookValidator = {
       minimum: 0,
 
       errorMessage: {
-        type: 'TOTAL_COPIES_MUST_BE_INTEGER',
-        minimum: 'TOTAL_COPIES_CANNOT_BE_NEGATIVE',
+        type: 'Total copies must be a number.',
+        minimum: 'Total copies cannot be negative.',
       },
     },
 
@@ -288,8 +297,8 @@ export const patchBookValidator = {
       minimum: 0,
 
       errorMessage: {
-        type: 'AVAILABLE_COPIES_MUST_BE_INTEGER',
-        minimum: 'AVAILABLE_COPIES_CANNOT_BE_NEGATIVE',
+        type: 'Available copies must be a number.',
+        minimum: 'Available copies cannot be negative.',
       },
     },
 
@@ -298,8 +307,8 @@ export const patchBookValidator = {
       enum: ['available', 'unavailable'],
 
       errorMessage: {
-        type: 'STATUS_MUST_BE_STRING',
-        enum: 'INVALID_BOOK_STATUS',
+        type: 'Status must be a string.',
+        enum: 'Invalid book status.',
       },
     },
   },
@@ -307,8 +316,7 @@ export const patchBookValidator = {
   additionalProperties: false,
 
   errorMessage: {
-    minProperties: 'AT_LEAST_ONE_FIELD_REQUIRED',
-
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    minProperties: 'At least one field is required.',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };

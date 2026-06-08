@@ -29,19 +29,19 @@ export const login = async (req, res) => {
     const user = rows[0];
 
     // Validate user existence
-    if (!user) throw new Error('USER_NOT_FOUND');
-
-    // Check account status
-    if (user.is_active !== 1) throw new Error('ACCOUNT_NOT_ACTIVE');
+    if (!user) throw new Error('User not found.');
 
     // Check email verification status
-    if (user.is_verified !== 1) throw new Error('EMAIL_NOT_VERIFIED');
+    if (user.is_verified !== 1) throw new Error('Please verify your email address before logging in.');
+
+    // Check account status
+    if (user.is_active !== 1) throw new Error('Your account is currently inactive');
 
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
     // Validate password
-    if (!isMatch) throw new Error('INVALID_PASSWORD');
+    if (!isMatch) throw new Error('Invalid password.');
 
     // Generate JWT token
     const token = generateToken({ id: user.id, role: user.role_name });
@@ -54,7 +54,7 @@ export const login = async (req, res) => {
     // Send response
     return res.status(200).json({
       success_flag: true,
-      message: 'LOGIN_SUCCESSFUL',
+      message: 'Logged in successfully.',
       data: {
         id: user.id,
         first_name: user.first_name,
@@ -69,7 +69,7 @@ export const login = async (req, res) => {
 
     return res.status(401).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -86,7 +86,7 @@ export const verifyEmail = async (req, res) => {
     const { uid, token } = req.query;
 
     // Validate query params
-    if (!uid || !token) throw new Error('INVALID_VERIFICATION_LINK');
+    if (!uid || !token) throw new Error('Invalid or expired verification link.');
 
     // Fetch user verification data
     const [rows] = await db.query(
@@ -99,15 +99,15 @@ export const verifyEmail = async (req, res) => {
     const user = rows[0];
 
     // Check user existence
-    if (!user) throw new Error('USER_NOT_FOUND');
+    if (!user) throw new Error('User not found.');
 
     // Check already verified
-    if (user.is_verified === 1) throw new Error('USER_ALREADY_VERIFIED');
+    if (user.is_verified === 1) throw new Error('User is already verified.');
 
     // Validate token
     const isTokenValid = await bcrypt.compare(token, user.verification_token);
 
-    if (!isTokenValid) throw new Error('INVALID_TOKEN');
+    if (!isTokenValid) throw new Error('Invalid token.');
 
     // Activate user account
     await db.query(
@@ -123,14 +123,14 @@ export const verifyEmail = async (req, res) => {
 
     return res.status(200).json({
       success_flag: true,
-      message: 'EMAIL_VERIFIED_SUCCESSFULLY',
+      message: 'Email verified successfully.',
     });
   } catch (error) {
     logger.error('VERIFY EMAIL ERROR', error);
 
     return res.status(400).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -149,7 +149,7 @@ export const logout = async (req, res) => {
     // Return logout success response
     return res.status(200).json({
       success_flag: true,
-      message: 'LOGOUT_SUCCESSFUL',
+      message: 'Logged out successfully.',
     });
   } catch (error) {
     // log error
@@ -158,7 +158,7 @@ export const logout = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: 'INTERNAL_SERVER_ERROR',
+      message: 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -190,12 +190,12 @@ export const forgotPassword = async (req, res) => {
 
     // Check user existence
     if (!user) {
-      throw new Error('USER_NOT_FOUND');
+      throw new Error('User not found.');
     }
 
     // check user verified or not
     if (!user.is_verified) {
-      throw new Error('USER_NOT_VERIFIED');
+      throw new Error('Your account is not verified yet.');
     }
 
     // Generate password reset token
@@ -225,7 +225,7 @@ export const forgotPassword = async (req, res) => {
     // Return success response
     return res.status(200).json({
       success_flag: true,
-      message: 'RESET_PASSWORD_EMAIL_SENT',
+      message: 'A password reset link has been sent to your email address.',
       token: rawToken,
     });
   } catch (error) {
@@ -271,17 +271,17 @@ export const resetPassword = async (req, res) => {
 
     // validate user
     if (!user) {
-      throw new Error('USER_NOT_FOUND');
+      throw new Error('User not found.');
     }
 
     // validate verification status
     if (!user.is_verified) {
-      throw new Error('USER_NOT_VERIFIED');
+      throw new Error('Your account has not been verified yet.');
     }
 
     //check token is present and valid
     if (!user.verification_token || !(await bcrypt.compare(token, user.verification_token))) {
-      throw new Error('INVALID_TOKEN');
+      throw new Error('Invalid token.');
     }
 
     // compare old password
@@ -289,7 +289,7 @@ export const resetPassword = async (req, res) => {
 
     // validate new password
     if (isSamePassword) {
-      throw new Error('NEW_PASSWORD_MUST_BE_DIFFERENT');
+      throw new Error('The new password must be different from your current password.');
     }
 
     // hash new password
@@ -318,7 +318,7 @@ export const resetPassword = async (req, res) => {
     // success response
     return res.status(200).json({
       success_flag: true,
-      message: 'PASSWORD_RESET_SUCCESS',
+      message: 'Password reset successfully.',
     });
   } catch (error) {
     logger.error('RESET PASSWORD ERROR', error);

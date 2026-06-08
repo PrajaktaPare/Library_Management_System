@@ -9,25 +9,23 @@ export const verifyJWT = (req, res, next) => {
 
     // check auth header exists
     if (!authHeader) {
-      // log warning
       logger.warn('AUTH HEADER MISSING');
 
       // return response
       return res.status(401).json({
         success_flag: false,
-        message: 'AUTHORIZATION_TOKEN_REQUIRED',
+        message: 'Authorization token is required.',
       });
     }
 
     // validate bearer format
     if (!authHeader.startsWith('Bearer ')) {
-      // log warning
       logger.warn('INVALID AUTH TOKEN FORMAT');
 
       // return response
       return res.status(401).json({
         success_flag: false,
-        message: 'INVALID_TOKEN_FORMAT',
+        message: 'Invalid token format.',
       });
     }
 
@@ -42,7 +40,7 @@ export const verifyJWT = (req, res, next) => {
       // return response
       return res.status(401).json({
         success_flag: false,
-        message: 'TOKEN_REQUIRED',
+        message: 'Token is required.',
       });
     }
 
@@ -51,16 +49,16 @@ export const verifyJWT = (req, res, next) => {
 
     // attach user data
     req.user = decoded;
+
     // continue request
     next();
   } catch (error) {
-    // log error
     logger.error('JWT VERIFICATION FAILED', error);
 
     // return error response
     return res.status(401).json({
       success_flag: false,
-      message: 'INVALID_OR_EXPIRED_TOKEN',
+      message: 'Invalid or Expired Token.',
     });
   }
 };
@@ -76,19 +74,18 @@ export const authorizeRoles = (...roles) => {
         // return response
         return res.status(403).json({
           success_flag: false,
-          message: 'ACCESS_DENIED',
+          message: 'Access denied',
         });
       }
       // continue request
       next();
     } catch (error) {
-      // log error
       logger.error('ROLE AUTHORIZATION ERROR', error);
 
       // return error response
       return res.status(500).json({
         success_flag: false,
-        message: 'INTERNAL_SERVER_ERROR',
+        message: 'An unexpected error occurred. Please try again later.',
       });
     }
   };

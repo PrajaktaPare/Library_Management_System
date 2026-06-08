@@ -39,7 +39,7 @@ export const getBooksCount = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -77,7 +77,7 @@ export const createBook = async (req, res) => {
     // Return success response with created book ID
     return res.status(201).json({
       success_flag: true,
-      message: 'BOOK_CREATED',
+      message: 'Book created successfully.',
       data: { book_id: result.insertId },
     });
   } catch (error) {
@@ -88,7 +88,9 @@ export const createBook = async (req, res) => {
     return res.status(error.code === 'ER_DUP_ENTRY' ? 409 : 500).json({
       success_flag: false,
       message:
-        error.code === 'ER_DUP_ENTRY' ? 'BOOK_NUM_ALREADY_EXISTS' : error.message || 'INTERNAL_SERVER_ERROR',
+        error.code === 'ER_DUP_ENTRY'
+          ? 'Book number already exists.'
+          : error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -116,7 +118,7 @@ export const getAllBooks = async (req, res) => {
 
     // check that book records exist
     if (!rows.length) {
-      const error = new Error('NO_RECORDS_FOUND');
+      const error = new Error('No data available.');
       error.statusCode = 404;
       throw error;
     }
@@ -124,7 +126,7 @@ export const getAllBooks = async (req, res) => {
     // Return book records
     return res.status(200).json({
       success_flag: true,
-      message: 'BOOKS_FETCHED_SUCCESSFULLY',
+      message: 'Books fetched successfully.',
       data: rows,
     });
   } catch (error) {
@@ -133,7 +135,7 @@ export const getAllBooks = async (req, res) => {
     // Return appropriate error response
     return res.status(error.statusCode || 500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -152,7 +154,7 @@ export const getBookById = async (req, res) => {
 
     // check that the book exists
     if (!rows.length) {
-      throw new Error('BOOK_NOT_FOUND');
+      throw new Error('Book not found.');
     }
 
     // Return book details
@@ -164,9 +166,12 @@ export const getBookById = async (req, res) => {
     logger.error(error);
 
     // Return appropriate error response
-    return res.status(error.message === 'BOOK_NOT_FOUND' ? 404 : 500).json({
+    return res.status(error.message === 'Book not found.' ? 404 : 500).json({
       success_flag: false,
-      message: error.message === 'BOOK_NOT_FOUND' ? error.message : 'INTERNAL_SERVER_ERROR',
+      message:
+        error.message === 'Book not found.'
+          ? error.message
+          : 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -195,7 +200,7 @@ export const patchBook = async (req, res) => {
     if (!fields.length) {
       return res.status(400).json({
         success_flag: false,
-        message: 'NO_VALID_FIELDS_TO_UPDATE',
+        message: 'No valid fields provided to update.',
       });
     }
 
@@ -208,7 +213,7 @@ export const patchBook = async (req, res) => {
     // Return success response
     return res.status(200).json({
       success_flag: true,
-      message: 'BOOK_UPDATED',
+      message: 'Book updated successfully.',
     });
   } catch (error) {
     logger.error('PATCH BOOK ERROR', error);
@@ -216,7 +221,7 @@ export const patchBook = async (req, res) => {
     // Return internal server error response
     return res.status(500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -237,7 +242,7 @@ export const deleteBook = async (req, res) => {
 
     // check that the book exists
     if (!rows.length) {
-      throw new Error('BOOK_NOT_FOUND');
+      throw new Error('Book not found.');
     }
 
     // Check for active book issued
@@ -253,7 +258,7 @@ export const deleteBook = async (req, res) => {
 
     // Prevent deletion if the book is currently issued
     if (activeIssuedBooks.length > 0) {
-      throw new Error('CANNOT_DELETE_BOOK_WITH_ACTIVE_ISSUED_DATA');
+      throw new Error('Cannot delete book with active issued records.');
     }
 
     // Check for pending book requests
@@ -269,7 +274,7 @@ export const deleteBook = async (req, res) => {
 
     // Prevent deletion if pending requests exist
     if (pendingRequests.length > 0) {
-      throw new Error('CANNOT_DELETE_BOOK_WITH_PENDING_REQUESTS');
+      throw new Error('Cannot delete book with pending records');
     }
 
     // Delete book record
@@ -278,14 +283,14 @@ export const deleteBook = async (req, res) => {
     // Return success response
     return res.status(200).json({
       success_flag: true,
-      message: 'BOOK_DELETED',
+      message: 'Book deleted successfully.',
     });
   } catch (error) {
     logger.error('DELETE BOOK ERROR', error);
 
     // Map business errors to appropriate HTTP status codes
     const statusMap = {
-      BOOK_NOT_FOUND: 404,
+      'Book not found.': 404,
       CANNOT_DELETE_BOOK_WITH_ACTIVE_ISSUED_DATA: 409,
       CANNOT_DELETE_BOOK_WITH_PENDING_REQUESTS: 409,
     };
@@ -293,7 +298,7 @@ export const deleteBook = async (req, res) => {
     // Return error response
     return res.status(statusMap[error.message] || 500).json({
       success_flag: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR',
+      message: error.message || 'An unexpected error occurred. Please try again later.',
     });
   }
 };

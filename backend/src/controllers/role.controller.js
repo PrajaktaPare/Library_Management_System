@@ -25,7 +25,7 @@ export const createRole = async (req, res) => {
 
     // check duplicate role
     if (existingRows.length > 0) {
-      throw new Error('ROLE_ALREADY_EXISTS');
+      throw new Error('Role already exists.');
     }
 
     // Insert new role record
@@ -40,7 +40,7 @@ export const createRole = async (req, res) => {
     // Return success response
     return res.status(201).json({
       success_flag: true,
-      message: 'ROLE_CREATED',
+      message: 'Role created successfully.',
     });
   } catch (error) {
     logger.error('CREATE ROLE ERROR', error);
@@ -119,7 +119,7 @@ export const getRoleById = async (req, res) => {
 
     // check that the role exists
     if (rows.length === 0) {
-      throw new Error('ROLE_NOT_FOUND');
+      throw new Error('Role not found.');
     }
 
     // Return role details
@@ -165,7 +165,7 @@ export const updateRole = async (req, res) => {
 
     // check that the role exists
     if (existingRows.length === 0) {
-      throw new Error('ROLE_NOT_FOUND');
+      throw new Error('Role not found.');
     }
 
     // Check for duplicate role name
@@ -181,7 +181,7 @@ export const updateRole = async (req, res) => {
 
     // check duplicate role
     if (duplicateRows.length > 0) {
-      throw new Error('ROLE_ALREADY_EXISTS');
+      throw new Error('Role already exists.');
     }
 
     // Update role details
@@ -207,7 +207,7 @@ export const updateRole = async (req, res) => {
     // Return success response
     return res.status(200).json({
       success_flag: true,
-      message: 'ROLE_UPDATED',
+      message: 'Role updated successfully.',
       data: rows[0],
     });
   } catch (error) {
@@ -244,7 +244,7 @@ export const deleteRole = async (req, res) => {
 
     // check that the role exists
     if (rows.length === 0) {
-      throw new Error('ROLE_NOT_FOUND');
+      throw new Error('Role not found.');
     }
 
     // Delete role record
@@ -259,7 +259,7 @@ export const deleteRole = async (req, res) => {
     // Return success response
     return res.status(200).json({
       success_flag: true,
-      message: 'ROLE_DELETED',
+      message: 'Role deleted successfully.',
     });
   } catch (error) {
     logger.error('DELETE ROLE ERROR', error);

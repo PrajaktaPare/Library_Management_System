@@ -1,5 +1,6 @@
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
+import logger from '../services/logger.service.js';
 
 // Load environment variables
 dotenv.config();
@@ -18,10 +19,10 @@ const pool = mysql.createPool({
 const connectDB = async () => {
   try {
     const conn = await pool.getConnection(); // Get connection from pool
-    console.log('DB Connected');
+    logger.info('DB Connected');
     conn.release(); // Release connection back to pool
   } catch (err) {
-    console.error('DB Connection Failed:', err.message);
+    logger.error(`DB Connection Failed: ${err.message}`);
     process.exit(1); // Stop server if DB connection fails
   }
 };

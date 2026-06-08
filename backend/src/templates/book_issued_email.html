@@ -29,12 +29,14 @@
               border: 1px solid #d7e3ea;
             "
           >
+            <!-- Header -->
             <tr>
               <td align="center" style="background: #33627a; padding: 25px 20px">
                 <h1 style="margin: 0; color: #ffffff; font-size: 28px">📚 Library Management System</h1>
               </td>
             </tr>
 
+            <!-- Content -->
             <tr>
               <td style="padding: 30px 25px; color: #333333">
                 <h3
@@ -46,13 +48,14 @@
                     text-align: center;
                   "
                 >
-                  Book Issued Email
+                  Book Request Approved
                 </h3>
+
                 <h4 style="margin-top: 0; margin-bottom: 15px; font-size: 18px; color: #222222">
                   Hello {{student_name}},
                 </h4>
 
-                <p style="font-size: 16px; line-height: 1.8; color: #555555">
+                <p style="font-size: 16px; line-height: 1.8; color: #555555; margin-bottom: 20px">
                   Your book request has been approved successfully.
                 </p>
 
@@ -61,40 +64,60 @@
                   cellpadding="8"
                   cellspacing="0"
                   border="0"
-                  style="margin-top: 20px; border-collapse: collapse"
+                  style="margin-top: 20px; border-collapse: collapse; table-layout: fixed"
                 >
                   <tr>
-                    <td><strong>Book Title</strong></td>
-                    <td>{{book_title}}</td>
+                    <td
+                      width="35%"
+                      style="word-wrap: break-word; overflow-wrap: break-word; font-weight: bold"
+                    >
+                      Book Title
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{book_title}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Author</strong></td>
-                    <td>{{book_author}}</td>
+                    <td
+                      width="35%"
+                      style="word-wrap: break-word; overflow-wrap: break-word; font-weight: bold"
+                    >
+                      Author
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{book_author}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Book Number</strong></td>
-                    <td>{{book_isbn}}</td>
+                    <td
+                      width="35%"
+                      style="word-wrap: break-word; overflow-wrap: break-word; font-weight: bold"
+                    >
+                      Book Number
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{book_isbn}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Category</strong></td>
-                    <td>{{book_category}}</td>
+                    <td
+                      width="35%"
+                      style="word-wrap: break-word; overflow-wrap: break-word; font-weight: bold"
+                    >
+                      Category
+                    </td>
+                    <td style="word-wrap: break-word; overflow-wrap: break-word">{{book_category}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Issue Date</strong></td>
+                    <td width="35%" style="font-weight: bold">Issue Date</td>
                     <td>{{issue_date}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Due Date</strong></td>
+                    <td width="35%" style="font-weight: bold">Due Date</td>
                     <td>{{due_date}}</td>
                   </tr>
 
                   <tr>
-                    <td><strong>Fine Per Day</strong></td>
+                    <td width="35%" style="font-weight: bold">Fine Per Day</td>
                     <td>₹{{fine_per_day}}</td>
                   </tr>
                 </table>
@@ -105,6 +128,7 @@
               </td>
             </tr>
 
+            <!-- Footer -->
             <tr>
               <td align="center" style="background: #f7f7f7; padding: 18px; font-size: 13px; color: #888888">
                 © 2026 Library Management System

@@ -10,7 +10,7 @@ import importPlugin from 'eslint-plugin-import';
 export default [
   // Ignore files and folders
   {
-    ignores: ['node_modules/**', 'build/**', 'uploads/**', 'temp/**', '*.log'],
+    ignores: ['node_modules/**','*.log'],
   },
 
   // Default ESLint recommended rules

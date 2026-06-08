@@ -2,48 +2,38 @@
 export const loginValidator = {
   type: 'object',
 
-  // Required login fields
   required: ['email', 'password'],
 
   properties: {
     email: {
       type: 'string',
-
-      format: 'email', // Validate email format
-
-      minLength: 1, // Prevent empty email field
-
+      format: 'email',
+      minLength: 1,
       errorMessage: {
-        type: 'WRONG_EMAIL_FORMAT',
-
-        minLength: 'EMAIL_REQUIRED',
+        type: 'Email must be a string.',
+        format: 'Invalid email format.',
+        minLength: 'Email is required.',
       },
     },
 
     password: {
       type: 'string',
-
-      minLength: 1, // Prevent empty password field
-
+      minLength: 1,
       errorMessage: {
-        type: 'PASSWORD_MUST_BE_STRING',
-
-        minLength: 'PASSWORD_REQUIRED',
+        type: 'Password must be a string.',
+        minLength: 'Password is required.',
       },
     },
   },
 
-  // Prevent extra unwanted fields in request body
   additionalProperties: false,
 
   errorMessage: {
     required: {
-      email: 'EMAIL_REQUIRED',
-
-      password: 'PASSWORD_REQUIRED',
+      email: 'Email is required.',
+      password: 'Password is required.',
     },
-
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -57,8 +47,8 @@ export const resetPasswordValidator = {
       type: 'string',
       format: 'email',
       errorMessage: {
-        type: 'EMAIL_MUST_BE_STRING',
-        format: 'INVALID_EMAIL_FORMAT',
+        type: 'Email must be a string.',
+        format: 'Invalid email format.',
       },
     },
 
@@ -66,8 +56,8 @@ export const resetPasswordValidator = {
       type: 'string',
       minLength: 1,
       errorMessage: {
-        type: 'INVALID_TOKEN_FORMAT',
-        minLength: 'TOKEN_REQUIRED',
+        type: 'Token must be a string.',
+        minLength: 'Token is required.',
       },
     },
 
@@ -75,8 +65,9 @@ export const resetPasswordValidator = {
       type: 'string',
       pattern: '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,10}$',
       errorMessage: {
-        type: 'PASSWORD_MUST_BE_STRING',
-        pattern: 'PASSWORD_MUST_HAVE_UPPERCASE_NUMBER_SPECIALCHAR_6_TO_10_LENGTH',
+        type: 'Password must be a string.',
+        pattern:
+          'Password must contain at least one uppercase letter, one number, one special character, and be 6 to 10 characters long.',
       },
     },
   },
@@ -85,11 +76,11 @@ export const resetPasswordValidator = {
 
   errorMessage: {
     required: {
-      email: 'EMAIL_REQUIRED',
-      token: 'TOKEN_REQUIRED',
-      password: 'PASSWORD_REQUIRED',
+      email: 'Email is required.',
+      token: 'Token is required.',
+      password: 'Password is required.',
     },
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -102,10 +93,9 @@ export const forgotPasswordValidator = {
     email: {
       type: 'string',
       format: 'email',
-
       errorMessage: {
-        type: 'EMAIL_MUST_BE_STRING',
-        format: 'INVALID_EMAIL_FORMAT',
+        type: 'Email must be a string.',
+        format: 'Invalid email format.',
       },
     },
   },
@@ -114,8 +104,8 @@ export const forgotPasswordValidator = {
 
   errorMessage: {
     required: {
-      email: 'EMAIL_REQUIRED',
+      email: 'Email is required.',
     },
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };

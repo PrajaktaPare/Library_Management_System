@@ -23,10 +23,9 @@ export const generateVerificationToken = async () => {
       hashedToken,
     };
   } catch (error) {
-    // log token generation error
     logger.error('TOKEN_GENERATION_ERROR', error);
 
     // throw application error
-    throw new Error('TOKEN_GENERATION_FAILED');
+    throw new Error('Failed to generate token.');
   }
 };

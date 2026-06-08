@@ -11,8 +11,8 @@ export const issueIdValidator = {
       minimum: 1,
 
       errorMessage: {
-        type: 'ISSUE_ID_MUST_BE_INTEGER',
-        minimum: 'INVALID_ISSUE_ID',
+        type: 'Issue ID must be a number.',
+        minimum: 'Invalid issue ID.',
       },
     },
   },
@@ -21,10 +21,10 @@ export const issueIdValidator = {
 
   errorMessage: {
     required: {
-      issue_id: 'ISSUE_ID_REQUIRED',
+      issue_id: 'Issue ID is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -44,9 +44,9 @@ export const getIssuesQueryValidator = {
           maximum: 100,
 
           errorMessage: {
-            type: 'LIMIT_MUST_BE_INTEGER',
-            minimum: 'LIMIT_MINIMUM_1',
-            maximum: 'LIMIT_MAXIMUM_100',
+            type: 'Limit must be a number.',
+            minimum: 'Limit must be at least 1.',
+            maximum: 'Limit must not exceed 100.',
           },
         },
 
@@ -55,8 +55,8 @@ export const getIssuesQueryValidator = {
           minimum: 0,
 
           errorMessage: {
-            type: 'OFFSET_MUST_BE_INTEGER',
-            minimum: 'OFFSET_CANNOT_BE_NEGATIVE',
+            type: 'Offset must be a number.',
+            minimum: 'Offset cannot be negative.',
           },
         },
 
@@ -68,7 +68,7 @@ export const getIssuesQueryValidator = {
               type: 'string',
 
               errorMessage: {
-                type: 'COLUMN_MUST_BE_STRING',
+                type: 'Column must be a string.',
               },
             },
 
@@ -77,8 +77,8 @@ export const getIssuesQueryValidator = {
               enum: ['ASC', 'DESC'],
 
               errorMessage: {
-                type: 'ORDER_DIRECTION_MUST_BE_STRING',
-                enum: 'ORDER_DIRECTION_MUST_BE_ASC_OR_DESC',
+                type: 'Direction must be a string.',
+                enum: 'Order direction must be ASC or DESC.',
               },
             },
           },
@@ -86,7 +86,7 @@ export const getIssuesQueryValidator = {
           additionalProperties: false,
 
           errorMessage: {
-            additionalProperties: 'INVALID_ORDER_FIELD',
+            additionalProperties: 'Invalid order field provided.',
           },
         },
 
@@ -105,7 +105,7 @@ export const getIssuesQueryValidator = {
                     type: 'string',
 
                     errorMessage: {
-                      type: 'LIKE_MUST_BE_STRING',
+                      type: 'Like value must be a string.',
                     },
                   },
                 },
@@ -113,14 +113,14 @@ export const getIssuesQueryValidator = {
                 additionalProperties: false,
 
                 errorMessage: {
-                  additionalProperties: 'INVALID_WHERE_OPERATOR',
+                  additionalProperties: 'Invalid where condition provided.',
                 },
               },
             ],
           },
 
           errorMessage: {
-            type: 'WHERE_MUST_BE_OBJECT',
+            type: 'Where filter must be an object.',
           },
         },
       },
@@ -128,7 +128,7 @@ export const getIssuesQueryValidator = {
       additionalProperties: false,
 
       errorMessage: {
-        additionalProperties: 'INVALID_FILTER_FIELD',
+        additionalProperties: 'Invalid filter field provided.',
       },
     },
   },

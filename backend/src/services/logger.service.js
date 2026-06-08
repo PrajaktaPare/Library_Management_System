@@ -42,5 +42,4 @@ const logger = winston.createLogger({
   exitOnError: false,
 });
 
-//export logger
 export default logger;

@@ -1,4 +1,4 @@
-const FINE_PER_DAY = Number(process.env.FINE_PER_DAY) || 5;
+const finePerDay = Number(process.env.FINE_PER_DAY) || 5;
 
 export const calculateFine = dueDate => {
   const now = new Date();
@@ -12,5 +12,5 @@ export const calculateFine = dueDate => {
     return 0;
   }
 
-  return overdueDays * FINE_PER_DAY;
+  return overdueDays * finePerDay;
 };

@@ -11,8 +11,8 @@ export const requestIdValidator = {
       minimum: 1,
 
       errorMessage: {
-        type: 'REQUEST_ID_MUST_BE_INTEGER',
-        minimum: 'INVALID_REQUEST_ID',
+        type: 'Request ID must be a number.',
+        minimum: 'Invalid request ID.',
       },
     },
   },
@@ -21,10 +21,10 @@ export const requestIdValidator = {
 
   errorMessage: {
     required: {
-      id: 'REQUEST_ID_REQUIRED',
+      id: 'Request ID is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -41,8 +41,8 @@ export const createRequestValidator = {
       minimum: 1,
 
       errorMessage: {
-        type: 'bookId_MUST_BE_INTEGER',
-        minimum: 'INVALID_bookId',
+        type: 'Book ID must be a number.',
+        minimum: 'Invalid book ID.',
       },
     },
   },
@@ -51,10 +51,10 @@ export const createRequestValidator = {
 
   errorMessage: {
     required: {
-      bookId: 'bookId_REQUIRED',
+      bookId: 'Book ID is required.',
     },
 
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -70,9 +70,9 @@ export const rejectRequestValidator = {
       maxLength: 500,
 
       errorMessage: {
-        type: 'REASON_MUST_BE_STRING',
-        minLength: 'REJECTION_REASON_REQUIRED',
-        maxLength: 'REJECTION_REASON_MAX_LENGTH_500',
+        type: 'Reason must be a string.',
+        minLength: 'Rejection reason is required.',
+        maxLength: 'Rejection reason must not exceed 500 characters.',
       },
     },
   },
@@ -80,7 +80,7 @@ export const rejectRequestValidator = {
   additionalProperties: false,
 
   errorMessage: {
-    additionalProperties: 'EXTRA_FIELDS_NOT_ALLOWED',
+    additionalProperties: 'Extra fields are not allowed.',
   },
 };
 
@@ -100,9 +100,9 @@ export const getRequestsQueryValidator = {
           maximum: 100,
 
           errorMessage: {
-            type: 'LIMIT_MUST_BE_INTEGER',
-            minimum: 'LIMIT_MINIMUM_1',
-            maximum: 'LIMIT_MAXIMUM_100',
+            type: 'Limit must be a number.',
+            minimum: 'Limit must be at least 1.',
+            maximum: 'Limit must not exceed 100.',
           },
         },
 
@@ -111,8 +111,8 @@ export const getRequestsQueryValidator = {
           minimum: 0,
 
           errorMessage: {
-            type: 'OFFSET_MUST_BE_INTEGER',
-            minimum: 'OFFSET_CANNOT_BE_NEGATIVE',
+            type: 'Offset must be a number.',
+            minimum: 'Offset cannot be negative.',
           },
         },
 
@@ -124,7 +124,7 @@ export const getRequestsQueryValidator = {
               type: 'string',
 
               errorMessage: {
-                type: 'COLUMN_MUST_BE_STRING',
+                type: 'Column must be a string.',
               },
             },
 
@@ -133,8 +133,8 @@ export const getRequestsQueryValidator = {
               enum: ['ASC', 'DESC'],
 
               errorMessage: {
-                type: 'ORDER_DIRECTION_MUST_BE_STRING',
-                enum: 'ORDER_DIRECTION_MUST_BE_ASC_OR_DESC',
+                type: 'Direction must be a string.',
+                enum: 'Order direction must be ASC or DESC.',
               },
             },
           },
@@ -142,7 +142,7 @@ export const getRequestsQueryValidator = {
           additionalProperties: false,
 
           errorMessage: {
-            additionalProperties: 'INVALID_ORDER_FIELD',
+            additionalProperties: 'Invalid order field provided.',
           },
         },
 
@@ -161,7 +161,7 @@ export const getRequestsQueryValidator = {
                     type: 'string',
 
                     errorMessage: {
-                      type: 'LIKE_MUST_BE_STRING',
+                      type: 'Like value must be a string.',
                     },
                   },
                 },
@@ -169,14 +169,14 @@ export const getRequestsQueryValidator = {
                 additionalProperties: false,
 
                 errorMessage: {
-                  additionalProperties: 'INVALID_WHERE_OPERATOR',
+                  additionalProperties: 'Invalid where condition provided.',
                 },
               },
             ],
           },
 
           errorMessage: {
-            type: 'WHERE_MUST_BE_OBJECT',
+            type: 'Where filter must be an object.',
           },
         },
       },
@@ -184,7 +184,7 @@ export const getRequestsQueryValidator = {
       additionalProperties: false,
 
       errorMessage: {
-        additionalProperties: 'INVALID_FILTER_FIELD',
+        additionalProperties: 'Invalid filter field provided.',
       },
     },
   },

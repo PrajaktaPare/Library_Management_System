@@ -45,7 +45,6 @@ export const validateSchema = (schema, source = 'body') => {
 
       // validation failed
       if (!valid) {
-        // log validation errors
         logger.warn('AJV VALIDATION FAILED', validate.errors);
 
         // format errors
@@ -59,7 +58,7 @@ export const validateSchema = (schema, source = 'body') => {
         // return validation response
         return res.status(400).json({
           success_flag: false,
-          message: errors[0]?.message || 'VALIDATION_ERROR',
+          message: errors[0]?.message || 'Validation error',
           errors,
         });
       }
@@ -73,7 +72,7 @@ export const validateSchema = (schema, source = 'body') => {
       // return error response
       return res.status(500).json({
         success_flag: false,
-        message: 'VALIDATION_MIDDLEWARE_ERROR',
+        message: 'Validation middleware error',
       });
     }
   };
