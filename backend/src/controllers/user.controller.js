@@ -199,7 +199,7 @@ export const postUser = async (req, res) => {
     // Return successful registration response
     return res.status(201).json({
       success_flag: true,
-      message: 'User registered successfully. Please verify your email to activate your account.',
+      message: 'User registered successfully. Please verify email to activate account.',
       data: { user_id: result.insertId, email },
     });
   } catch (error) {
@@ -339,7 +339,22 @@ export const deleteUser = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     // Fetch authenticated user's profile details
-    const [rows] = await db.execute(`SELECT * FROM users WHERE id=?`, [req.user.id]);
+    const [rows] = await db.execute(
+      `SELECT 
+          id,
+          email,
+          first_name,
+          last_name,
+          phone,
+          role_id,
+          is_active,
+          is_verified,
+          created_at,
+          updated_at
+        FROM users 
+        WHERE id = ?`,
+      [req.user.id]
+    );
 
     // Return profile details
     return res.json({

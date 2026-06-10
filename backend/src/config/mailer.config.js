@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import logger from './../services/logger.service.js';
 
 // load environment variables
 dotenv.config();
@@ -23,12 +24,10 @@ const transporter = nodemailer.createTransport({
  * Logs connection status in console.
  */
 transporter.verify((error, success) => {
-  // handle connection failure
   if (error) {
-    console.error('Mailer connection failed:', error.message);
+    logger.error(`Mailer connection failed: ${error.message}`);
   } else {
-    // mailer ready log
-    console.log('Mailer is ready to send emails');
+    logger.info('Mailer is ready to send emails');
   }
 });
 

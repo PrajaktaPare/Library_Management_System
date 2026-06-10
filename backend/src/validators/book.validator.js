@@ -212,10 +212,11 @@ export const createBookValidator = {
     status: {
       type: 'string',
       enum: ['available', 'unavailable'],
-
+      minLength: 1,
       errorMessage: {
         type: 'Status must be a string.',
         enum: 'Invalid status.',
+        minlength: 'Status ir required.',
       },
     },
   },

@@ -34,9 +34,6 @@ export const login = async (req, res) => {
     // Check email verification status
     if (user.is_verified !== 1) throw new Error('Please verify your email address before logging in.');
 
-    // Check account status
-    if (user.is_active !== 1) throw new Error('Your account is currently inactive');
-
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
@@ -272,11 +269,6 @@ export const resetPassword = async (req, res) => {
     // validate user
     if (!user) {
       throw new Error('User not found.');
-    }
-
-    // validate verification status
-    if (!user.is_verified) {
-      throw new Error('Your account has not been verified yet.');
     }
 
     //check token is present and valid
