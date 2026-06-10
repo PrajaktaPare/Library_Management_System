@@ -1,0 +1,981 @@
+{
+  "info": {
+    "_postman_id": "52889d95-825d-4be9-8b07-ec7a43c24391",
+    "name": "SMART LIBRARY MANAGEMENT SYSTEM",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54509548",
+    "_collection_link": "https://go.postman.co/collection/54509548-52889d95-825d-4be9-8b07-ec7a43c24391?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "ROLES",
+      "item": [
+        {
+          "name": "POST ROLE",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6MSwiaWF0IjoxNzgwMDMwODI4LCJleHAiOjE3ODAxMTcyMjh9.Wsm7o40memBLhOXJpoPn5U4VIw8AtWobGx8-5-FZVKc",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"role_name\":\"Teacher\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/roles/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "roles",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET ROLE",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwMDQxMjM1LCJleHAiOjE3ODAxMjc2MzV9.YG77Z4hKt1qhiH9_s9ZRynTMjYnZzBnRc5VD7_gxyz8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/roles",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "roles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE ROLE",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/roles/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "roles",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH ROLE",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"role_name\":\"demo\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/roles/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "roles",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "COUNT",
+      "item": [
+        {
+          "name": "GET COUNT OF USERS",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3000/users/count",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "users",
+                "count"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "{\"where\":{\"first_name\":{\"like\":\"yash\"}}}",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET COUNT OF BOOKS",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/books/count",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "books",
+                "count"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "{\"where\":{\"category\":\"academic\"}}",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET COUNT OF BOOKS_REQUESTED",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/requests/count",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "requests",
+                "count"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET COUNT OF ISSUED_BOOKS",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/issued-books/count",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "issued-books",
+                "count"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "POST LOGIN",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "//obj for admin\r\n { \r\n \"email\":\"admin@yopmail.com\",\r\n \"password\": \"Admin@123\"\r\n }\r\n\r\n//obj for student 1\r\n// {\r\n//   \"email\": \"kartiki@yopmail.com\",\r\n//   \"password\": \"Test@123\"\r\n//   }\r\n\r\n\r\n//obj for student 2\r\n// {\r\n//   \"email\": \"prajakta@yopmail.com\",\r\n//   \"password\": \"Test@123\"\r\n// }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST USER",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwOTg3OTkxLCJleHAiOjE3ODEwNzQzOTF9.N3rfbFa1tRj7-q41M0M8WdFTnxLXYqZNqRTkY2Asz78",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"first_name\": \"kartiki\",\r\n  \"last_name\": \"konde\",\r\n  \"email\": \"kartiki@yopmail.com\",\r\n  \"password\": \"Test@123\",\r\n  \"phone\": \"9112346798\",\r\n  \"role_id\": 2\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET VERIFY_EMAIL",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/auth/verify-email?uid=27&token=3e75fcf88abe498aef43",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "verify-email"
+          ],
+          "query": [
+            {
+              "key": "uid",
+              "value": "27"
+            },
+            {
+              "key": "token",
+              "value": "3e75fcf88abe498aef43"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST FORGOT PASSWORD",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"shital@yopmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/forgot-password",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "forgot-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST RESET_PASSWORD",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"shital@yopmail.com\",\r\n  \"token\": \"93b2782290772c383c99\",\r\n  \"password\": \"Shital@123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/reset-password",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "reset-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET ALL USERS",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwOTg3OTkxLCJleHAiOjE3ODEwNzQzOTF9.N3rfbFa1tRj7-q41M0M8WdFTnxLXYqZNqRTkY2Asz78",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/users?filter={\"order\":\"created_at DESC\"}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users"
+          ],
+          "query": [
+            {
+              "key": "filter",
+              "value": "{\"limit\":2,\"offset\":2,\"order\":\"created_at desc\"}",
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "filter",
+              "value": "{\"where\":{\"first_name\":{\"like\":\"yash\"}}}",
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "filter",
+              "value": "{\"order\":\"created_at DESC\"}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET PROFILE",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzgwOTg4MTMzLCJleHAiOjE3ODEwNzQ1MzN9.lvXcZDlfIIUxxFaJOJekPaGmJjKDKEa65YdsCcL3fVs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/users/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH PROFILE",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjUsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzgwODg2NTM2LCJleHAiOjE3ODA5NzI5MzZ9.qgQOnJVeTb7fsp4kMIipKuqInV0dITwtf615qMq7Asg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"first_name\": \"Sarita\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST BOOK",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwOTg3OTkxLCJleHAiOjE3ODEwNzQzOTF9.N3rfbFa1tRj7-q41M0M8WdFTnxLXYqZNqRTkY2Asz78",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"The Pragmatic Programmer\",\r\n  \"author\": \"Andrew Hunt\",\r\n  \"book_num\": \"BK1011\",\r\n  \"category\": \"Academic\",\r\n  \"sub_category\": \"Software Engineering\",\r\n  \"total_copies\": 12,\r\n  \"available_copies\": 12,\r\n  \"status\": \"available\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/books",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH BOOK",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwNTY4NDg0LCJleHAiOjE3ODA2NTQ4ODR9.4Kj3rybZ5z-7_UmXrvp9iYmQAnQaHUC5tUmLN9Hpdwk",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"category\": \"Reading\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/books/15",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "books",
+            "15"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET ALL BOOKS",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzgwOTg4MTMzLCJleHAiOjE3ODEwNzQ1MzN9.lvXcZDlfIIUxxFaJOJekPaGmJjKDKEa65YdsCcL3fVs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/books?filter={\"order\":\"created_at desc\"}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "books"
+          ],
+          "query": [
+            {
+              "key": "filter",
+              "value": "{\"where\":{\"category\":\"academic\"}}",
+              "disabled": true
+            },
+            {
+              "key": "filter",
+              "value": "{\"limit\":2,\"offset\":2,\"order\":\"created_at desc\"}",
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "filter",
+              "value": "{\"order\":\"created_at desc\"}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST REQUEST",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzgwOTg4MTMzLCJleHAiOjE3ODEwNzQ1MzN9.lvXcZDlfIIUxxFaJOJekPaGmJjKDKEa65YdsCcL3fVs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \r\n    \"bookId\":18\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/requests",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "requests"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET ALL REQUESTS",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwODg2Njk0LCJleHAiOjE3ODA5NzMwOTR9.sp-b7wztgcQqZM-ZTb_tJeCpYbwe3PgU1ntgpHooJ9o",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/requests?filter={\"order\":\"created_at DESC\"}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "requests"
+          ],
+          "query": [
+            {
+              "key": "filter",
+              "value": "{\"limit\":1,\"offset\":1,\"where\":{\"request_status\":\"pending\"}}",
+              "disabled": true
+            },
+            {
+              "key": "filter",
+              "value": "{\"limit\":1,\"offset\":1}",
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "filter",
+              "value": "{\"order\":\"created_at DESC\"}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET MY REUESTS",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzgwOTg4MTMzLCJleHAiOjE3ODEwNzQ1MzN9.lvXcZDlfIIUxxFaJOJekPaGmJjKDKEa65YdsCcL3fVs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/requests",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "requests"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE REQUEST",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzgwOTg4MTMzLCJleHAiOjE3ODEwNzQ1MzN9.lvXcZDlfIIUxxFaJOJekPaGmJjKDKEa65YdsCcL3fVs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/requests/38/cancel",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "requests",
+            "38",
+            "cancel"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH APPROVE REQUEST",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwOTg3OTkxLCJleHAiOjE3ODEwNzQzOTF9.N3rfbFa1tRj7-q41M0M8WdFTnxLXYqZNqRTkY2Asz78",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/requests/38/approve",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "requests",
+            "38",
+            "approve"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH REJECT REQUEST",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwODg2Njk0LCJleHAiOjE3ODA5NzMwOTR9.sp-b7wztgcQqZM-ZTb_tJeCpYbwe3PgU1ntgpHooJ9o",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/requests/36/reject",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "requests",
+            "36",
+            "reject"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET ISSUED BOOKS",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgxMDcxOTQzLCJleHAiOjE3ODExNTgzNDN9.h7lGCptp3CkIwo3wA5aA5KqTojhjQqcSYvHiirrZZCk",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/issued-books",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "issued-books"
+          ],
+          "query": [
+            {
+              "key": "filter",
+              "value": "{\"order\":\"created_at DESC\",\"where\":{\"status\":\"active\"}}",
+              "disabled": true
+            },
+            {
+              "key": "filter",
+              "value": "{\"where\":{\"status\":\"active\"}",
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET MY ISSUED BOOKS",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjUsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzgwODg2OTk4LCJleHAiOjE3ODA5NzMzOTh9.HV-4UtNfZX3vpCFfTXlfpjjrEOgZIgVkNTbl3larYI4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/issued-books?filter={\"order\":\"created_at DESC\"}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "issued-books"
+          ],
+          "query": [
+            {
+              "key": "filter",
+              "value": "{\"order\":\"created_at DESC\"}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "RETURN BOOK",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgwODg2Njk0LCJleHAiOjE3ODA5NzMwOTR9.sp-b7wztgcQqZM-ZTb_tJeCpYbwe3PgU1ntgpHooJ9o",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/issued-books/3/return",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "issued-books",
+            "3",
+            "return"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LOGOUT",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/auth/logout",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
